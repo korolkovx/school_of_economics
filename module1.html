@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DROP ZONE | ИМБА</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Roboto+Mono:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0a0a0f;
@@ -73,22 +73,17 @@
             padding: 24px;
             margin-top: 20px;
         }
-        .chest-area {
-            text-align: center;
-            padding: 20px 0;
-            position: relative;
-        }
+        
+        /* Chest Area & Gacha */
+        .chest-area { text-align: center; padding: 20px 0; position: relative; }
         .chest-img {
-            width: 150px;
-            height: 150px;
+            width: 150px; height: 150px;
             background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="%2300e5ff" xmlns="http://www.w3.org/2000/svg"><path d="M20,6H4A2,2 0 0,0 2,8V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V8A2,2 0 0,0 20,6M20,19H4V13H9V15H15V13H20V19M20,11H15V9H9V11H4V8H20V11Z"/></svg>') no-repeat center;
             margin: 0 auto;
             filter: drop-shadow(0 0 20px rgba(0,229,255,0.5));
             transition: transform 0.1s;
         }
-        .chest-img.shake {
-            animation: shake 0.4s infinite;
-        }
+        .chest-img.shake { animation: shake 0.4s infinite; }
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -102,68 +97,38 @@
             90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .stat-box {
-            background: rgba(0,0,0,0.4);
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .stat-value {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
+        
+        /* Stats & Buttons */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .stat-box { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; text-align: center; }
+        .stat-value { font-family: 'Roboto Mono', monospace; font-size: 1.2rem; font-weight: 700; }
+        
         .btn-gacha {
             background: linear-gradient(45deg, #00e5ff, #0077ff);
-            border: none;
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            padding: 20px;
-            width: 100%;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(0, 119, 255, 0.3);
-            transition: all 0.2s;
+            border: none; color: white;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.2rem; text-transform: uppercase;
+            padding: 20px; width: 100%; border-radius: 12px; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(0, 119, 255, 0.3); transition: all 0.2s;
         }
-        .btn-gacha:active {
-            transform: scale(0.95);
-        }
+        .btn-gacha:active { transform: scale(0.95); }
         .btn-danger {
             background: linear-gradient(45deg, var(--danger), #cc0000);
-            box-shadow: 0 10px 20px rgba(255, 0, 85, 0.3);
-            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(255, 0, 85, 0.3); margin-top: 10px;
         }
         
+        /* Floating Text & Glitch */
         .floating-text {
-            position: absolute;
-            font-family: 'Roboto Mono', monospace;
-            font-weight: 700;
-            font-size: 1.5rem;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            z-index: 10;
+            position: absolute; font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 1.5rem;
+            pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 10;
         }
         .float-loss { color: var(--danger); }
         .float-win { color: var(--success); text-shadow: 0 0 10px var(--success); }
-        
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
             100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
         }
 
-        .glitch {
-            animation: glitch-anim 0.2s infinite;
-        }
+        .glitch { animation: glitch-anim 0.2s infinite; }
         @keyframes glitch-anim {
             0% { filter: hue-rotate(0deg); transform: translateX(0); }
             20% { filter: hue-rotate(90deg); transform: translateX(-5px); }
@@ -175,151 +140,79 @@
 
         .hidden { display: none !important; }
         
-        .var-hover {
-            display: inline-block;
-            position: relative;
-            cursor: help;
-            border-bottom: 2px dashed rgba(255,255,255,0.3);
-            transition: 0.2s;
-            padding: 0 4px;
+        /* Story Mode (Step 2) */
+        .story-screen {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 60vh; width: 100%; text-align: center;
         }
-        .var-hover:hover {
-            transform: scale(1.1);
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-        }
-        .var-hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 120%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            color: #000;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.2s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            z-index: 100;
-        }
-        .var-hover:hover::after {
-            opacity: 1;
-            bottom: 150%;
-        }
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeInUp 0.6s ease forwards; }
+        .delay-1 { animation-delay: 0.8s; }
+        .delay-2 { animation-delay: 1.6s; }
+        .delay-3 { animation-delay: 2.4s; }
+        .delay-4 { animation-delay: 3.2s; }
+        .delay-5 { animation-delay: 4.0s; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
+        .visual-stats {
+            width: 100%; max-width: 500px; background: rgba(0,0,0,0.3);
+            padding: 30px; border-radius: 16px; margin-top: 20px;
+        }
+        .stat-row {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+            font-size: 1.2rem; font-family: 'Roboto Mono', monospace; font-weight: 700;
+        }
+        .stat-row .action { color: var(--text-muted); font-size: 0.9rem; font-family: 'Montserrat', sans-serif; text-transform: uppercase; font-weight: 900;}
+
+        /* Formula Box & Hovers */
+        .formula-box {
+            background: #000; padding: 30px; border-radius: 16px;
+            font-family: 'Roboto Mono', monospace; font-size: 1.2rem; line-height: 2;
+            border: 1px solid rgba(0, 229, 255, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .var-hover {
+            display: inline-block; position: relative; cursor: help; border-bottom: 2px dashed rgba(255,255,255,0.3);
+            transition: 0.2s; padding: 0 4px;
+        }
+        .var-hover:hover { transform: scale(1.1); background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .var-hover::after {
+            content: attr(data-tooltip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
+            background: #fff; color: #000; padding: 8px 12px; border-radius: 6px; font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem; font-weight: 700; white-space: nowrap; opacity: 0; pointer-events: none; transition: 0.2s; z-index: 100;
+        }
+        .var-hover:hover::after { opacity: 1; bottom: 150%; }
+        
+        /* Results Modal */
+        .modal-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px); z-index: 100; display: flex; justify-content: center; align-items: center;
+            padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content {
+            background: #111; border: 1px solid var(--danger); border-radius: 16px; padding: 30px; width: 100%; max-width: 400px;
+            text-align: center; box-shadow: 0 20px 50px rgba(255,0,85,0.2); transform: translateY(20px); transition: transform 0.3s;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .summary-list {
+            background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; text-align: left; margin: 20px 0;
+            font-family: 'Roboto Mono', monospace; font-size: 0.9rem;
+        }
+        .summary-list div { display: flex; justify-content: space-between; margin-bottom: 8px; }
+
+        /* Dev Mode (Step 3) */
         .dev-mode { border-color: var(--success); }
         .slider-container { margin: 20px 0; }
-        .slider-container label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            background: rgba(255,255,255,0.1);
-            height: 8px;
-            border-radius: 4px;
-            outline: none;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--accent);
-        }
-        
-        .formula-box {
-            background: #000;
-            padding: 20px;
-            border-radius: 12px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1rem;
-            margin: 15px 0;
-            border-left: 4px solid var(--accent);
-            line-height: 1.8;
-        }
+        .slider-container label { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--accent); border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px var(--accent); }
         .profit-positive { color: var(--success); }
         .profit-negative { color: var(--danger); }
-        
-        .oge-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border: 1px solid var(--success);
-            margin-top: 20px;
-        }
-
-        /* Results Modal Overlay */
-        .modal-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .modal-content {
-            background: #111;
-            border: 1px solid var(--danger);
-            border-radius: 16px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(255,0,85,0.2);
-            transform: translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-        .summary-list {
-            background: rgba(0,0,0,0.5);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: left;
-            margin: 20px 0;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.9rem;
-        }
-        .summary-list div {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
+        .oge-card { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border: 1px solid var(--success); margin-top: 20px; }
 
         @media (min-width: 768px) {
             .app-container { padding: 40px; }
             .glass-panel { padding: 40px; }
-            #step1 > .glass-panel {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 40px;
-                align-items: center;
-                margin-top: 40px;
-            }
-            .step2-layout { display: flex; gap: 40px; align-items: center; }
-            .step2-layout > div { flex: 1; }
+            #step1 > .glass-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-top: 40px; }
             .dev-layout { display: flex; gap: 40px; align-items: center; }
             .dev-layout > div { flex: 1; }
         }
@@ -362,7 +255,7 @@
     <!-- Results Modal -->
     <div class="modal-overlay" id="resultsModal">
         <div class="modal-content">
-            <h2 style="color: var(--danger); margin-bottom: 5px;">БАНКРОТ</h2>
+            <h2 style="color: var(--danger); margin-bottom: 5px; font-size: 2.5rem;">БАНКРОТ</h2>
             <p style="color: var(--text-muted); margin: 0; font-size: 0.9rem;">Итоги твоих спинов</p>
             
             <div class="summary-list">
@@ -374,7 +267,7 @@
                 <div style="color: var(--success)"><span>Получено с лута:</span> <strong id="resWon">0 💎</strong></div>
             </div>
             
-            <h3 style="margin-bottom: 20px;">Чистый убыток:<br><span id="resTotal" style="color: var(--danger); font-size: 1.8rem; display:block; margin-top:10px;">0 💎</span></h3>
+            <h3 style="margin-bottom: 20px;">Чистый убыток:<br><span id="resTotal" style="color: var(--danger); font-size: 2rem; display:block; margin-top:10px;">0 💎</span></h3>
             
             <button class="btn-gacha btn-danger" onclick="triggerFail()">В ЧЕМ ПОДВОХ?</button>
         </div>
@@ -386,39 +279,74 @@
         <h2 style="color: var(--danger);">СИСТЕМА ВЗЛОМАНА</h2>
     </div>
     
-    <div class="glass-panel">
-        <h3 style="margin-bottom: 20px;">АЛГОРИТМ КАЗИНО РАСКРЫТ</h3>
+    <div class="glass-panel" style="min-height: 60vh; padding: 40px; border-color: var(--accent);">
         
-        <div class="step2-layout">
-            <div>
-                <p>Казино не верит в удачу. Оно программирует свою прибыль через <strong>Математическое Ожидание (E)</strong>.</p>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Наведи (или нажми) на переменные кода, который оставил тебя без штанов:</p>
-                
-                <div class="formula-box">
-                    <div>E = 
-                        <span class="var-hover" data-tooltip="Шанс победы: 2%" style="color: var(--accent)">(P_win</span> × 
-                        <span class="var-hover" data-tooltip="Выигрыш: 5000 💎" style="color: var(--accent)">V_win)</span> + 
-                        <span class="var-hover" data-tooltip="Шанс проиграть: 98%">(P_lose</span> × 
-                        <span class="var-hover" data-tooltip="Утешительный мусор: 10 💎">V_lose)</span> - 
-                        <span class="var-hover" data-tooltip="Цена клика: 200 💎" style="color: var(--danger)">Price</span>
-                    </div>
-                    <div style="margin-top:15px; color: var(--text-muted)">E = (0.02 × 5000) + (0.98 × 10) - 200</div>
-                    <div style="margin-top:10px; font-size: 1.5rem; color: var(--danger)">E = -90.2 💎</div>
+        <!-- Screen 2.1 -->
+        <div id="substep1" class="story-screen">
+            <h2 class="fade-in" style="color: var(--text-muted); font-size: 1.5rem;">АЛГОРИТМ РАСКРЫТ.</h2>
+            <h1 class="fade-in delay-1" style="color: var(--danger); font-size: 3rem; margin: 30px 0;">Казино не верит в удачу.</h1>
+            <h3 class="fade-in delay-2" style="color: var(--text); font-weight: normal; font-size: 1.5rem; line-height: 1.5;">Оно программирует прибыль через<br><strong style="font-size: 2.5rem; color: var(--accent); display: inline-block; margin-top: 15px;">Математическое Ожидание (E)</strong></h3>
+            <button class="btn-gacha fade-in delay-3" style="max-width: 400px; margin-top: 50px;" onclick="nextSubstep(2)">ПОКАЗАТЬ ИСХОДНЫЙ КОД</button>
+        </div>
+
+        <!-- Screen 2.2 -->
+        <div id="substep2" class="story-screen hidden">
+            <h3 class="fade-in" style="color: var(--accent); font-size: 2rem; margin-bottom: 40px;">КОД КЕЙСА</h3>
+            
+            <div class="formula-box fade-in delay-1">
+                E = 
+                <span class="var-hover" data-tooltip="Шанс победы: 2%" style="color: var(--accent)">(P_win</span> × 
+                <span class="var-hover" data-tooltip="Выигрыш: 5000 💎" style="color: var(--accent)">V_win)</span> + 
+                <span class="var-hover" data-tooltip="Шанс проиграть: 98%">(P_lose</span> × 
+                <span class="var-hover" data-tooltip="Мусор: 10 💎">V_lose)</span> - 
+                <span class="var-hover" data-tooltip="Цена клика: 200 💎" style="color: var(--danger)">Price</span>
+            </div>
+            
+            <div class="fade-in delay-2" style="margin-top: 40px;">
+                <div style="color: var(--text-muted); font-size: 1.5rem; font-family: 'Roboto Mono', monospace;">E = (0.02 × 5000) + (0.98 × 10) - 200</div>
+                <div style="margin-top:20px; font-size: 4rem; font-weight: 900; color: var(--danger); font-family: 'Roboto Mono', monospace;">E = -90.2 💎</div>
+                <p style="color: var(--danger); font-size: 1.2rem; margin-top: 10px; font-weight: 700;">Математически гарантированный убыток с клика.</p>
+            </div>
+
+            <button class="btn-gacha fade-in delay-3" style="max-width: 400px; margin-top: 50px;" onclick="nextSubstep(3)">КАК ЭТО РАБОТАЕТ В МАССАХ?</button>
+        </div>
+
+        <!-- Screen 2.3 -->
+        <div id="substep3" class="story-screen hidden">
+            <h3 class="fade-in" style="color: var(--danger); font-size: 2rem;">МАСШТАБ СКАМА</h3>
+            
+            <div class="visual-stats fade-in delay-1">
+                <div class="stat-row">
+                    <span>👥 100 игроков</span>
+                    <span class="action">потратили</span>
+                    <span style="color: var(--accent)">20 000 💎</span>
+                </div>
+                <div class="stat-row fade-in delay-2">
+                    <span>🔪 2 счастливчика</span>
+                    <span class="action">забрали</span>
+                    <span>10 000 💎</span>
+                </div>
+                <div class="stat-row fade-in delay-3">
+                    <span>🗑️ 98 игроков</span>
+                    <span class="action">утешились</span>
+                    <span style="color: var(--text-muted)">980 💎</span>
+                </div>
+                <hr class="fade-in delay-4" style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+                <div class="stat-row fade-in delay-4" style="font-size: 1.5rem;">
+                    <span style="color: var(--danger)">🏦 КАЗИНО</span>
+                    <span class="action">заработало</span>
+                    <span style="color: var(--danger)">+9 020 💎</span>
                 </div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center;">
-                <h4 style="color: var(--accent); margin-bottom: 10px;">ЧТО ЭТО ЗНАЧИТ?</h4>
-                <p style="font-size: 0.9rem; line-height: 1.8;">Представь 100 игроков. Они заплатили <strong>20 000 💎</strong> за открытие кейсов.<br><br>
-                2 человека забрали ножи (10 000 💎).<br>98 забрали мусор (980 💎).<br><br>
-                Казино выплатило 10 980 💎, а оставило себе <strong>9 020 💎 чистой прибыли</strong>.</p>
-                <p style="color: var(--danger); font-weight: bold; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                Делим на 100: с каждого клика система гарантированно списывает у тебя 90.2 алмаза в тень.
-                </p>
+            <div class="fade-in delay-5" style="margin-top: 40px;">
+                <p style="font-size: 1.5rem;">9020 💎 прибыли / 100 игроков = <strong style="color: var(--danger); font-size: 2rem;">90.2 💎</strong></p>
+                <p style="color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;">Именно столько они тихо списывают с тебя при каждом нажатии.</p>
             </div>
-        </div>
 
-        <button class="btn-gacha" style="margin-top: 30px;" onclick="goToPractice()">ОТОМСТИТЬ (РЕЖИМ СОЗДАТЕЛЯ)</button>
+            <button class="btn-gacha fade-in delay-5" style="max-width: 400px; margin-top: 40px; background: linear-gradient(45deg, #00ff88, #00cc66); box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);" onclick="goToPractice()">ОТОМСТИТЬ (РЕЖИМ СОЗДАТЕЛЯ)</button>
+        </div>
+        
     </div>
 </div>
 
@@ -434,11 +362,11 @@
         <div class="dev-layout">
             <div>
                 <h3>БАЛАНСИРОВКА ЛУТА</h3>
-                <p style="font-size:0.9rem; color:var(--text-muted); margin-top: 10px;">Твоя задача: настрой шанс выпадения ножа так, чтобы игроки верили в победу, но ты стабильно зарабатывал.</p>
-                <p style="font-size:0.9rem; background: rgba(0,255,136,0.1); padding: 10px; border-radius: 6px; border-left: 3px solid var(--success);"><strong>Цель:</strong> Ожидание (E) для игрока должно быть от -50 до -10 💎.</p>
+                <p style="font-size:1rem; color:var(--text-muted); margin-top: 15px; line-height: 1.6;">Твоя задача: настрой шанс выпадения ножа так, чтобы игроки верили в победу, но ты стабильно зарабатывал.</p>
+                <p style="font-size:1rem; background: rgba(0,255,136,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--success); margin-top: 20px;"><strong>Цель:</strong> Ожидание (E) для игрока должно быть от -50 до -10 💎.</p>
                 
-                <div class="slider-container" style="margin-top: 30px;">
-                    <label><span>Шанс выпадения Ножа:</span> <span id="chanceVal" class="stat-value">2.0%</span></label>
+                <div class="slider-container" style="margin-top: 40px;">
+                    <label style="font-size: 1.2rem;"><span>Шанс Ножа:</span> <strong id="chanceVal" class="stat-value" style="color: var(--accent);">2.0%</strong></label>
                     <input type="range" id="chanceSlider" min="0" max="100" value="20" oninput="calculateE()">
                 </div>
             </div>
@@ -446,39 +374,33 @@
             <div>
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <div style="font-size: 0.75rem; color: var(--text-muted)">Ожидание (E) игрока</div>
-                        <div class="stat-value" id="eVal">-90.2 💎</div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">Ожидание (E) игрока</div>
+                        <div class="stat-value" id="eVal" style="font-size: 1.8rem;">-90.2 💎</div>
                     </div>
                     <div class="stat-box" style="background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);">
-                        <div style="font-size: 0.75rem; color: var(--success)">Твой профит с 1 спина</div>
-                        <div class="stat-value" id="profitVal" style="color:var(--success)">+90.2 💎</div>
+                        <div style="font-size: 0.9rem; color: var(--success); margin-bottom: 10px;">Твой профит с 1 спина</div>
+                        <div class="stat-value" id="profitVal" style="color:var(--success); font-size: 1.8rem;">+90.2 💎</div>
                     </div>
                 </div>
 
-                <button class="btn-gacha" id="finishBtn" disabled style="background: #333; box-shadow: none; margin-top:20px; width: 100%;" onclick="showOGE()">БАЛАНС НЕ ОДОБРЕН</button>
+                <button class="btn-gacha" id="finishBtn" disabled style="background: #333; box-shadow: none; margin-top:30px; width: 100%;" onclick="showOGE()">БАЛАНС НЕ ОДОБРЕН</button>
             </div>
         </div>
     </div>
 
     <div class="glass-panel oge-card hidden" id="ogeCard">
-        <h3 style="color: var(--success); font-size: 1.5rem; text-align: center;">MISSION PASSED: ОГЭ №10</h3>
-        <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid var(--success);">
-            <p style="font-size:1rem; margin: 0;"><em>"В сборнике 25 билетов, в 2 из них встречается вопрос по теме 'Неравенства'. Найдите вероятность..."</em></p>
+        <h3 style="color: var(--success); font-size: 2rem; text-align: center;">MISSION PASSED: ОГЭ №10</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 30px; border-radius: 12px; margin: 30px 0; border-left: 4px solid var(--success);">
+            <p style="font-size:1.2rem; margin: 0; line-height: 1.6;"><em>"В сборнике 25 билетов, в 2 из них встречается вопрос по теме 'Неравенства'. Найдите вероятность того, что в случайно выбранном билете не будет вопроса по этой теме."</em></p>
         </div>
-        <p style="font-size:1rem; line-height: 1.6; text-align: center;">Ты только что программировал вероятности. В бланке ФИПИ это выглядит абстрактно, но суть та же: ты делишь нужные исходы (2) на все возможные (25). <br><strong style="color:var(--accent);">Это один и тот же код.</strong></p>
-        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--success); box-shadow: 0 10px 20px rgba(0,255,136,0.3); margin-top: 30px;">ВЕРНУТЬСЯ В МЕНЮ</a>
+        <p style="font-size:1.2rem; line-height: 1.8; text-align: center;">Ты только что программировал вероятности. В бланке ФИПИ это выглядит абстрактно, но суть та же: ты делишь нужные исходы (2) на все возможные (25). <br><strong style="color:var(--accent); font-size: 1.5rem; display: block; margin-top: 15px;">Это один и тот же код.</strong></p>
+        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--success); box-shadow: 0 10px 20px rgba(0,255,136,0.3); margin-top: 40px; max-width: 400px; margin-left: auto; margin-right: auto;">ВЕРНУТЬСЯ В МЕНЮ</a>
     </div>
 </div>
 
 <script>
     let balance = 10000;
-    let sessionData = {
-        cases: 0,
-        spent: 0,
-        knives: 0,
-        trash: 0,
-        won: 0
-    };
+    let sessionData = { cases: 0, spent: 0, knives: 0, trash: 0, won: 0 };
     
     function createFloatingText(text, x, y, type) {
         const el = document.createElement('div');
@@ -494,21 +416,12 @@
         const chest = document.getElementById('chestImg');
         const badge = document.getElementById('balanceBadge');
         
-        if (balance < 200 * times && times === 1) {
-            showResults();
-            return;
-        }
-
-        // Determine how many times we can actually open if less money than requested
+        if (balance < 200 * times && times === 1) { showResults(); return; }
         let actualTimes = Math.min(times, Math.floor(balance / 200));
-        if (actualTimes === 0) {
-            showResults();
-            return;
-        }
+        if (actualTimes === 0) { showResults(); return; }
         
         chest.classList.add('shake');
         setTimeout(() => chest.classList.remove('shake'), times === 1 ? 400 : 800);
-
         badge.classList.add('loss');
         setTimeout(() => badge.classList.remove('loss'), 300);
 
@@ -518,35 +431,19 @@
         sessionData.cases += actualTimes;
 
         let roundWon = 0;
-
         for(let i=0; i<actualTimes; i++) {
-            let roll = Math.random();
-            if (roll < 0.02) {
-                balance += 5000;
-                roundWon += 5000;
-                sessionData.knives++;
-                sessionData.won += 5000;
-            } else {
-                balance += 10;
-                roundWon += 10;
-                sessionData.trash++;
-                sessionData.won += 10;
-            }
+            if (Math.random() < 0.02) { balance += 5000; roundWon += 5000; sessionData.knives++; sessionData.won += 5000; }
+            else { balance += 10; roundWon += 10; sessionData.trash++; sessionData.won += 10; }
         }
 
         document.getElementById('coins').innerText = balance.toLocaleString('ru-RU');
-        
         const chestRect = chest.getBoundingClientRect();
         createFloatingText('-' + roundSpent, chestRect.left + chestRect.width/2 - 30 + (Math.random()*20-10), chestRect.top + (Math.random()*40-20), 'float-loss');
         if (roundWon > 10 * actualTimes) {
-            setTimeout(() => {
-                createFloatingText('+' + roundWon + ' 🔪', chestRect.left + chestRect.width/2 - 20, chestRect.top - 20, 'float-win');
-            }, 200);
+            setTimeout(() => { createFloatingText('+' + roundWon + ' 🔪', chestRect.left + chestRect.width/2 - 20, chestRect.top - 20, 'float-win'); }, 200);
         }
 
-        if (balance < 200 || sessionData.cases >= 50) {
-            setTimeout(showResults, 1200);
-        }
+        if (balance < 200 || sessionData.cases >= 50) { setTimeout(showResults, 1200); }
     }
 
     function showResults() {
@@ -577,6 +474,23 @@
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.remove('hidden');
         }, 800);
+    }
+    
+    function nextSubstep(stepNum) {
+        // Hide all substeps
+        document.getElementById('substep1').classList.add('hidden');
+        document.getElementById('substep2').classList.add('hidden');
+        document.getElementById('substep3').classList.add('hidden');
+        
+        // Remove and re-add fade-in classes to reset animations
+        const target = document.getElementById('substep' + stepNum);
+        target.classList.remove('hidden');
+        const animatedElements = target.querySelectorAll('.fade-in');
+        animatedElements.forEach(el => {
+            el.style.animation = 'none';
+            el.offsetHeight; // trigger reflow
+            el.style.animation = null; 
+        });
     }
 
     function goToPractice() {
@@ -619,7 +533,7 @@
     function showOGE() {
         document.getElementById('ogeCard').classList.remove('hidden');
         document.getElementById('finishBtn').classList.add('hidden');
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
     }
 </script>
 
