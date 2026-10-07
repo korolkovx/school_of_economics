@@ -21,20 +21,22 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 0;
+            padding: 20px;
             overflow-x: hidden;
             display: flex;
             justify-content: center;
         }
         .app-container {
             width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
+            max-width: 900px;
+            min-height: calc(100vh - 40px);
             position: relative;
             background: radial-gradient(circle at top, #1a1a2e 0%, var(--bg) 100%);
             padding: 20px;
             display: flex;
             flex-direction: column;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         h1, h2, h3 { text-transform: uppercase; margin: 0; }
         .header {
@@ -73,7 +75,7 @@
         }
         .chest-area {
             text-align: center;
-            padding: 40px 0;
+            padding: 20px 0;
         }
         .chest-img {
             width: 150px;
@@ -171,6 +173,45 @@
 
         .hidden { display: none !important; }
         
+        /* Interactive Formula Tooltips */
+        .var-hover {
+            display: inline-block;
+            position: relative;
+            cursor: help;
+            border-bottom: 2px dashed rgba(255,255,255,0.3);
+            transition: 0.2s;
+            padding: 0 4px;
+        }
+        .var-hover:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        .var-hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.2s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+        .var-hover:hover::after {
+            opacity: 1;
+            bottom: 150%;
+        }
+
         .dev-mode {
             border-color: var(--success);
         }
@@ -204,12 +245,13 @@
         
         .formula-box {
             background: #000;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             font-family: 'Roboto Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 1rem;
             margin: 15px 0;
             border-left: 4px solid var(--accent);
+            line-height: 1.8;
         }
         .profit-positive { color: var(--success); }
         .profit-negative { color: var(--danger); }
@@ -218,6 +260,39 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
             border: 1px solid var(--success);
             margin-top: 20px;
+        }
+
+        /* Desktop Layout Adaptation */
+        @media (min-width: 768px) {
+            .app-container {
+                padding: 40px;
+            }
+            .glass-panel {
+                padding: 40px;
+            }
+            #step1 .glass-panel {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                align-items: center;
+                margin-top: 40px;
+            }
+            .step2-layout {
+                display: flex;
+                gap: 40px;
+                align-items: center;
+            }
+            .step2-layout > div {
+                flex: 1;
+            }
+            .dev-layout {
+                display: flex;
+                gap: 40px;
+                align-items: center;
+            }
+            .dev-layout > div {
+                flex: 1;
+            }
         }
     </style>
 </head>
@@ -238,19 +313,21 @@
             <p style="color: var(--text-muted); margin-top: 5px;">Эпический лут внутри</p>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div style="font-size: 0.8rem; color: var(--text-muted)">Шанс ножа</div>
-                <div class="stat-value" style="color: var(--accent)">2.0%</div>
+        <div class="gacha-controls">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div style="font-size: 0.8rem; color: var(--text-muted)">Шанс ножа</div>
+                    <div class="stat-value" style="color: var(--accent)">2.0%</div>
+                </div>
+                <div class="stat-box">
+                    <div style="font-size: 0.8rem; color: var(--text-muted)">Цена кейса</div>
+                    <div class="stat-value">200 💎</div>
+                </div>
             </div>
-            <div class="stat-box">
-                <div style="font-size: 0.8rem; color: var(--text-muted)">Цена кейса</div>
-                <div class="stat-value">200 💎</div>
-            </div>
-        </div>
 
-        <button class="btn-gacha" id="btn1" onclick="openBox(1)">ОТКРЫТЬ (200 💎)</button>
-        <button class="btn-gacha btn-danger" id="btn50" onclick="openBox(50)">АВТО-СПИН x50</button>
+            <button class="btn-gacha" id="btn1" onclick="openBox(1)">ОТКРЫТЬ (200 💎)</button>
+            <button class="btn-gacha btn-danger" id="btn50" onclick="openBox(50)">АВТО-СПИН x50</button>
+        </div>
     </div>
 </div>
 
@@ -260,18 +337,38 @@
     </div>
     
     <div class="glass-panel">
-        <h3>ТЫ СЛИЛ БАЛАНС. ПОЧЕМУ?</h3>
-        <p>Думал, тебе не повезло? Алгоритм обокрал тебя по формуле <strong>Математического ожидания (E)</strong>.</p>
+        <h3 style="margin-bottom: 20px;">АЛГОРИТМ КАЗИНО РАСКРЫТ</h3>
         
-        <div class="formula-box">
-            <div>E = (P_win × V_win) + (P_lose × V_lose) - Price</div>
-            <div style="margin-top:10px; color: var(--text-muted)">E = (0.02 × 5000) + (0.98 × 10) - 200</div>
-            <div style="margin-top:10px; font-size: 1.2rem; color: var(--danger)">E = -90.2 💎</div>
+        <div class="step2-layout">
+            <div>
+                <p>Казино не верит в удачу. Оно программирует свою прибыль через <strong>Математическое Ожидание (E)</strong>.</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Наведи (или нажми) на переменные кода, который оставил тебя без штанов:</p>
+                
+                <div class="formula-box">
+                    <div>E = 
+                        <span class="var-hover" data-tooltip="Шанс победы: 2%" style="color: var(--accent)">(P_win</span> × 
+                        <span class="var-hover" data-tooltip="Выигрыш: 5000 💎" style="color: var(--accent)">V_win)</span> + 
+                        <span class="var-hover" data-tooltip="Шанс проиграть: 98%">(P_lose</span> × 
+                        <span class="var-hover" data-tooltip="Утешительный мусор: 10 💎">V_lose)</span> - 
+                        <span class="var-hover" data-tooltip="Цена клика: 200 💎" style="color: var(--danger)">Price</span>
+                    </div>
+                    <div style="margin-top:15px; color: var(--text-muted)">E = (0.02 × 5000) + (0.98 × 10) - 200</div>
+                    <div style="margin-top:10px; font-size: 1.5rem; color: var(--danger)">E = -90.2 💎</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center;">
+                <h4 style="color: var(--accent); margin-bottom: 10px;">ЧТО ЭТО ЗНАЧИТ?</h4>
+                <p style="font-size: 0.9rem; line-height: 1.8;">Представь 100 игроков. Они заплатили <strong>20 000 💎</strong> за открытие кейсов.<br><br>
+                2 человека забрали ножи (10 000 💎).<br>98 забрали мусор (980 💎).<br><br>
+                Казино выплатило 10 980 💎, а оставило себе <strong>9 020 💎 чистой прибыли</strong>.</p>
+                <p style="color: var(--danger); font-weight: bold; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                Делим на 100: с каждого клика система гарантированно списывает у тебя 90.2 алмаза в тень.
+                </p>
+            </div>
         </div>
 
-        <p>С каждым кликом ты <strong>математически гарантированно</strong> терял 90.2 алмаза. Казино не верит в удачу, оно верит в расчет.</p>
-        
-        <button class="btn-gacha" style="margin-top: 30px;" onclick="goToPractice()">РЕЖИМ СОЗДАТЕЛЯ</button>
+        <button class="btn-gacha" style="margin-top: 30px;" onclick="goToPractice()">ОТОМСТИТЬ (РЕЖИМ СОЗДАТЕЛЯ)</button>
     </div>
 </div>
 
@@ -284,33 +381,42 @@
     </div>
 
     <div class="glass-panel dev-mode">
-        <h3>БАЛАНСИРОВКА ЛУТА</h3>
-        <p style="font-size:0.9rem; color:var(--text-muted)">Твоя задача: настрой шанс выпадения ножа так, чтобы игроки верили в победу, но ты стабильно зарабатывал.<br><br><strong>Цель:</strong> E (для игрока) должно быть от -50 до -10 💎.</p>
-        
-        <div class="slider-container">
-            <label><span>Шанс выпадения Ножа:</span> <span id="chanceVal" class="stat-value">2.0%</span></label>
-            <input type="range" id="chanceSlider" min="0" max="100" value="20" oninput="calculateE()">
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div style="font-size: 0.75rem; color: var(--text-muted)">Ожидание (E) игрока</div>
-                <div class="stat-value" id="eVal">-90.2 💎</div>
+        <div class="dev-layout">
+            <div>
+                <h3>БАЛАНСИРОВКА ЛУТА</h3>
+                <p style="font-size:0.9rem; color:var(--text-muted); margin-top: 10px;">Твоя задача: настрой шанс выпадения ножа так, чтобы игроки верили в победу, но ты стабильно зарабатывал.</p>
+                <p style="font-size:0.9rem; background: rgba(0,255,136,0.1); padding: 10px; border-radius: 6px; border-left: 3px solid var(--success);"><strong>Цель:</strong> Ожидание (E) для игрока должно быть от -50 до -10 💎.</p>
+                
+                <div class="slider-container" style="margin-top: 30px;">
+                    <label><span>Шанс выпадения Ножа:</span> <span id="chanceVal" class="stat-value">2.0%</span></label>
+                    <input type="range" id="chanceSlider" min="0" max="100" value="20" oninput="calculateE()">
+                </div>
             </div>
-            <div class="stat-box">
-                <div style="font-size: 0.75rem; color: var(--success)">Твой профит с 1 спина</div>
-                <div class="stat-value" id="profitVal" style="color:var(--success)">+90.2 💎</div>
+
+            <div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div style="font-size: 0.75rem; color: var(--text-muted)">Ожидание (E) игрока</div>
+                        <div class="stat-value" id="eVal">-90.2 💎</div>
+                    </div>
+                    <div class="stat-box" style="background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);">
+                        <div style="font-size: 0.75rem; color: var(--success)">Твой профит с 1 спина</div>
+                        <div class="stat-value" id="profitVal" style="color:var(--success)">+90.2 💎</div>
+                    </div>
+                </div>
+
+                <button class="btn-gacha" id="finishBtn" disabled style="background: #333; box-shadow: none; margin-top:20px; width: 100%;" onclick="showOGE()">БАЛАНС НЕ ОДОБРЕН</button>
             </div>
         </div>
-
-        <button class="btn-gacha" id="finishBtn" disabled style="background: #333; box-shadow: none; margin-top:20px;" onclick="showOGE()">БАЛАНС НЕ ОДОБРЕН</button>
     </div>
 
     <div class="glass-panel oge-card hidden" id="ogeCard">
-        <h3 style="color: var(--success)">MISSION PASSED: ОГЭ №10</h3>
-        <p style="font-size:0.9rem;"><em>"В сборнике 25 билетов, в 2 из них встречается вопрос по теме 'Неравенства'. Найдите вероятность..."</em></p>
-        <p style="font-size:0.9rem;">Ты только что программировал вероятности. В бланке это выглядит иначе, но суть та же: ты делишь нужные исходы (2) на все возможные (25).</p>
-        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--success); box-shadow: 0 10px 20px rgba(0,255,136,0.3)">ВЕРНУТЬСЯ В МЕНЮ</a>
+        <h3 style="color: var(--success); font-size: 1.5rem; text-align: center;">MISSION PASSED: ОГЭ №10</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid var(--success);">
+            <p style="font-size:1rem; margin: 0;"><em>"В сборнике 25 билетов, в 2 из них встречается вопрос по теме 'Неравенства'. Найдите вероятность..."</em></p>
+        </div>
+        <p style="font-size:1rem; line-height: 1.6; text-align: center;">Ты только что программировал вероятности. В бланке ФИПИ это выглядит абстрактно, но суть та же: ты делишь нужные исходы (2) на все возможные (25). <br><strong style="color:var(--accent);">Это один и тот же код.</strong></p>
+        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--success); box-shadow: 0 10px 20px rgba(0,255,136,0.3); margin-top: 30px;">ВЕРНУТЬСЯ В МЕНЮ</a>
     </div>
 </div>
 
@@ -409,6 +515,8 @@
     function showOGE() {
         document.getElementById('ogeCard').classList.remove('hidden');
         document.getElementById('finishBtn').classList.add('hidden');
+        // Scroll to bottom smoothly
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
 
