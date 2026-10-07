@@ -76,6 +76,7 @@
         .chest-area {
             text-align: center;
             padding: 20px 0;
+            position: relative;
         }
         .chest-img {
             width: 150px;
@@ -145,7 +146,6 @@
         
         .floating-text {
             position: absolute;
-            color: var(--danger);
             font-family: 'Roboto Mono', monospace;
             font-weight: 700;
             font-size: 1.5rem;
@@ -153,12 +153,14 @@
             animation: floatUp 1s ease-out forwards;
             z-index: 10;
         }
+        .float-loss { color: var(--danger); }
+        .float-win { color: var(--success); text-shadow: 0 0 10px var(--success); }
+        
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
             100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
         }
 
-        /* Glitch effect */
         .glitch {
             animation: glitch-anim 0.2s infinite;
         }
@@ -173,7 +175,6 @@
 
         .hidden { display: none !important; }
         
-        /* Interactive Formula Tooltips */
         .var-hover {
             display: inline-block;
             position: relative;
@@ -212,12 +213,8 @@
             bottom: 150%;
         }
 
-        .dev-mode {
-            border-color: var(--success);
-        }
-        .slider-container {
-            margin: 20px 0;
-        }
+        .dev-mode { border-color: var(--success); }
+        .slider-container { margin: 20px 0; }
         .slider-container label {
             display: flex;
             justify-content: space-between;
@@ -262,37 +259,69 @@
             margin-top: 20px;
         }
 
-        /* Desktop Layout Adaptation */
+        /* Results Modal Overlay */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-content {
+            background: #111;
+            border: 1px solid var(--danger);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(255,0,85,0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .summary-list {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            margin: 20px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+        }
+        .summary-list div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
         @media (min-width: 768px) {
-            .app-container {
-                padding: 40px;
-            }
-            .glass-panel {
-                padding: 40px;
-            }
-            #step1 .glass-panel {
+            .app-container { padding: 40px; }
+            .glass-panel { padding: 40px; }
+            #step1 > .glass-panel {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 40px;
                 align-items: center;
                 margin-top: 40px;
             }
-            .step2-layout {
-                display: flex;
-                gap: 40px;
-                align-items: center;
-            }
-            .step2-layout > div {
-                flex: 1;
-            }
-            .dev-layout {
-                display: flex;
-                gap: 40px;
-                align-items: center;
-            }
-            .dev-layout > div {
-                flex: 1;
-            }
+            .step2-layout { display: flex; gap: 40px; align-items: center; }
+            .step2-layout > div { flex: 1; }
+            .dev-layout { display: flex; gap: 40px; align-items: center; }
+            .dev-layout > div { flex: 1; }
         }
     </style>
 </head>
@@ -327,6 +356,27 @@
 
             <button class="btn-gacha" id="btn1" onclick="openBox(1)">ОТКРЫТЬ (200 💎)</button>
             <button class="btn-gacha btn-danger" id="btn50" onclick="openBox(50)">АВТО-СПИН x50</button>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal-overlay" id="resultsModal">
+        <div class="modal-content">
+            <h2 style="color: var(--danger); margin-bottom: 5px;">БАНКРОТ</h2>
+            <p style="color: var(--text-muted); margin: 0; font-size: 0.9rem;">Итоги твоих спинов</p>
+            
+            <div class="summary-list">
+                <div><span>Открыто кейсов:</span> <strong id="resCases">0</strong></div>
+                <div style="color: var(--danger)"><span>Потрачено:</span> <strong id="resSpent">0 💎</strong></div>
+                <hr style="border:0; border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;">
+                <div><span>Выпало Ножей:</span> <strong id="resKnives" style="color: var(--accent)">0</strong></div>
+                <div><span>Выпало Мусора:</span> <strong id="resTrash" style="color: var(--text-muted)">0</strong></div>
+                <div style="color: var(--success)"><span>Получено с лута:</span> <strong id="resWon">0 💎</strong></div>
+            </div>
+            
+            <h3 style="margin-bottom: 20px;">Чистый убыток:<br><span id="resTotal" style="color: var(--danger); font-size: 1.8rem; display:block; margin-top:10px;">0 💎</span></h3>
+            
+            <button class="btn-gacha btn-danger" onclick="triggerFail()">В ЧЕМ ПОДВОХ?</button>
         </div>
     </div>
 </div>
@@ -422,10 +472,17 @@
 
 <script>
     let balance = 10000;
+    let sessionData = {
+        cases: 0,
+        spent: 0,
+        knives: 0,
+        trash: 0,
+        won: 0
+    };
     
-    function createFloatingText(text, x, y) {
+    function createFloatingText(text, x, y, type) {
         const el = document.createElement('div');
-        el.className = 'floating-text';
+        el.className = 'floating-text ' + type;
         el.innerText = text;
         el.style.left = x + 'px';
         el.style.top = y + 'px';
@@ -434,12 +491,18 @@
     }
 
     function openBox(times) {
-        const btn = document.getElementById(times === 1 ? 'btn1' : 'btn50');
         const chest = document.getElementById('chestImg');
         const badge = document.getElementById('balanceBadge');
         
-        if (balance < 200 * times) {
-            triggerFail();
+        if (balance < 200 * times && times === 1) {
+            showResults();
+            return;
+        }
+
+        // Determine how many times we can actually open if less money than requested
+        let actualTimes = Math.min(times, Math.floor(balance / 200));
+        if (actualTimes === 0) {
+            showResults();
             return;
         }
         
@@ -449,24 +512,65 @@
         badge.classList.add('loss');
         setTimeout(() => badge.classList.remove('loss'), 300);
 
-        for(let i=0; i<times; i++) {
-            balance -= 200;
+        let roundSpent = 200 * actualTimes;
+        balance -= roundSpent;
+        sessionData.spent += roundSpent;
+        sessionData.cases += actualTimes;
+
+        let roundWon = 0;
+
+        for(let i=0; i<actualTimes; i++) {
             let roll = Math.random();
-            if (roll < 0.02) balance += 5000;
-            else balance += 10;
+            if (roll < 0.02) {
+                balance += 5000;
+                roundWon += 5000;
+                sessionData.knives++;
+                sessionData.won += 5000;
+            } else {
+                balance += 10;
+                roundWon += 10;
+                sessionData.trash++;
+                sessionData.won += 10;
+            }
         }
 
         document.getElementById('coins').innerText = balance.toLocaleString('ru-RU');
         
         const chestRect = chest.getBoundingClientRect();
-        createFloatingText('-' + (200 * times), chestRect.left + chestRect.width/2 - 20 + (Math.random()*40-20), chestRect.top + (Math.random()*40-20));
+        createFloatingText('-' + roundSpent, chestRect.left + chestRect.width/2 - 30 + (Math.random()*20-10), chestRect.top + (Math.random()*40-20), 'float-loss');
+        if (roundWon > 10 * actualTimes) {
+            setTimeout(() => {
+                createFloatingText('+' + roundWon + ' 🔪', chestRect.left + chestRect.width/2 - 20, chestRect.top - 20, 'float-win');
+            }, 200);
+        }
 
-        if (balance <= 0 || times === 50) {
-            setTimeout(triggerFail, 1200);
+        if (balance < 200 || sessionData.cases >= 50) {
+            setTimeout(showResults, 1200);
         }
     }
 
+    function showResults() {
+        document.getElementById('resCases').innerText = sessionData.cases;
+        document.getElementById('resSpent').innerText = '-' + sessionData.spent.toLocaleString('ru-RU') + ' 💎';
+        document.getElementById('resKnives').innerText = sessionData.knives;
+        document.getElementById('resTrash').innerText = sessionData.trash;
+        document.getElementById('resWon').innerText = '+' + sessionData.won.toLocaleString('ru-RU') + ' 💎';
+        
+        let net = sessionData.won - sessionData.spent;
+        let totalEl = document.getElementById('resTotal');
+        totalEl.innerText = net.toLocaleString('ru-RU') + ' 💎';
+        if(net >= 0) {
+            totalEl.style.color = 'var(--success)';
+            totalEl.innerText = '+' + totalEl.innerText;
+        } else {
+            totalEl.style.color = 'var(--danger)';
+        }
+
+        document.getElementById('resultsModal').classList.add('active');
+    }
+
     function triggerFail() {
+        document.getElementById('resultsModal').classList.remove('active');
         document.body.classList.add('glitch');
         setTimeout(() => {
             document.body.classList.remove('glitch');
@@ -482,7 +586,7 @@
     }
 
     function calculateE() {
-        let chance = document.getElementById('chanceSlider').value / 10; // 0 to 10.0%
+        let chance = document.getElementById('chanceSlider').value / 10; 
         document.getElementById('chanceVal').innerText = chance.toFixed(1) + '%';
         
         let chanceDecimal = chance / 100;
@@ -515,7 +619,6 @@
     function showOGE() {
         document.getElementById('ogeCard').classList.remove('hidden');
         document.getElementById('finishBtn').classList.add('hidden');
-        // Scroll to bottom smoothly
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
