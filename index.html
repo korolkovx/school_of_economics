@@ -4,37 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ИМБА | Интерактивный курс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f4f9;
-            --text-color: #111111;
-            --accent-color: #0000FF;
-            --card-bg: #ffffff;
+            --bg: #F4F1E1; /* Ledger paper warm gray/yellow */
+            --panel: #FFFFFF;
+            --accent: #00C853; /* Cash Green */
+            --danger: #FF2A55; /* Debt Red */
+            --success: #00C853; /* Cash Green */
+            --yellow: #FFC000; /* Gold Coin */
+            --text: #000000;
+            --text-muted: #555555;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 4px 4px 0px #000000;
         }
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
             line-height: 1.6;
         }
         header {
-            background-color: var(--accent-color);
-            color: #ffffff;
-            padding: 40px 20px;
+            background-color: var(--accent);
+            color: var(--text);
+            padding: 60px 20px;
             text-align: center;
+            border-bottom: var(--border);
+            box-shadow: 0px 8px 0px rgba(0,0,0,0.1);
         }
         header h1 {
             margin: 0;
-            font-size: 3.5rem;
+            font-size: 4rem;
             text-transform: uppercase;
             letter-spacing: -2px;
+            font-weight: 900;
         }
         header p {
-            margin-top: 10px;
-            font-size: 1.2rem;
-            opacity: 0.9;
+            margin-top: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
         }
         .container {
             max-width: 800px;
@@ -42,43 +55,47 @@
             padding: 0 20px;
         }
         .module-card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--accent-color);
-            transition: transform 0.2s ease;
-        }
-        .module-card:hover {
-            transform: translateY(-5px);
+            background-color: var(--panel);
+            border: var(--border);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.1s;
         }
         .module-card h2 {
             margin-top: 0;
-            color: var(--accent-color);
+            color: var(--text);
             display: flex;
             align-items: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
         }
         .module-badge {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-right: 10px;
+            background-color: var(--yellow);
+            color: var(--text);
+            padding: 4px 12px;
+            border: 2px solid #000;
+            font-size: 0.9rem;
+            margin-right: 15px;
+            box-shadow: var(--shadow-sm);
         }
         .btn {
             display: inline-block;
-            background-color: var(--accent-color);
-            color: #fff;
+            background-color: var(--text);
+            color: var(--accent);
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-top: 10px;
+            padding: 15px 25px;
+            border: var(--border);
+            font-weight: 900;
+            margin-top: 20px;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.1s;
         }
-        .btn:hover {
-            opacity: 0.9;
+        .btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
         }
     </style>
 </head>
@@ -86,32 +103,32 @@
 
 <header>
     <h1>ИМБА</h1>
-    <p>Интерактивный курс про изнанку игр и ОГЭ</p>
+    <p>ИНТЕРАКТИВНЫЙ КУРС ПРО ИЗНАНКУ ИГР И ОГЭ</p>
 </header>
 
 <div class="container">
     <div class="module-card">
-        <h2><span class="module-badge">Модуль 1</span> Взлом рандома</h2>
-        <p><strong>Цель:</strong> Разобрать алгоритм лутбоксов и кейсов.</p>
+        <h2><span class="module-badge">МОДУЛЬ 1</span> Взлом рандома</h2>
+        <p><strong>ЦЕЛЬ:</strong> Разобрать алгоритм лутбоксов и кейсов.</p>
         <p><strong>ОГЭ:</strong> Задание №10 (Классическая вероятность).</p>
         <p>Учимся считать математическое ожидание, чтобы никогда не сливать деньги в рулетках. Ты создашь свой кейс так, чтобы выходить в плюс!</p>
-        <a href="module1.html" class="btn">Начать симуляцию</a>
+        <a href="module1.html" class="btn">НАЧАТЬ СИМУЛЯЦИЮ</a>
     </div>
 
     <div class="module-card">
-        <h2><span class="module-badge">Модуль 2</span> Война за ресурсы</h2>
-        <p><strong>Цель:</strong> Идеальный баланс крафта и стратегии.</p>
+        <h2><span class="module-badge">МОДУЛЬ 2</span> Война за ресурсы</h2>
+        <p><strong>ЦЕЛЬ:</strong> Идеальный баланс крафта и стратегии.</p>
         <p><strong>ОГЭ:</strong> Задания №13, №21 (Системы неравенств).</p>
         <p>Узнаем, как распределять лимиты золота и ресурсов. Графически находим оптимальную точку выгоды (максимум функции).</p>
-        <a href="module2.html" class="btn">Начать симуляцию</a>
+        <a href="module2.html" class="btn">НАЧАТЬ СИМУЛЯЦИЮ</a>
     </div>
 
     <div class="module-card">
-        <h2><span class="module-badge">Модуль 3</span> Чтение мыслей</h2>
-        <p><strong>Цель:</strong> Переговоры и предсказание противника.</p>
+        <h2><span class="module-badge">МОДУЛЬ 3</span> Чтение мыслей</h2>
+        <p><strong>ЦЕЛЬ:</strong> Переговоры и предсказание противника.</p>
         <p><strong>ОГЭ:</strong> Задания №4, №11 (Графы и матрицы).</p>
         <p>Дилемма заключенного и Теория игр. Разбираемся, как строить деревья решений и находить равновесие Нэша в мультиплеере.</p>
-        <a href="module3.html" class="btn">Начать симуляцию</a>
+        <a href="module3.html" class="btn">НАЧАТЬ СИМУЛЯЦИЮ</a>
     </div>
 </div>
 

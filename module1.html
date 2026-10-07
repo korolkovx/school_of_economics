@@ -7,23 +7,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #EBEBE6; /* Muted off-white */
+            /* Economics + Neobrutalism Palette */
+            --bg: #F4F1E1; /* Ledger paper warm gray/yellow */
             --panel: #FFFFFF;
-            --accent: #0000FF; /* HSE Blue */
-            --danger: #FF3366;
-            --success: #00E676;
-            --yellow: #FFD700;
-            --text: #111111;
+            --accent: #00C853; /* Cash Green */
+            --danger: #FF2A55; /* Debt Red */
+            --success: #00C853; /* Cash Green */
+            --yellow: #FFC000; /* Gold Coin */
+            --text: #000000;
             --text-muted: #555555;
-            --border: 3px solid #111111;
-            --shadow: 6px 6px 0px #111111;
-            --shadow-sm: 4px 4px 0px #111111;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 4px 4px 0px #000000;
         }
         * { box-sizing: border-box; }
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--bg);
-            background-image: radial-gradient(#ccc 1px, transparent 1px);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
             background-size: 20px 20px;
             color: var(--text);
             margin: 0;
@@ -83,7 +84,7 @@
         .chest-area { text-align: center; padding: 20px 0; position: relative; }
         .chest-img {
             width: 150px; height: 150px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="%23111" xmlns="http://www.w3.org/2000/svg"><path d="M20,6H4A2,2 0 0,0 2,8V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V8A2,2 0 0,0 20,6M20,19H4V13H9V15H15V13H20V19M20,11H15V9H9V11H4V8H20V11Z"/></svg>') no-repeat center;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="%23000" xmlns="http://www.w3.org/2000/svg"><path d="M20,6H4A2,2 0 0,0 2,8V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V8A2,2 0 0,0 20,6M20,19H4V13H9V15H15V13H20V19M20,11H15V9H9V11H4V8H20V11Z"/></svg>') no-repeat center;
             margin: 0 auto;
             transition: transform 0.1s;
         }
@@ -105,23 +106,24 @@
         /* Stats & Buttons */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .stat-box { 
-            background: #fff; border: 2px solid #111; box-shadow: 3px 3px 0px #111;
+            background: #fff; border: 2px solid #000; box-shadow: 3px 3px 0px #000;
             padding: 12px; text-align: center; 
         }
         .stat-value { font-family: 'Roboto Mono', monospace; font-size: 1.2rem; font-weight: 900; }
         
         .btn-gacha {
-            background: var(--accent);
-            color: white; border: var(--border);
+            background: var(--text); /* Black button */
+            color: var(--accent); /* Green text */
+            border: var(--border);
             font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.2rem; text-transform: uppercase;
             padding: 20px; width: 100%; cursor: pointer; margin-top: 20px;
             box-shadow: var(--shadow); transition: all 0.1s;
         }
         .btn-gacha:active {
             transform: translate(6px, 6px);
-            box-shadow: 0px 0px 0px #111;
+            box-shadow: 0px 0px 0px #000;
         }
-        .btn-danger { background: var(--danger); }
+        .btn-danger { background: var(--danger); color: #fff; }
         
         /* Floating Text & Glitch */
         .floating-text {
@@ -180,7 +182,7 @@
             display: inline-block; position: relative; cursor: help; border-bottom: 3px solid var(--text);
             transition: 0.1s; padding: 0 4px;
         }
-        .var-hover:hover { background: var(--yellow); transform: translateY(-3px); box-shadow: 2px 2px 0px #111; }
+        .var-hover:hover { background: var(--yellow); transform: translateY(-3px); box-shadow: 2px 2px 0px #000; }
         .var-hover::after {
             content: attr(data-tooltip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
             background: var(--text); color: #fff; padding: 8px 12px; font-family: 'Montserrat', sans-serif;
@@ -190,7 +192,7 @@
         
         /* Results Modal */
         .modal-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(235, 235, 230, 0.9);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(244, 241, 225, 0.95);
             z-index: 100; display: flex; justify-content: center; align-items: center;
             padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
         }
@@ -202,7 +204,7 @@
         .modal-overlay.active .modal-content { transform: scale(1); }
         
         .summary-list {
-            background: #f9f9f9; padding: 15px; border: 2px solid #111; text-align: left; margin: 20px 0;
+            background: #f9f9f9; padding: 15px; border: 2px solid #000; text-align: left; margin: 20px 0;
             font-family: 'Roboto Mono', monospace; font-size: 1rem; font-weight: 700;
         }
         .summary-list div { display: flex; justify-content: space-between; margin-bottom: 8px; }
@@ -211,10 +213,10 @@
         .dev-mode { box-shadow: 6px 6px 0px var(--success); }
         .slider-container { margin: 20px 0; }
         .slider-container label { display: flex; justify-content: space-between; font-size: 1rem; font-weight: 900; margin-bottom: 15px; }
-        input[type=range] { -webkit-appearance: none; width: 100%; background: #111; height: 12px; outline: none; border-radius: 0; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: #000; height: 12px; outline: none; border-radius: 0; }
         input[type=range]::-webkit-slider-thumb { 
             -webkit-appearance: none; width: 30px; height: 30px; background: var(--success); 
-            border: 3px solid #111; cursor: pointer; border-radius: 0;
+            border: 3px solid #000; cursor: pointer; border-radius: 0;
         }
         
         .oge-card { background: #fff; border: var(--border); box-shadow: 8px 8px 0px var(--success); margin-top: 30px; }
@@ -271,7 +273,7 @@
             <div class="summary-list">
                 <div><span>Открыто кейсов:</span> <strong id="resCases">0</strong></div>
                 <div style="color: var(--danger)"><span>Потрачено:</span> <strong id="resSpent">0 💎</strong></div>
-                <hr style="border:0; border-top: 2px solid #111; margin: 10px 0;">
+                <hr style="border:0; border-top: 2px solid #000; margin: 10px 0;">
                 <div><span>Выпало Ножей:</span> <strong id="resKnives" style="color: var(--accent)">0</strong></div>
                 <div><span>Выпало Мусора:</span> <strong id="resTrash">0</strong></div>
                 <div style="color: var(--success)"><span>Получено с лута:</span> <strong id="resWon">0 💎</strong></div>
@@ -295,7 +297,7 @@
         <div id="substep1" class="story-screen">
             <h2 class="fade-in" style="color: var(--text-muted); font-size: 1.5rem;">АЛГОРИТМ РАСКРЫТ.</h2>
             <h1 class="fade-in delay-1" style="color: var(--danger); font-size: 3.5rem; margin: 30px 0;">КАЗИНО НЕ ВЕРИТ В УДАЧУ.</h1>
-            <h3 class="fade-in delay-2" style="font-weight: 900; font-size: 1.5rem; line-height: 1.5;">ОНО ПРОГРАММИРУЕТ ПРИБЫЛЬ ЧЕРЕЗ<br><strong style="font-size: 2.5rem; color: var(--accent); display: inline-block; margin-top: 15px; background: var(--yellow); padding: 5px 15px; border: 3px solid #111;">МАТЕМАТИЧЕСКОЕ ОЖИДАНИЕ (E)</strong></h3>
+            <h3 class="fade-in delay-2" style="font-weight: 900; font-size: 1.5rem; line-height: 1.5;">ОНО ПРОГРАММИРУЕТ ПРИБЫЛЬ ЧЕРЕЗ<br><strong style="font-size: 2.5rem; color: var(--accent); display: inline-block; margin-top: 15px; background: var(--text); padding: 5px 15px; border: 3px solid #000;">МАТЕМАТИЧЕСКОЕ ОЖИДАНИЕ (E)</strong></h3>
             <button class="btn-gacha fade-in delay-3" style="max-width: 400px; margin-top: 50px;" onclick="nextSubstep(2)">ПОКАЗАТЬ ИСХОДНЫЙ КОД</button>
         </div>
 
@@ -314,7 +316,7 @@
             
             <div class="fade-in delay-2" style="margin-top: 40px;">
                 <div style="font-size: 1.5rem; font-family: 'Roboto Mono', monospace; font-weight: 900;">E = (0.02 × 5000) + (0.98 × 10) - 200</div>
-                <div style="margin-top:20px; font-size: 4rem; font-weight: 900; color: var(--danger); font-family: 'Roboto Mono', monospace; background: #111; padding: 10px 20px; display: inline-block;">E = -90.2 💎</div>
+                <div style="margin-top:20px; font-size: 4rem; font-weight: 900; color: #fff; font-family: 'Roboto Mono', monospace; background: var(--danger); padding: 10px 20px; display: inline-block; border: var(--border);">E = -90.2 💎</div>
                 <p style="color: var(--danger); font-size: 1.2rem; margin-top: 20px; font-weight: 900;">МАТЕМАТИЧЕСКИ ГАРАНТИРОВАННЫЙ УБЫТОК С КЛИКА.</p>
             </div>
 
@@ -341,7 +343,7 @@
                     <span class="action">УТЕШИЛИСЬ</span>
                     <span style="color: var(--text-muted)">980 💎</span>
                 </div>
-                <hr class="fade-in delay-4" style="border: 2px solid #111; margin: 20px 0;">
+                <hr class="fade-in delay-4" style="border: 2px solid #000; margin: 20px 0;">
                 <div class="stat-row fade-in delay-4" style="font-size: 1.5rem;">
                     <span style="color: var(--danger)">🏦 КАЗИНО</span>
                     <span class="action">ПРИБЫЛЬ</span>
@@ -354,7 +356,7 @@
                 <p style="color: var(--text-muted); font-size: 1.2rem; margin-top: 10px; font-weight: 700;">Именно столько они тихо списывают с тебя при каждом нажатии.</p>
             </div>
 
-            <button class="btn-gacha fade-in delay-5" style="max-width: 400px; margin-top: 40px; background: var(--success); color: #111;" onclick="goToPractice()">ОТОМСТИТЬ (РЕЖИМ СОЗДАТЕЛЯ)</button>
+            <button class="btn-gacha fade-in delay-5" style="max-width: 400px; margin-top: 40px; background: var(--success); color: #000;" onclick="goToPractice()">ОТОМСТИТЬ (РЕЖИМ СОЗДАТЕЛЯ)</button>
         </div>
         
     </div>
@@ -363,7 +365,7 @@
 <div class="app-container hidden" id="step3">
     <div class="header">
         <h2>DEV<span style="color:var(--success)">MODE</span></h2>
-        <div class="balance-badge" style="background: var(--success); border-color:#111; color:#111;">
+        <div class="balance-badge" style="background: var(--success); border-color:#000; color:#000;">
             ADMIN
         </div>
     </div>
@@ -389,22 +391,22 @@
                     </div>
                     <div class="stat-box" style="background: var(--success);">
                         <div style="font-size: 0.9rem; font-weight: 900; margin-bottom: 10px;">ТВОЙ ПРОФИТ (1 СПИН)</div>
-                        <div class="stat-value" id="profitVal" style="color:#111; font-size: 1.8rem;">+90.2 💎</div>
+                        <div class="stat-value" id="profitVal" style="color:#000; font-size: 1.8rem;">+90.2 💎</div>
                     </div>
                 </div>
 
-                <button class="btn-gacha" id="finishBtn" disabled style="background: #999; margin-top:30px; width: 100%; color: #111;" onclick="showOGE()">БАЛАНС НЕ ОДОБРЕН</button>
+                <button class="btn-gacha" id="finishBtn" disabled style="background: #999; margin-top:30px; width: 100%; color: #000;" onclick="showOGE()">БАЛАНС НЕ ОДОБРЕН</button>
             </div>
         </div>
     </div>
 
     <div class="glass-panel oge-card hidden" id="ogeCard">
         <h3 style="color: var(--text); font-size: 2.5rem; text-align: center;">MISSION PASSED<br><span style="color: var(--success)">ОГЭ №10</span></h3>
-        <div style="background: #fff; padding: 30px; border: var(--border); margin: 30px 0; font-weight: 700; box-shadow: 4px 4px 0px #111;">
+        <div style="background: #fff; padding: 30px; border: var(--border); margin: 30px 0; font-weight: 700; box-shadow: 4px 4px 0px #000;">
             <p style="font-size:1.2rem; margin: 0; line-height: 1.6;"><em>"В сборнике 25 билетов, в 2 из них встречается вопрос по теме 'Неравенства'. Найдите вероятность того, что в случайно выбранном билете не будет вопроса по этой теме."</em></p>
         </div>
-        <p style="font-size:1.2rem; line-height: 1.8; text-align: center; font-weight: 700;">Ты только что программировал вероятности. В бланке ФИПИ это выглядит абстрактно, но суть та же: ты делишь нужные исходы (2) на все возможные (25). <br><strong style="color:var(--accent); font-size: 1.5rem; display: block; margin-top: 15px; background: var(--yellow); padding: 5px; border: 3px solid #111;">ЭТО ОДИН И ТОТ ЖЕ КОД.</strong></p>
-        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--accent); margin-top: 40px; max-width: 400px; margin-left: auto; margin-right: auto;">ВЕРНУТЬСЯ В МЕНЮ</a>
+        <p style="font-size:1.2rem; line-height: 1.8; text-align: center; font-weight: 700;">Ты только что программировал вероятности. В бланке ФИПИ это выглядит абстрактно, но суть та же: ты делишь нужные исходы (2) на все возможные (25). <br><strong style="color:var(--accent); font-size: 1.5rem; display: block; margin-top: 15px; background: var(--text); color: #fff; padding: 10px; border: 3px solid #000;">ЭТО ОДИН И ТОТ ЖЕ КОД.</strong></p>
+        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--yellow); color:#000; margin-top: 40px; max-width: 400px; margin-left: auto; margin-right: auto;">ВЕРНУТЬСЯ В МЕНЮ</a>
     </div>
 </div>
 
@@ -477,7 +479,7 @@
             document.body.classList.remove('glitch');
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.remove('hidden');
-        }, 300); // Shorter glitch for neobrutalism
+        }, 300);
     }
     
     function nextSubstep(stepNum) {
@@ -516,18 +518,18 @@
         
         let profit = -e;
         profitEl.innerText = (profit > 0 ? '+' : '') + profit.toFixed(1) + ' 💎';
-        profitEl.style.color = profit > 0 ? "#111" : "var(--danger)";
+        profitEl.style.color = profit > 0 ? "#000" : "var(--danger)";
 
         let btn = document.getElementById('finishBtn');
         if (e >= -50 && e <= -10) {
             btn.disabled = false;
             btn.style.background = "var(--success)";
-            btn.style.color = "#111";
+            btn.style.color = "#000";
             btn.innerText = "УТВЕРДИТЬ БАЛАНС";
         } else {
             btn.disabled = true;
             btn.style.background = "#999";
-            btn.style.color = "#111";
+            btn.style.color = "#000";
             btn.innerText = "БАЛАНС НЕ ОДОБРЕН";
         }
     }
