@@ -3,20 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Модуль 2: Война за ресурсы</title>
+    <title>CRAFT ZONE | ИМБА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #111; color: #fff; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #222; padding: 20px; border-radius: 12px; text-align: center;}
-        h1 { color: #0000FF; }
-        .btn { background: #0000FF; color: #fff; border: none; padding: 15px 20px; font-size: 1.2rem; border-radius: 8px; cursor: pointer; text-decoration: none; margin-top: 20px; display: inline-block;}
+        :root {
+            --bg: #F4F1E1;
+            --panel: #FFFFFF;
+            --accent: #00C853; 
+            --danger: #FF2A55; 
+            --success: #00C853; 
+            --yellow: #FFC000; 
+            --text: #000000;
+            --text-muted: #555555;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 4px 4px 0px #000000;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
+            margin: 0; padding: 20px; overflow-x: hidden;
+            display: flex; justify-content: center;
+        }
+        .app-container {
+            width: 100%; max-width: 900px; min-height: calc(100vh - 40px);
+            position: relative; padding: 10px; display: flex; flex-direction: column;
+        }
+        h1, h2, h3, h4 { text-transform: uppercase; margin: 0; font-weight: 900; }
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 20px; border-bottom: var(--border); margin-bottom: 20px;
+        }
+        .balance-badge {
+            background: var(--yellow); border: var(--border); padding: 8px 16px;
+            font-family: 'Roboto Mono', monospace; font-weight: 900; color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+        .glass-panel {
+            background: var(--panel); border: var(--border); box-shadow: var(--shadow);
+            padding: 24px; position: relative; margin-top: 20px;
+        }
+        
+        .resource-bar {
+            background: #eee; border: 2px solid #000; height: 30px; width: 100%;
+            position: relative; margin-top: 5px; margin-bottom: 15px;
+        }
+        .resource-fill {
+            background: var(--text); height: 100%; transition: width 0.2s;
+        }
+        .resource-fill.over { background: var(--danger); }
+        .resource-text {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Roboto Mono', monospace; font-weight: 900; color: #fff; mix-blend-mode: difference;
+        }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .stat-box { 
+            background: #fff; border: 2px solid #000; box-shadow: 3px 3px 0px #000;
+            padding: 15px; text-align: center; 
+        }
+        .stat-value { font-family: 'Roboto Mono', monospace; font-size: 1.5rem; font-weight: 900; }
+        
+        .btn-gacha {
+            background: var(--text); color: var(--accent); border: var(--border);
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.2rem;
+            padding: 20px; width: 100%; cursor: pointer; margin-top: 20px;
+            box-shadow: var(--shadow); transition: all 0.1s; text-transform: uppercase;
+        }
+        .btn-gacha:active:not(:disabled) { transform: translate(6px, 6px); box-shadow: 0px 0px 0px #000; }
+        .btn-gacha:disabled { background: #999; color: #555; cursor: not-allowed; box-shadow: none; transform: none; }
+        
+        .slider-container { margin: 20px 0; background: #f9f9f9; padding: 15px; border: 2px solid #000; }
+        .slider-container label { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 15px; font-size: 1.1rem; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: #000; height: 12px; outline: none; border-radius: 0; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; background: var(--accent); border: 3px solid #000; cursor: pointer; }
+        
+        .hidden { display: none !important; }
+        .oge-card { background: #fff; border: var(--border); box-shadow: 8px 8px 0px var(--accent); margin-top: 30px; }
+        
+        .story-screen {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 50vh; width: 100%; text-align: center;
+        }
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeInUp 0.4s ease forwards; }
+        .delay-1 { animation-delay: 0.6s; }
+        .delay-2 { animation-delay: 1.2s; }
+        .delay-3 { animation-delay: 1.8s; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        @media (min-width: 768px) {
+            .app-container { padding: 40px; }
+            .glass-panel { padding: 40px; }
+            #step1 > .glass-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Модуль 2: Война за ресурсы</h1>
-    <p><em>Загрузка симуляции крафта...</em></p>
-    <p>Здесь вы будете распределять ограниченные ресурсы (железо и кожу), чтобы выковать самую дорогую броню, используя системы неравенств (ОГЭ №13).</p>
-    <a href="index.html" class="btn">Вернуться в меню</a>
+
+<div class="app-container" id="step1">
+    <div class="header">
+        <h2 style="letter-spacing: 2px;">CRAFT<span style="color:var(--accent)">ZONE</span></h2>
+        <div class="balance-badge">БРОННИК</div>
+    </div>
+
+    <div class="glass-panel" style="box-shadow: 8px 8px 0px var(--accent);">
+        <div>
+            <h3 style="font-size: 2rem;">ОПТИМИЗАЦИЯ КРАФТА</h3>
+            <p style="font-weight: 700; margin-top: 10px;">Склад переполнен, но лимиты жесткие. Скрафти броню так, чтобы выжать <strong>максимальную прибыль в золоте</strong>, не уйдя в дефицит ресурсов.</p>
+            
+            <div style="margin-top: 30px;">
+                <div style="font-weight: 900;">ЖЕЛЕЗО (МАКС 100)</div>
+                <div class="resource-bar">
+                    <div class="resource-fill" id="ironFill" style="width: 0%;"></div>
+                    <div class="resource-text" id="ironText">0 / 100</div>
+                </div>
+                
+                <div style="font-weight: 900;">КОЖА (МАКС 80)</div>
+                <div class="resource-bar">
+                    <div class="resource-fill" id="leatherFill" style="width: 0%;"></div>
+                    <div class="resource-text" id="leatherText">0 / 80</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="slider-container">
+                <label><span>ОБЫЧНАЯ БРОНЯ</span> <strong id="val1" style="color: var(--accent);">0 шт</strong></label>
+                <p style="font-size: 0.8rem; margin: -5px 0 15px 0;">Расход: 2 Железа, 1 Кожа. Доход: 10 💰</p>
+                <input type="range" id="slider1" min="0" max="60" value="0" oninput="calcCraft()">
+            </div>
+            
+            <div class="slider-container">
+                <label><span>ЭПИЧЕСКАЯ БРОНЯ</span> <strong id="val2" style="color: var(--accent);">0 шт</strong></label>
+                <p style="font-size: 0.8rem; margin: -5px 0 15px 0;">Расход: 1 Железо, 3 Кожи. Доход: 15 💰</p>
+                <input type="range" id="slider2" min="0" max="40" value="0" oninput="calcCraft()">
+            </div>
+
+            <div class="stat-box" style="background: var(--yellow); margin-top: 20px;">
+                <div style="font-size: 0.9rem; font-weight: 900;">ПРОГНОЗ ПРИБЫЛИ</div>
+                <div class="stat-value" id="profitVal" style="font-size: 2.5rem; color: #000;">0 💰</div>
+                <div id="errorMsg" style="color: var(--danger); font-weight: 900; margin-top: 5px; display: none;">НЕДОСТАТОЧНО РЕСУРСОВ!</div>
+            </div>
+
+            <button class="btn-gacha" id="submitBtn" disabled onclick="checkWin()">ПРОДАТЬ НА АУКЦИОНЕ</button>
+        </div>
+    </div>
 </div>
+
+<div class="app-container hidden" id="step2">
+    <div class="header">
+        <h2 style="color: var(--accent);">СИСТЕМА ВЗЛОМАНА</h2>
+    </div>
+    
+    <div class="glass-panel" style="min-height: 60vh; padding: 40px; box-shadow: 8px 8px 0px var(--accent);">
+        <div id="substep1" class="story-screen">
+            <h2 class="fade-in" style="color: var(--text-muted); font-size: 1.5rem;">КАК ТЫ ЭТО СДЕЛАЛ?</h2>
+            <h1 class="fade-in delay-1" style="font-size: 3.5rem; margin: 30px 0;">ТЫ ТОЛЬКО ЧТО РЕШИЛ СИСТЕМУ НЕРАВЕНСТВ.</h1>
+            <p class="fade-in delay-2" style="font-weight: 900; font-size: 1.5rem; line-height: 1.5;">Обычные игроки крафтят наугад.<br><strong style="font-size: 2rem; color: #fff; background: var(--text); padding: 5px 15px; margin-top: 15px; display: inline-block;">МЕТА-ИГРОКИ ИСПОЛЬЗУЮТ ЛИНЕЙНОЕ ПРОГРАММИРОВАНИЕ.</strong></p>
+            
+            <div class="fade-in delay-3" style="background: #fff; border: var(--border); padding: 20px; margin-top: 30px; font-family: 'Roboto Mono', monospace; font-size: 1.2rem; font-weight: 900; text-align: left; max-width: 500px; width: 100%;">
+                <div>2x + 1y ≤ 100 <span style="color:var(--text-muted); font-size:0.9rem;">(Железо)</span></div>
+                <div>1x + 3y ≤ 80 <span style="color:var(--text-muted); font-size:0.9rem;">(Кожа)</span></div>
+                <hr style="border: 1px solid #000;">
+                <div style="color: var(--accent);">MAX Прибыль = 10x + 15y</div>
+            </div>
+
+            <button class="btn-gacha fade-in delay-3" style="max-width: 400px; margin-top: 40px;" onclick="showOGE()">ПОКАЗАТЬ ОГЭ</button>
+        </div>
+    </div>
+    
+    <div class="glass-panel oge-card hidden" id="ogeCard">
+        <h3 style="font-size: 2.5rem; text-align: center;">MISSION PASSED<br><span style="color: var(--accent)">ОГЭ №13 и №21</span></h3>
+        <div style="background: #fff; padding: 30px; border: var(--border); margin: 30px 0; font-weight: 700; box-shadow: 4px 4px 0px #000;">
+            <p style="font-size:1.2rem; margin: 0; line-height: 1.6;"><em>"Решите систему линейных неравенств..."</em></p>
+        </div>
+        <p style="font-size:1.2rem; line-height: 1.8; text-align: center; font-weight: 700;">Поиск идеального баланса крафта на графике — это нахождение вершины многоугольника решений системы неравенств. <br><strong style="color:var(--text); font-size: 1.5rem; display: block; margin-top: 15px; background: var(--yellow); padding: 5px; border: 3px solid #000;">ГЕЙМДИЗАЙН = АЛГЕБРА.</strong></p>
+        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--accent); color:#fff; margin-top: 40px; max-width: 400px; margin-left: auto; margin-right: auto;">ВЕРНУТЬСЯ В МЕНЮ</a>
+    </div>
+</div>
+
+<script>
+    // Max Profit is x=44, y=12 (Iron: 88+12=100, Leather: 44+36=80. Profit = 440+180 = 620)
+    let maxFound = false;
+
+    function calcCraft() {
+        let x = parseInt(document.getElementById('slider1').value);
+        let y = parseInt(document.getElementById('slider2').value);
+        
+        document.getElementById('val1').innerText = x + ' шт';
+        document.getElementById('val2').innerText = y + ' шт';
+        
+        let iron = (2 * x) + (1 * y);
+        let leather = (1 * x) + (3 * y);
+        let profit = (10 * x) + (15 * y);
+        
+        let iFill = document.getElementById('ironFill');
+        let lFill = document.getElementById('leatherFill');
+        let btn = document.getElementById('submitBtn');
+        let err = document.getElementById('errorMsg');
+        
+        iFill.style.width = Math.min(iron, 100) + '%';
+        document.getElementById('ironText').innerText = iron + ' / 100';
+        lFill.style.width = Math.min((leather/80)*100, 100) + '%';
+        document.getElementById('leatherText').innerText = leather + ' / 80';
+        
+        let over = false;
+        if (iron > 100) { iFill.classList.add('over'); over = true; } else { iFill.classList.remove('over'); }
+        if (leather > 80) { lFill.classList.add('over'); over = true; } else { lFill.classList.remove('over'); }
+        
+        let profEl = document.getElementById('profitVal');
+        profEl.innerText = profit + ' 💰';
+        
+        if (over) {
+            btn.disabled = true;
+            btn.innerText = "ПЕРЕВЕС";
+            err.style.display = "block";
+            profEl.style.color = "var(--danger)";
+        } else {
+            btn.disabled = false;
+            err.style.display = "none";
+            profEl.style.color = "#000";
+            
+            if (profit === 620) {
+                btn.style.background = "var(--accent)";
+                btn.style.color = "#fff";
+                btn.innerText = "ИДЕАЛЬНЫЙ БАЛАНС! ПРОДАТЬ";
+                maxFound = true;
+            } else {
+                btn.style.background = "var(--text)";
+                btn.style.color = "var(--accent)";
+                btn.innerText = "ПРОДАТЬ (МОЖНО БОЛЬШЕ!)";
+                maxFound = false;
+            }
+        }
+    }
+
+    function checkWin() {
+        if (!maxFound) {
+            alert("Неплохо, но ты не выжал максимум. Попробуй скомбинировать крафт так, чтобы забить ресурсы под ноль!");
+            return;
+        }
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+    }
+
+    function showOGE() {
+        document.getElementById('ogeCard').classList.remove('hidden');
+        setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+    }
+</script>
+
 </body>
 </html>

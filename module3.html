@@ -3,20 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Модуль 3: Чтение мыслей</title>
+    <title>MIND ZONE | ИМБА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #111; color: #fff; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #222; padding: 20px; border-radius: 12px; text-align: center;}
-        h1 { color: #0000FF; }
-        .btn { background: #0000FF; color: #fff; border: none; padding: 15px 20px; font-size: 1.2rem; border-radius: 8px; cursor: pointer; text-decoration: none; margin-top: 20px; display: inline-block;}
+        :root {
+            --bg: #F4F1E1;
+            --panel: #FFFFFF;
+            --accent: #00C853; 
+            --danger: #FF2A55; 
+            --yellow: #FFC000; 
+            --text: #000000;
+            --text-muted: #555555;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 4px 4px 0px #000000;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
+            margin: 0; padding: 20px; overflow-x: hidden;
+            display: flex; justify-content: center;
+        }
+        .app-container {
+            width: 100%; max-width: 900px; min-height: calc(100vh - 40px);
+            position: relative; padding: 10px; display: flex; flex-direction: column;
+        }
+        h1, h2, h3, h4 { text-transform: uppercase; margin: 0; font-weight: 900; }
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 20px; border-bottom: var(--border); margin-bottom: 20px;
+        }
+        .balance-badge {
+            background: var(--text); border: var(--border); padding: 8px 16px;
+            font-family: 'Roboto Mono', monospace; font-weight: 900; color: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        .glass-panel {
+            background: var(--panel); border: var(--border); box-shadow: var(--shadow);
+            padding: 24px; position: relative; margin-top: 20px;
+        }
+        
+        .matrix-grid {
+            display: grid; grid-template-columns: 100px 1fr 1fr; grid-template-rows: auto 1fr 1fr;
+            gap: 10px; margin-top: 30px; text-align: center;
+        }
+        .matrix-cell {
+            border: 2px solid #000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 15px; font-weight: 900;
+        }
+        .cell-label { background: var(--text); color: #fff; }
+        .cell-data { background: #fff; font-family: 'Roboto Mono', monospace; font-size: 1.2rem; }
+        
+        .btn-gacha {
+            background: var(--text); color: #fff; border: var(--border);
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.2rem;
+            padding: 20px; width: 100%; cursor: pointer; margin-top: 20px;
+            box-shadow: var(--shadow); transition: all 0.1s; text-transform: uppercase;
+        }
+        .btn-gacha:active:not(:disabled) { transform: translate(6px, 6px); box-shadow: 0px 0px 0px #000; }
+        .btn-gacha:disabled { background: #999; color: #555; cursor: not-allowed; box-shadow: none; transform: none; }
+        .btn-accent { background: var(--accent); color: #000; }
+        .btn-danger { background: var(--danger); color: #fff; }
+        
+        .hidden { display: none !important; }
+        .oge-card { background: #fff; border: var(--border); box-shadow: 8px 8px 0px var(--danger); margin-top: 30px; }
+        
+        .story-screen {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 50vh; width: 100%; text-align: center;
+        }
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeInUp 0.4s ease forwards; }
+        .delay-1 { animation-delay: 0.6s; }
+        .delay-2 { animation-delay: 1.2s; }
+        .delay-3 { animation-delay: 1.8s; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        
+        .vs-container { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .player-box { width: 45%; border: var(--border); box-shadow: var(--shadow-sm); padding: 20px; text-align: center; background: #fff; font-weight: 900; }
+        .vs-text { font-size: 2rem; font-weight: 900; color: var(--danger); }
+        
+        #resultLog { font-family: 'Roboto Mono', monospace; font-size: 1.2rem; margin-top: 20px; font-weight: 900; color: var(--accent); min-height: 30px;}
+
+        @media (min-width: 768px) {
+            .app-container { padding: 40px; }
+            .glass-panel { padding: 40px; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Модуль 3: Чтение мыслей</h1>
-    <p><em>Загрузка матрицы Дилеммы заключенного...</em></p>
-    <p>Здесь вы научитесь строить графы и читать ходы оппонента, как в заданиях №4 и №11 ОГЭ.</p>
-    <a href="index.html" class="btn">Вернуться в меню</a>
+
+<div class="app-container" id="step1">
+    <div class="header">
+        <h2 style="letter-spacing: 2px;">MIND<span style="color:var(--danger)">ZONE</span></h2>
+        <div class="balance-badge">ДИЛЕММА</div>
+    </div>
+
+    <div class="glass-panel" style="box-shadow: 8px 8px 0px var(--danger);">
+        <h3 style="font-size: 2rem; text-align: center;">СПЛИТ ИЛИ СТИЛ</h3>
+        <p style="font-weight: 700; margin-top: 10px; text-align: center;">Ты и Незнакомец зачистили босса и нашли <strong>10 000 💰</strong>. Вы не можете говорить друг с другом. Выберите действие.</p>
+        
+        <div class="matrix-grid">
+            <div></div>
+            <div class="matrix-cell cell-label">ОН: ПОДЕЛИТЬ</div>
+            <div class="matrix-cell cell-label">ОН: УКРАСТЬ</div>
+            
+            <div class="matrix-cell cell-label">ТЫ: ПОДЕЛИТЬ</div>
+            <div class="matrix-cell cell-data" id="cell-split-split">ТЫ: +5000<br>ОН: +5000</div>
+            <div class="matrix-cell cell-data" id="cell-split-steal">ТЫ: 0<br>ОН: +10 000</div>
+            
+            <div class="matrix-cell cell-label">ТЫ: УКРАСТЬ</div>
+            <div class="matrix-cell cell-data" id="cell-steal-split">ТЫ: +10 000<br>ОН: 0</div>
+            <div class="matrix-cell cell-data" id="cell-steal-steal">ТЫ: 0<br>ОН: 0</div>
+        </div>
+
+        <div class="vs-container">
+            <div class="player-box">
+                <div>ТВОЙ СЧЕТ</div>
+                <div id="pScore" style="font-size: 2rem; color: var(--accent);">0</div>
+            </div>
+            <div class="vs-text">VS</div>
+            <div class="player-box">
+                <div>СЧЕТ БОТА</div>
+                <div id="bScore" style="font-size: 2rem; color: var(--danger);">0</div>
+            </div>
+        </div>
+        
+        <div id="resultLog" style="text-align: center;">Сделай выбор...</div>
+
+        <div style="display: flex; gap: 20px; margin-top: 20px;">
+            <button class="btn-gacha btn-accent" id="btnSplit" onclick="playRound('split')">🤝 ПОДЕЛИТЬ</button>
+            <button class="btn-gacha btn-danger" id="btnSteal" onclick="playRound('steal')">🔪 УКРАСТЬ</button>
+        </div>
+        
+        <button class="btn-gacha" id="btnNext" style="display: none; background: #111;" onclick="goToTheory()">В ЧЕМ МЕТА?</button>
+    </div>
 </div>
+
+<div class="app-container hidden" id="step2">
+    <div class="header">
+        <h2 style="color: var(--accent);">ТЕОРИЯ ИГР</h2>
+    </div>
+    
+    <div class="glass-panel" style="min-height: 60vh; padding: 40px; box-shadow: 8px 8px 0px #000;">
+        <div id="substep1" class="story-screen">
+            <h2 class="fade-in" style="color: var(--text-muted); font-size: 1.5rem;">РАВНОВЕСИЕ НЭША</h2>
+            <h1 class="fade-in delay-1" style="font-size: 3rem; margin: 30px 0;">ТЫ ПРЕДСКАЗЫВАЛ ГРАФ ВЕРОЯТНОСТЕЙ.</h1>
+            <p class="fade-in delay-2" style="font-weight: 900; font-size: 1.2rem; line-height: 1.5;">Почему все в итоге жмут "УКРАСТЬ"? Это математическая неизбежность. <br>В теории игр это называется <strong>Равновесием Нэша</strong> — точка, где никому не выгодно менять стратегию, если другой ее не меняет.</p>
+            
+            <div class="fade-in delay-3" style="margin-top: 30px; font-weight: 900; font-size: 1.2rem; border: var(--border); padding: 20px; background: var(--yellow);">
+                Матрица, которую ты видел — это просто <strong>граф путей</strong>. Ты мысленно перебирал ветки графа, чтобы найти ту, где твой риск минимален.
+            </div>
+
+            <button class="btn-gacha fade-in delay-3" style="max-width: 400px; margin-top: 40px;" onclick="showOGE()">ПОКАЗАТЬ ОГЭ</button>
+        </div>
+    </div>
+    
+    <div class="glass-panel oge-card hidden" id="ogeCard">
+        <h3 style="font-size: 2.5rem; text-align: center;">MISSION PASSED<br><span style="color: var(--danger)">ОГЭ №4 и №11</span></h3>
+        <div style="background: #fff; padding: 30px; border: var(--border); margin: 30px 0; font-weight: 700; box-shadow: 4px 4px 0px #000;">
+            <p style="font-size:1.2rem; margin: 0; line-height: 1.6;"><em>"Между населёнными пунктами построены дороги, протяжённость которых приведена в таблице. Определите длину кратчайшего пути..."</em></p>
+        </div>
+        <p style="font-size:1.2rem; line-height: 1.8; text-align: center; font-weight: 700;">Решение задачи на графы — это то же самое построение дерева решений, которое ты только что делал, пытаясь переиграть бота. Ты ищешь оптимальный маршрут в матрице. <br><strong style="color:var(--text); font-size: 1.5rem; display: block; margin-top: 15px; background: var(--accent); padding: 5px; border: 3px solid #000;">ТОТ ЖЕ МЕХАНИЗМ МОЗГА.</strong></p>
+        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--text); color:#fff; margin-top: 40px; max-width: 400px; margin-left: auto; margin-right: auto;">ВЕРНУТЬСЯ В МЕНЮ</a>
+    </div>
+</div>
+
+<script>
+    let pScore = 0;
+    let bScore = 0;
+    let round = 0;
+    
+    // Bot strategy: starts nice, then plays Tit-for-Tat, then becomes greedy.
+    function getBotMove() {
+        if(round === 0) return 'split';
+        if(round === 1) return Math.random() > 0.5 ? 'split' : 'steal';
+        return 'steal';
+    }
+
+    function playRound(pMove) {
+        let bMove = getBotMove();
+        
+        // Reset cells
+        document.querySelectorAll('.matrix-cell.cell-data').forEach(el => el.style.background = '#fff');
+        
+        let log = document.getElementById('resultLog');
+        
+        if (pMove === 'split' && bMove === 'split') {
+            document.getElementById('cell-split-split').style.background = 'var(--yellow)';
+            pScore += 5000; bScore += 5000;
+            log.innerText = "Оба поделили! +5000 каждому.";
+            log.style.color = "var(--accent)";
+        } else if (pMove === 'steal' && bMove === 'split') {
+            document.getElementById('cell-steal-split').style.background = 'var(--yellow)';
+            pScore += 10000;
+            log.innerText = "Ты заскамил бота! +10000.";
+            log.style.color = "var(--accent)";
+        } else if (pMove === 'split' && bMove === 'steal') {
+            document.getElementById('cell-split-steal').style.background = 'var(--yellow)';
+            bScore += 10000;
+            log.innerText = "Бот заскамил тебя! Ты остался ни с чем.";
+            log.style.color = "var(--danger)";
+        } else {
+            document.getElementById('cell-steal-steal').style.background = 'var(--danger)';
+            log.innerText = "Жадность сгубила обоих. Никто ничего не получил.";
+            log.style.color = "var(--danger)";
+        }
+        
+        document.getElementById('pScore').innerText = pScore;
+        document.getElementById('bScore').innerText = bScore;
+        
+        round++;
+        
+        if (round >= 3) {
+            document.getElementById('btnSplit').style.display = "none";
+            document.getElementById('btnSteal').style.display = "none";
+            document.getElementById('btnNext').style.display = "block";
+        }
+    }
+
+    function goToTheory() {
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+    }
+
+    function showOGE() {
+        document.getElementById('ogeCard').classList.remove('hidden');
+        setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+    }
+</script>
+
 </body>
 </html>
