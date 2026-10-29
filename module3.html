@@ -6,6 +6,78 @@
     <title>MIND ZONE | ИМБА</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
     <style>
+        /* DUOLINGO LESSON TOP BAR */
+        .lesson-navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: var(--border);
+            margin-bottom: 25px;
+        }
+        .exit-btn {
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            box-shadow: 3px 3px 0px #000000;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #000000;
+            text-decoration: none;
+            transition: all 0.1s;
+            flex-shrink: 0;
+        }
+        .exit-btn:hover { background: #f0f0f0; }
+        .exit-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px #000000;
+        }
+        .progress-track {
+            flex: 1;
+            background: #E0DEC9;
+            border: 3px solid #000000;
+            height: 28px;
+            position: relative;
+            box-shadow: 3px 3px 0px #000000;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 33%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+        .hearts-pill {
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            box-shadow: 3px 3px 0px #000000;
+            padding: 8px 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 900;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
         :root {
             --bg: #F4F1E1;
             --panel: #FFFFFF;
@@ -102,6 +174,14 @@
 <body>
 
 <div class="app-container" id="step1">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 33%;"></div>
+            <div class="progress-label">ШАГ 1 ИЗ 3 • ДИЛЕММА НЭША</div>
+        </div>
+        <div class="hearts-pill">❤️ 5</div>
+    </div>
     <div class="header">
         <h2 style="letter-spacing: 2px;">MIND<span style="color:var(--danger)">ZONE</span></h2>
         <div class="balance-badge">МОДУЛЬ 3 • ТЕОРИЯ ИГР</div>
@@ -150,6 +230,14 @@
 
 <!-- STEP 2: THEORY & DEEP EXPLANATION -->
 <div class="app-container hidden" id="step2">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" id="pFill3" style="width: 66%;"></div>
+            <div class="progress-label" id="pLabel3">ШАГ 2 ИЗ 3 • ГРАФ РЕШЕНИЙ</div>
+        </div>
+        <div class="hearts-pill">❤️ 5</div>
+    </div>
     <div class="header">
         <h2 style="color: var(--accent);">ТЕОРИЯ ИГР И ГРАФЫ</h2>
         <div class="balance-badge">ОГЭ №4 И №11</div>
@@ -337,9 +425,11 @@
         let opts = document.querySelectorAll('#quizContainer3 .quiz-opt');
         opts.forEach(o => o.style.pointerEvents = 'none');
         
-        if (isCorrect) {
+if (isCorrect) {
             el.classList.add('correct');
             document.getElementById('quizFeedback3').classList.remove('hidden');
+            let f = document.getElementById('pFill3'); if(f) f.style.width = '100%';
+            let l = document.getElementById('pLabel3'); if(l) l.innerText = 'ШАГ 3 ИЗ 3 • ЭКЗАМЕН СДАН!';
             try {
                 localStorage.setItem('imba_mod_3', 'true');
                 let cur = parseInt(localStorage.getItem('imba_xp') || '0');

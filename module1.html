@@ -6,6 +6,78 @@
     <title>DROP ZONE | ИМБА</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
     <style>
+        /* DUOLINGO LESSON TOP BAR */
+        .lesson-navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: var(--border);
+            margin-bottom: 25px;
+        }
+        .exit-btn {
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            box-shadow: 3px 3px 0px #000000;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #000000;
+            text-decoration: none;
+            transition: all 0.1s;
+            flex-shrink: 0;
+        }
+        .exit-btn:hover { background: #f0f0f0; }
+        .exit-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px #000000;
+        }
+        .progress-track {
+            flex: 1;
+            background: #E0DEC9;
+            border: 3px solid #000000;
+            height: 28px;
+            position: relative;
+            box-shadow: 3px 3px 0px #000000;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 25%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+        .hearts-pill {
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            box-shadow: 3px 3px 0px #000000;
+            padding: 8px 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 900;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
         :root {
             /* Economics + Neobrutalism Palette */
             --bg: #F4F1E1; /* Ledger paper warm gray/yellow */
@@ -235,6 +307,14 @@
 <body>
 
 <div class="app-container" id="step1">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" id="pFill1" style="width: 25%;"></div>
+            <div class="progress-label" id="pLabel1">ШАГ 1 ИЗ 4 • СИМУЛЯЦИЯ</div>
+        </div>
+        <div class="hearts-pill">❤️ 5</div>
+    </div>
     <div class="header">
         <h2 style="letter-spacing: 2px;">DROP<span style="color:var(--accent)">ZONE</span></h2>
         <div class="balance-badge" id="balanceBadge">
@@ -289,6 +369,14 @@
 </div>
 
 <div class="app-container hidden" id="step2">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 50%;"></div>
+            <div class="progress-label">ШАГ 2 ИЗ 4 • МАТОЖИДАНИЕ</div>
+        </div>
+        <div class="hearts-pill">❤️ 5</div>
+    </div>
     <div class="header">
         <h2 style="color: var(--danger);">СИСТЕМА ВЗЛОМАНА</h2>
     </div>
@@ -365,6 +453,14 @@
 </div>
 
 <div class="app-container hidden" id="step3">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" id="pFill3" style="width: 75%;"></div>
+            <div class="progress-label" id="pLabel3">ШАГ 3 ИЗ 4 • БАЛАНСИРОВКА</div>
+        </div>
+        <div class="hearts-pill">❤️ 5</div>
+    </div>
     <div class="header">
         <h2>DEV<span style="color:var(--success)">MODE</span></h2>
         <div class="balance-badge" style="background: var(--success); border-color:#000; color:#000;">
@@ -603,7 +699,12 @@
     function showOGE() {
         document.getElementById('ogeCard').classList.remove('hidden');
         document.getElementById('finishBtn').classList.add('hidden');
+        let f3 = document.getElementById('pFill3');
+        if (f3) f3.style.width = '100%';
+        let l3 = document.getElementById('pLabel3');
+        if (l3) l3.innerText = 'ШАГ 4 ИЗ 4 • ЭКЗАМЕН ОГЭ';
         setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+    }), 100);
     }
 </script>
 
