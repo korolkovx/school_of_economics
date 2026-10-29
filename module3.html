@@ -324,17 +324,149 @@
             <button class="btn-gacha btn-danger" id="btnSteal" onclick="playRound('steal')">🔪 УКРАСТЬ</button>
         </div>
         
-        <button class="btn-gacha" id="btnNext" style="display: none; background: #000; color:var(--accent);" onclick="goToTheory()">РАСКРЫТЬ МЕТУ И ТЕОРИЮ ИГР</button>
+        <button class="btn-gacha" id="btnNext" style="display: none; background: #000; color:var(--accent);" onclick="goToArena()">В АРЕНУ СТРАТЕГИЙ АКСЕЛЬРОДА ➔</button>
     </div>
 </div>
 
-<!-- STEP 2: THEORY & DEEP EXPLANATION -->
+<!-- STEP 2: AXELROD TOURNAMENT ARENA -->
 <div class="app-container hidden" id="step2">
     <div class="lesson-navbar">
         <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
         <div class="progress-track">
-            <div class="progress-fill" id="pFill3" style="width: 66%;"></div>
-            <div class="progress-label" id="pLabel3">ШАГ 2 ИЗ 3 • ГРАФ РЕШЕНИЙ</div>
+            <div class="progress-fill" style="width: 66%;"></div>
+            <div class="progress-label">ШАГ 2 ИЗ 3 • АРЕНА АКСЕЛЬРОДА</div>
+        </div>
+        <div class="hearts-pill">❤️ 5</div>
+    </div>
+    <div class="header">
+        <h2 style="letter-spacing: 2px;">BOT<span style="color:var(--yellow)">ARENA</span></h2>
+        <div class="balance-badge" style="background:var(--yellow); color:#000;">ТУРНИР 50 РАУНДОВ</div>
+    </div>
+
+    <div class="glass-panel" style="box-shadow: 8px 8px 0px var(--yellow);">
+        <h3 style="font-size: clamp(1.2rem, 3.5vw, 1.7rem);">ЭВОЛЮЦИЯ ДОВЕРИЯ: ТУРНИР АКСЕЛЬРОДА</h3>
+        <p style="font-weight: 700; margin-top: 8px; line-height: 1.5; font-size: 0.95rem;">
+            В 1980 году политолог Роберт Аксельрод собрал алгоритмы ученых со всего мира в битву стратегий повторяющейся дилеммы заключенного. 
+            Проверь свою тактику против 5 архетипов поведения:
+        </p>
+
+        <!-- BOT SELECTOR TABS -->
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin:15px 0 10px;">
+            <button class="stat-pill" id="tab0" style="cursor:pointer; background:var(--accent); color:#000;" onclick="selectBot(0)">⚔️ ОКО ЗА ОКО</button>
+            <button class="stat-pill" id="tab1" style="cursor:pointer; background:#fff;" onclick="selectBot(1)">😈 ГРИФЕР</button>
+            <button class="stat-pill" id="tab2" style="cursor:pointer; background:#fff;" onclick="selectBot(2)">😇 ДОБРЯК</button>
+            <button class="stat-pill" id="tab3" style="cursor:pointer; background:#fff;" onclick="selectBot(3)">😡 ЗЛОПАМЯТНЫЙ</button>
+            <button class="stat-pill" id="tab4" style="cursor:pointer; background:#fff;" onclick="selectBot(4)">🕵️ ДЕТЕКТИВ</button>
+        </div>
+
+        <div id="botDesc" style="background:#f9f9f9; border:2px solid #000; padding:10px 14px; font-weight:700; font-size:0.88rem; line-height:1.4; margin-bottom:15px;">
+            ⚔️ <strong>Око за око (Tit-for-Tat):</strong> Начинает с дружбы (🤝), а затем в точности копирует твой предыдущий ход. На добро отвечает добром, на нож — ударом в ответ.
+        </div>
+
+        <!-- 10-ROUND DUEL HUD -->
+        <div class="vs-container" style="margin-top:10px;">
+            <div class="player-box">
+                <div style="font-size:0.8rem; color:#666;">ТВОЙ СЧЕТ</div>
+                <div id="duelPScore" style="font-size: 1.8rem; color: var(--accent);">0 💰</div>
+            </div>
+            <div class="vs-text" style="font-size:1rem;">РАУНД <span id="duelRound">1</span>/10</div>
+            <div class="player-box">
+                <div style="font-size:0.8rem; color:#666;">СЧЕТ БОТА</div>
+                <div id="duelBScore" style="font-size: 1.8rem; color: var(--danger);">0 💰</div>
+            </div>
+        </div>
+
+        <!-- MOVE HISTORY TAPE -->
+        <div style="background:#000; color:#fff; border:2px solid #000; padding:10px; margin:12px 0; font-family:'Roboto Mono',monospace; font-size:0.85rem; overflow-x:auto;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span style="color:#aaa;">ИСТОРИЯ ДУЭЛИ:</span>
+                <span id="duelStatus" style="color:var(--yellow);">Сделай свой ход!</span>
+            </div>
+            <div id="duelHistory" style="display:flex; gap:6px; min-height:28px; align-items:center;">
+                <span style="color:#666;">(Ожидание первого раунда...)</span>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px;" id="duelActionBtns">
+            <button class="btn-gacha btn-accent" style="padding:14px; font-size:1.05rem;" onclick="playDuelMove('split')">🤝 ПОДЕЛИТЬ</button>
+            <button class="btn-gacha btn-danger" style="padding:14px; font-size:1.05rem;" onclick="playDuelMove('steal')">🔪 УКРАСТЬ</button>
+        </div>
+
+        <!-- ALL-AGAINST-ALL 50-ROUND TOURNAMENT SIMULATOR -->
+        <div style="margin-top:25px; border-top:3px solid #000; padding-top:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <h4 style="margin:0; font-size:1.15rem;">БИТВА ВСЕХ СТРАТЕГИЙ (50 РАУНДОВ)</h4>
+                <button class="stat-pill" style="cursor:pointer; background:var(--accent); color:#000; font-size:0.85rem; padding:6px 12px;" onclick="runFullTournament()">🚀 СИМУЛЯЦИЯ 50 РАУНДОВ</button>
+            </div>
+            <p style="font-size:0.85rem; font-weight:700; color:#555; margin:8px 0 14px;">
+                Смотри, кто побеждает в долгой турнирной сетке, когда каждый бот играет 50 раундов против каждого другого:
+            </p>
+
+            <div id="tourneyBars" style="display:flex; flex-direction:column; gap:8px;">
+                <!-- Animated score bars -->
+                <div>
+                    <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.8rem; font-family:'Roboto Mono',monospace; margin-bottom:3px;">
+                        <span>⚔️ ОКО ЗА ОКО (TIT-FOR-TAT)</span>
+                        <span id="score-tft">0 очков</span>
+                    </div>
+                    <div style="background:#eee; border:2px solid #000; height:18px; position:relative; overflow:hidden;">
+                        <div id="bar-tft" style="background:var(--accent); height:100%; width:0%; transition:width 0.8s ease;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.8rem; font-family:'Roboto Mono',monospace; margin-bottom:3px;">
+                        <span>😡 ЗЛОПАМЯТНЫЙ (GRIM TRIGGER)</span>
+                        <span id="score-grim">0 очков</span>
+                    </div>
+                    <div style="background:#eee; border:2px solid #000; height:18px; position:relative; overflow:hidden;">
+                        <div id="bar-grim" style="background:#7C4DFF; height:100%; width:0%; transition:width 0.8s ease;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.8rem; font-family:'Roboto Mono',monospace; margin-bottom:3px;">
+                        <span>🕵️ ДЕТЕКТИВ (PROBER)</span>
+                        <span id="score-det">0 очков</span>
+                    </div>
+                    <div style="background:#eee; border:2px solid #000; height:18px; position:relative; overflow:hidden;">
+                        <div id="bar-det" style="background:var(--yellow); height:100%; width:0%; transition:width 0.8s ease;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.8rem; font-family:'Roboto Mono',monospace; margin-bottom:3px;">
+                        <span>😇 ДОБРЯК (ALWAYS COOP)</span>
+                        <span id="score-coop">0 очков</span>
+                    </div>
+                    <div style="background:#eee; border:2px solid #000; height:18px; position:relative; overflow:hidden;">
+                        <div id="bar-coop" style="background:#2979FF; height:100%; width:0%; transition:width 0.8s ease;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.8rem; font-family:'Roboto Mono',monospace; margin-bottom:3px;">
+                        <span>😈 ГРИФЕР (ALWAYS DEFECT)</span>
+                        <span id="score-defect">0 очков</span>
+                    </div>
+                    <div style="background:#eee; border:2px solid #000; height:18px; position:relative; overflow:hidden;">
+                        <div id="bar-defect" style="background:var(--danger); height:100%; width:0%; transition:width 0.8s ease;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tourneyInsight" class="hidden" style="margin-top:14px; background:#E8F5E9; border:2px solid #000; padding:12px; font-size:0.88rem; font-weight:700; line-height:1.4;">
+                👑 <strong>ПАРАДОКС АКСЕЛЬРОДА:</strong> «Око за око» побеждает в турнире, хотя не выиграла ни одного отдельного матча! Она побеждает потому, что защищает от паразитов и выжимает максимум очков из сотрудничества. Это фундамент доверия в экономике и мультиплеере.
+            </div>
+        </div>
+
+        <button class="btn-gacha" style="background:#000; color:var(--accent); margin-top:25px;" onclick="goToTheory()">ПЕРЕЙТИ К ГРАФУ РЕШЕНИЙ И ОГЭ №4 ➔</button>
+    </div>
+</div>
+
+<!-- STEP 3: THEORY & DEEP EXPLANATION -->
+<div class="app-container hidden" id="step3">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 100%;"></div>
+            <div class="progress-label">ШАГ 3 ИЗ 3 • ГРАФ РЕШЕНИЙ И ОГЭ</div>
         </div>
         <div class="hearts-pill">❤️ 5</div>
     </div>
@@ -457,7 +589,7 @@
         </div>
 
         <div style="display:flex; flex-direction:column; gap:12px; margin-top:30px; max-width:480px; margin-left:auto; margin-right:auto;">
-            <a href="module5.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--accent); color:#000; font-size:1.15rem;">СЛЕДУЮЩИЙ УРОВЕНЬ: ФИНАЛЬНЫЙ БОСС (№4) ➔</a>
+            <a href="module6.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--accent); color:#000; font-size:1.15rem;">СЛЕДУЮЩИЙ УРОВЕНЬ: БИРЖА ЛУТА И ИНФЛЯЦИЯ (№12) ➔</a>
             <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:#fff; color:#000; font-size:0.95rem; border:2px solid #000; box-shadow:3px 3px 0px #000;">🗺 ВЕРНУТЬСЯ НА КАРТУ КУРСА</a>
         </div>
     </div>
@@ -515,10 +647,178 @@
         }
     }
 
-    function goToTheory() {
+    function goToArena() {
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToTheory() {
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step3').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // AXELROD DUEL LOGIC
+    let currentBotIdx = 0;
+    const botArchetypes = [
+        { name: "Око за око", icon: "⚔️", desc: "⚔️ <strong>Око за око (Tit-for-Tat):</strong> Начинает с дружбы (🤝), а затем в точности копирует твой предыдущий ход. На добро отвечает добром, на нож — ударом в ответ." },
+        { name: "Грифер", icon: "😈", desc: "😈 <strong>Грифер (Always Defect):</strong> Всегда жмет украсть (🔪). Надеется заскамить тебя при любой попытке подружиться." },
+        { name: "Добряк", icon: "😇", desc: "😇 <strong>Добряк (Always Cooperate):</strong> Всегда готов делиться (🤝), даже если ты предал его 10 раз подряд." },
+        { name: "Злопамятный", icon: "😡", desc: "😡 <strong>Злопамятный (Grim Trigger):</strong> Начинает мирно, но стоит тебе предать его хотя бы один раз — он включает режим вечной мести до конца игры!" },
+        { name: "Детектив", icon: "🕵️", desc: "🕵️ <strong>Детектив:</strong> Первые ходы проверяет тебя [🤝, 🔪, 🤝, 🤝]. Если ты дал сдачи — уважает и играет «Око за око». Если стерпел — беспощадно грабит тебя до конца!" }
+    ];
+
+    let duelRound = 1;
+    let duelPScore = 0;
+    let duelBScore = 0;
+    let duelHistory = [];
+    let pHistory = [];
+    let bHistory = [];
+
+    function selectBot(idx) {
+        currentBotIdx = idx;
+        for (let i = 0; i < 5; i++) {
+            let tab = document.getElementById('tab' + i);
+            if (tab) {
+                tab.style.background = i === idx ? 'var(--accent)' : '#fff';
+                tab.style.color = '#000';
+            }
+        }
+        document.getElementById('botDesc').innerHTML = botArchetypes[idx].desc;
+        resetDuel();
+    }
+
+    function resetDuel() {
+        duelRound = 1;
+        duelPScore = 0;
+        duelBScore = 0;
+        pHistory = [];
+        bHistory = [];
+        document.getElementById('duelRound').innerText = '1';
+        document.getElementById('duelPScore').innerText = '0 💰';
+        document.getElementById('duelBScore').innerText = '0 💰';
+        document.getElementById('duelHistory').innerHTML = '<span style="color:#666;">(Ожидание первого раунда...)</span>';
+        document.getElementById('duelStatus').innerText = 'Сделай свой ход!';
+        document.getElementById('duelActionBtns').style.display = 'flex';
+    }
+
+    function getArchetypeMove(idx, pHist, bHist, r) {
+        if (idx === 0) { // Tit-for-tat
+            if (r === 1) return 'split';
+            return pHist[pHist.length - 1];
+        }
+        if (idx === 1) return 'steal'; // Always defect
+        if (idx === 2) return 'split'; // Always cooperate
+        if (idx === 3) { // Grim trigger
+            if (pHist.includes('steal')) return 'steal';
+            return 'split';
+        }
+        if (idx === 4) { // Detective
+            const intro = ['split', 'steal', 'split', 'split'];
+            if (r <= 4) return intro[r - 1];
+            // Check if player ever retaliated in response to betrayal
+            let playerEverRetaliated = pHist.includes('steal');
+            if (playerEverRetaliated) {
+                return pHist[pHist.length - 1]; // tit-for-tat
+            } else {
+                return 'steal'; // exploit!
+            }
+        }
+        return 'split';
+    }
+
+    function playDuelMove(pMove) {
+        let bMove = getArchetypeMove(currentBotIdx, pHistory, bHistory, duelRound);
+        pHistory.push(pMove);
+        bHistory.push(bMove);
+
+        let pGain = 0;
+        let bGain = 0;
+        let label = '';
+
+        if (pMove === 'split' && bMove === 'split') {
+            pGain = 3000; bGain = 3000;
+            label = '🤝 Обоюдный мир (+3 000 каждому)';
+        } else if (pMove === 'steal' && bMove === 'split') {
+            pGain = 5000; bGain = 0;
+            label = '🔪 Ты предал добряка! (+5 000 тебе)';
+        } else if (pMove === 'split' && bMove === 'steal') {
+            pGain = 0; bGain = 5000;
+            label = '⚠️ Бот тебя подставил (+5 000 боту)';
+        } else {
+            pGain = 1000; bGain = 1000;
+            label = '💥 Взаимная вражда (+1 000 каждому)';
+        }
+
+        duelPScore += pGain;
+        duelBScore += bGain;
+        document.getElementById('duelPScore').innerText = duelPScore.toLocaleString() + ' 💰';
+        document.getElementById('duelBScore').innerText = duelBScore.toLocaleString() + ' 💰';
+        document.getElementById('duelStatus').innerText = label;
+
+        // Render tape
+        let histContainer = document.getElementById('duelHistory');
+        if (duelRound === 1) histContainer.innerHTML = '';
+        let dot = document.createElement('div');
+        dot.style.background = '#222';
+        dot.style.border = '1px solid #444';
+        dot.style.padding = '2px 5px';
+        dot.style.borderRadius = '3px';
+        dot.style.fontSize = '0.75rem';
+        dot.innerHTML = `<span style="color:#aaa;">R${duelRound}:</span> ${pMove === 'split' ? '🤝' : '🔪'} vs ${bMove === 'split' ? '🤝' : '🔪'}`;
+        histContainer.appendChild(dot);
+
+        duelRound++;
+        if (duelRound <= 10) {
+            document.getElementById('duelRound').innerText = duelRound;
+        } else {
+            document.getElementById('duelActionBtns').style.display = 'none';
+            document.getElementById('duelStatus').innerText = '🏁 10 раундов сыграно! Выбери другого бота или запусти турнир!';
+        }
+    }
+
+    // FULL 50-ROUND ROUND ROBIN TOURNAMENT
+    function runFullTournament() {
+        const scores = [0, 0, 0, 0, 0]; // [tft, grim, det, coop, defect]
+        const botIndices = [0, 3, 4, 2, 1]; // matching the visual bars
+
+        for (let i = 0; i < botIndices.length; i++) {
+            for (let j = 0; j < botIndices.length; j++) {
+                let bi = botIndices[i];
+                let bj = botIndices[j];
+
+                let hA = [];
+                let hB = [];
+
+                for (let r = 1; r <= 50; r++) {
+                    let mA = getArchetypeMove(bi, hB, hA, r);
+                    let mB = getArchetypeMove(bj, hA, hB, r);
+                    hA.push(mA);
+                    hB.push(mB);
+
+                    if (mA === 'split' && mB === 'split') { scores[i] += 3; scores[j] += 3; }
+                    else if (mA === 'steal' && mB === 'split') { scores[i] += 5; }
+                    else if (mA === 'split' && mB === 'steal') { scores[j] += 5; }
+                    else { scores[i] += 1; scores[j] += 1; }
+                }
+            }
+        }
+
+        let maxScore = Math.max(...scores);
+        const barIds = ['tft', 'grim', 'det', 'coop', 'defect'];
+
+        scores.forEach((sc, idx) => {
+            let bar = document.getElementById('bar-' + barIds[idx]);
+            let txt = document.getElementById('score-' + barIds[idx]);
+            if (bar && txt) {
+                let pct = Math.round((sc / maxScore) * 100);
+                bar.style.width = pct + '%';
+                txt.innerText = sc.toLocaleString() + ' очков';
+            }
+        });
+
+        document.getElementById('tourneyInsight').classList.remove('hidden');
     }
 
     function checkAnswer3(el, isCorrect) {

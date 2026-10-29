@@ -521,6 +521,46 @@
                 <button class="btn-gacha" id="finishBtn" disabled style="background: #999; margin-top:30px; width: 100%; color: #000;" onclick="showOGE()">БАЛАНС НЕ ОДОБРЕН</button>
             </div>
         </div>
+
+        <!-- MONTE CARLO STRESS TEST SANDBOX -->
+        <div style="margin-top:25px; background:#111; color:#fff; border:3px solid #000; box-shadow:6px 6px 0px #000; padding:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <h4 style="color:var(--yellow); font-size:1.15rem; margin:0; text-transform:uppercase;">СЕРВЕРНЫЙ СТРЕСС-ТЕСТ: ЗАКОН БОЛЬШИХ ЧИСЕЛ</h4>
+                <span style="font-family:'Roboto Mono',monospace; font-size:0.75rem; background:#222; color:var(--accent); padding:2px 8px; border:1px solid #444; font-weight:900;">10 000 СПИНОВ В ЖИВОМ ЭФИРЕ</span>
+            </div>
+            <p style="color:#bbb; font-size:0.85rem; font-weight:700; margin:10px 0 14px; line-height:1.5;">
+                Запусти массовое открытие кейсов на твоем сервере. На маленьких цифрах результат штормит, но на дистанции <strong>10 000 спинов</strong> реальный профит ложится прямо на расчетную линию теории вероятностей!
+            </p>
+
+            <div style="background:#000; border:2px solid #333; padding:10px; position:relative;">
+                <div style="display:flex; justify-content:space-between; font-family:'Roboto Mono',monospace; font-size:0.75rem; margin-bottom:6px; color:#aaa;">
+                    <span style="color:#00C853;">● ФАКТИЧЕСКИЙ ПРОФИТ СЕРВЕРА</span>
+                    <span style="color:#FFC000;">--- ТЕОРЕТИЧЕСКОЕ ОЖИДАНИЕ (E)</span>
+                </div>
+                <canvas id="monteCarloCanvas" style="width:100%; height:150px; display:block;"></canvas>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px; font-family:'Roboto Mono',monospace; font-size:0.82rem;">
+                <div style="background:#1e1e1e; padding:8px 10px; border-left:3px solid var(--accent);">
+                    <div style="color:#888;">СПИНОВ:</div>
+                    <div id="simSpins" style="font-weight:900; font-size:1.1rem; color:#fff;">0</div>
+                </div>
+                <div style="background:#1e1e1e; padding:8px 10px; border-left:3px solid var(--yellow);">
+                    <div style="color:#888;">НОЖЕЙ ВЫПАЛО:</div>
+                    <div id="simKnives" style="font-weight:900; font-size:1.1rem; color:var(--yellow);">0 (0.0%)</div>
+                </div>
+                <div style="background:#1e1e1e; padding:8px 10px; border-left:3px solid #00C853;">
+                    <div style="color:#888;">ЧИСТЫЙ ПРОФИТ:</div>
+                    <div id="simProfit" style="font-weight:900; font-size:1.1rem; color:#00C853;">0 💎</div>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+                <button class="stat-pill" style="flex:1; justify-content:center; padding:10px; cursor:pointer; background:var(--accent); color:#000;" onclick="runMonteCarlo(1000)">⚡ СИМУЛЯЦИЯ 1 000</button>
+                <button class="stat-pill" style="flex:1; justify-content:center; padding:10px; cursor:pointer; background:var(--yellow); color:#000;" onclick="runMonteCarlo(10000)">🚀 СИМУЛЯЦИЯ 10 000</button>
+                <button class="stat-pill" style="padding:10px; cursor:pointer; background:#333; color:#fff;" onclick="resetMonteCarlo()">СБРОС</button>
+            </div>
+        </div>
     </div>
 
     <div class="glass-panel oge-card hidden" id="ogeCard">
@@ -729,7 +769,131 @@
         let l3 = document.getElementById('pLabel3');
         if (l3) l3.innerText = 'ШАГ 4 ИЗ 4 • ЭКЗАМЕН ОГЭ';
         setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
-    }), 100);
+    }
+
+    // MONTE CARLO ENGINE & REAL-TIME LAW OF LARGE NUMBERS
+    let mcHistory = [];
+    let mcTotalSpins = 0;
+    let mcTotalKnives = 0;
+    let mcTotalProfit = 0;
+
+    function resetMonteCarlo() {
+        mcHistory = [];
+        mcTotalSpins = 0;
+        mcTotalKnives = 0;
+        mcTotalProfit = 0;
+        document.getElementById('simSpins').innerText = '0';
+        document.getElementById('simKnives').innerText = '0 (0.0%)';
+        document.getElementById('simProfit').innerText = '0 💎';
+        drawMonteCarloCanvas();
+    }
+
+    function runMonteCarlo(numSpins) {
+        let chance = (document.getElementById('chanceSlider').value / 10) / 100;
+        let step = Math.max(1, Math.floor(numSpins / 100));
+        let batchProfit = 0;
+
+        for (let i = 1; i <= numSpins; i++) {
+            mcTotalSpins++;
+            let isKnife = Math.random() < chance;
+            if (isKnife) mcTotalKnives++;
+            // House profit per box: 200 - payout
+            let payout = isKnife ? 5000 : 10;
+            let profit = 200 - payout;
+            mcTotalProfit += profit;
+
+            if (i % step === 0 || i === numSpins) {
+                mcHistory.push({
+                    spins: mcTotalSpins,
+                    profit: mcTotalProfit,
+                    expected: mcTotalSpins * (200 - (chance * 5000 + (1 - chance) * 10))
+                });
+            }
+        }
+
+        let knifePct = (mcTotalKnives / mcTotalSpins * 100).toFixed(2);
+        document.getElementById('simSpins').innerText = mcTotalSpins.toLocaleString('ru-RU');
+        document.getElementById('simKnives').innerText = `${mcTotalKnives} (${knifePct}%)`;
+        document.getElementById('simProfit').innerText = `${mcTotalProfit > 0 ? '+' : ''}${mcTotalProfit.toLocaleString('ru-RU')} 💎`;
+
+        drawMonteCarloCanvas();
+    }
+
+    function drawMonteCarloCanvas() {
+        const canvas = document.getElementById('monteCarloCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+
+        canvas.width = canvas.offsetWidth * dpr;
+        canvas.height = canvas.offsetHeight * dpr;
+        ctx.scale(dpr, dpr);
+
+        const w = canvas.offsetWidth;
+        const h = canvas.offsetHeight;
+        ctx.clearRect(0, 0, w, h);
+
+        if (mcHistory.length < 2) {
+            ctx.fillStyle = '#444';
+            ctx.font = '12px "Roboto Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('Нажмите кнопку симуляции, чтобы построить график', w / 2, h / 2);
+            return;
+        }
+
+        // Find min and max for scaling
+        let maxSpins = mcHistory[mcHistory.length - 1].spins;
+        let minProfit = 0;
+        let maxProfit = 1000;
+        mcHistory.forEach(pt => {
+            if (pt.profit < minProfit) minProfit = pt.profit;
+            if (pt.profit > maxProfit) maxProfit = pt.profit;
+            if (pt.expected > maxProfit) maxProfit = pt.expected;
+            if (pt.expected < minProfit) minProfit = pt.expected;
+        });
+
+        // Add 10% padding
+        let range = (maxProfit - minProfit) || 1;
+        let pad = range * 0.1;
+        maxProfit += pad; minProfit -= pad;
+
+        function getY(val) {
+            return h - ((val - minProfit) / (maxProfit - minProfit)) * h;
+        }
+        function getX(s) {
+            return (s / maxSpins) * (w - 30) + 10;
+        }
+
+        // Draw Zero Line
+        let yZero = getY(0);
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(10, yZero);
+        ctx.lineTo(w - 10, yZero);
+        ctx.stroke();
+
+        // Draw Theoretical Expected Line (Dashed Yellow)
+        ctx.strokeStyle = '#FFC000';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(getX(0), getY(0));
+        ctx.lineTo(getX(maxSpins), getY(mcHistory[mcHistory.length - 1].expected));
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw Actual Realized Profit Line (Solid Green)
+        ctx.strokeStyle = '#00C853';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        mcHistory.forEach((pt, idx) => {
+            let px = getX(pt.spins);
+            let py = getY(pt.profit);
+            if (idx === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
     }
 </script>
 

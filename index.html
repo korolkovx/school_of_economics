@@ -393,9 +393,9 @@
 </header>
 
 <div class="container">
-    <!-- UNIT HEADER -->
+    <!-- UNIT 1 HEADER -->
     <div class="unit-banner">
-        <span class="unit-tag">РАЗДЕЛ 1 • ОСНОВЫ МЕТЫ</span>
+        <span class="unit-tag">РАЗДЕЛ 1 • МИКРОЭКОНОМИКА И РАНДОМ</span>
         <h2>ИЗНАНКА ИГРОВЫХ МЕХАНИК И ОГЭ</h2>
     </div>
 
@@ -416,13 +416,13 @@
             </div>
         </div>
 
-        <!-- BONUS CHEST: SCRATCH CARD -->
+        <!-- BONUS CHEST 1: SCRATCH CARD -->
         <div class="map-node-row pos-right">
             <div class="node-wrapper">
-                <div class="duo-chest" id="bonusChest" onclick="openChest()" title="Секретный сундук с чит-кодом">
+                <div class="duo-chest" id="bonusChest" onclick="openChest(1)" title="Секретный сундук с чит-кодом №1">
                     <span>🎁</span>
                 </div>
-                <div class="node-label" style="background:var(--yellow);">БОНУСНЫЙ СУНДУК</div>
+                <div class="node-label" style="background:var(--yellow);">БОНУСНЫЙ СУНДУК 1</div>
             </div>
         </div>
 
@@ -456,43 +456,135 @@
             </div>
         </div>
 
-        <!-- LEVEL 5: BOSS RAID (GRAPHS) -->
+        <!-- UNIT 2 BANNER (IN-BETWEEN SECTIONS) -->
+        <div class="map-node-row pos-center" style="margin: 35px 0 45px; z-index: 5;">
+            <div class="unit-banner" style="background:#2979FF; color:#fff; box-shadow:6px 6px 0px #000; width:100%; max-width:440px;">
+                <span class="unit-tag" style="background:#fff; color:#000;">РАЗДЕЛ 2 • МАКРОЭКОНОМИКА И ФУНКЦИИ</span>
+                <h2 style="color:#fff;">РЫНКИ, БАЛЛИСТИКА И ГРАФЫ</h2>
+            </div>
+        </div>
+
+        <!-- LEVEL 5: MARKET EXCHANGE & COMPOUND INTEREST (OGE 12) -->
         <div class="map-node-row pos-center">
             <div class="node-wrapper">
-                <a href="module5.html" class="duo-node" id="node5" title="Начать Уровень 5">
+                <a href="module6.html" class="duo-node" id="node5" title="Начать Уровень 5">
+                    <span class="icon">📈</span>
+                </a>
+                <div class="node-label">5. БИРЖА ЛУТА <span class="node-oge">№12</span></div>
+            </div>
+        </div>
+
+        <!-- BONUS CHEST 2: SCRATCH CARD -->
+        <div class="map-node-row pos-left">
+            <div class="node-wrapper">
+                <div class="duo-chest" id="bonusChest2" onclick="openChest(2)" title="Секретный сундук с чит-кодом №2" style="background:#E3F2FD;">
+                    <span>💎</span>
+                </div>
+                <div class="node-label" style="background:var(--yellow);">БОНУСНЫЙ СУНДУК 2</div>
+            </div>
+        </div>
+
+        <!-- LEVEL 6: SIEGE BALLISTICS (OGE 11) -->
+        <div class="map-node-row pos-right">
+            <div class="node-wrapper">
+                <a href="module7.html" class="duo-node" id="node6" title="Начать Уровень 6">
+                    <span class="icon">🎯</span>
+                </a>
+                <div class="node-label">6. БАЛЛИСТИКА <span class="node-oge">№11</span></div>
+            </div>
+        </div>
+
+        <!-- LEVEL 7: BASE BUILDER & PICK'S FORMULA (OGE 18) -->
+        <div class="map-node-row pos-left">
+            <div class="node-wrapper">
+                <a href="module8.html" class="duo-node" id="node7" title="Начать Уровень 7">
+                    <span class="icon">🏰</span>
+                </a>
+                <div class="node-label">7. ЗАХВАТ БАЗЫ <span class="node-oge">№18</span></div>
+            </div>
+        </div>
+
+        <!-- LEVEL 8: FINAL BOSS RAID (OGE 4) -->
+        <div class="map-node-row pos-center">
+            <div class="node-wrapper">
+                <a href="module5.html" class="duo-node" id="node8" title="Начать Уровень 8">
                     <span class="icon">🐉</span>
                 </a>
-                <div class="node-label">5. РЕЙД ПО ГРАФАМ <span class="node-oge">№4</span></div>
+                <div class="node-label">8. РЕЙД ПО ГРАФАМ <span class="node-oge">№4</span></div>
             </div>
         </div>
 
         <!-- FINAL TROPHY -->
         <div class="map-node-row pos-center" style="margin-bottom: 0;">
             <div class="node-wrapper">
-                <div class="duo-node" id="trophyNode" style="width: 86px; height: 86px; background: var(--yellow); border-radius: 20px;">
+                <div class="duo-node" id="trophyNode" onclick="openTrophy()" style="width: 88px; height: 88px; background: var(--yellow); border-radius: 20px;" title="Получить диплом магистра">
                     <span class="icon" style="font-size: 2.6rem;">🏆</span>
                 </div>
-                <div class="node-label" style="background:var(--accent);">ИТОГОВЫЙ ДИПЛОМ</div>
+                <div class="node-label" style="background:var(--accent); cursor:pointer;" onclick="openTrophy()">ИТОГОВЫЙ ДИПЛОМ</div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- SCRATCH CHEST MODAL -->
-<div class="modal-overlay" id="chestModal">
+<!-- SCRATCH CHEST MODAL 1 -->
+<div class="modal-overlay" id="chestModal1">
     <div class="modal-card">
-        <button class="close-btn" onclick="closeChest()">✕</button>
-        <h3 style="margin-top:0; font-size:1.25rem;">СЕКРЕТНЫЙ БОНУСНЫЙ СУНДУК</h3>
+        <button class="close-btn" onclick="closeChest(1)">✕</button>
+        <h3 style="margin-top:0; font-size:1.25rem;">СЕКРЕТНЫЙ БОНУСНЫЙ СУНДУК 1</h3>
         <p style="font-weight:700; font-size:0.9rem; line-height: 1.4;">Сотри защитный слой монетой или пальцем, чтобы забрать секретный инсайт:</p>
         
-        <div class="scratch-card" id="modalScratchCard">
+        <div class="scratch-card" id="modalScratchCard1">
             <div style="padding:15px; font-weight:700; font-size:0.88rem; line-height:1.4; text-align:center;">
                 ⚡ <strong>ЛАЙФХАК ОГЭ №10:</strong> Если в условии спрашивают вероятность того, что событие <em>НЕ произойдет</em>, никогда не складывай все варианты вручную! Просто вычти вероятность успеха из единицы: <strong>P = 1 − P_успеха</strong>. Это экономит 3 минуты на экзамене!
             </div>
-            <canvas class="scratch-canvas" id="modalScratchCanvas"></canvas>
+            <canvas class="scratch-canvas" id="modalScratchCanvas1"></canvas>
         </div>
         
-        <button class="stat-pill" style="width:100%; justify-content:center; padding:10px; font-size:0.95rem; cursor:pointer;" onclick="closeChest()">ЗАБРАТЬ +50 XP</button>
+        <button class="stat-pill" style="width:100%; justify-content:center; padding:10px; font-size:0.95rem; cursor:pointer;" onclick="closeChest(1)">ЗАБРАТЬ +50 XP</button>
+    </div>
+</div>
+
+<!-- SCRATCH CHEST MODAL 2 -->
+<div class="modal-overlay" id="chestModal2">
+    <div class="modal-card">
+        <button class="close-btn" onclick="closeChest(2)">✕</button>
+        <h3 style="margin-top:0; font-size:1.25rem;">СЕКРЕТНЫЙ БОНУСНЫЙ СУНДУК 2</h3>
+        <p style="font-weight:700; font-size:0.9rem; line-height: 1.4;">Сотри защитный слой, чтобы забрать формулу прогрессии:</p>
+        
+        <div class="scratch-card" id="modalScratchCard2">
+            <div style="padding:15px; font-weight:700; font-size:0.88rem; line-height:1.4; text-align:center;">
+                📈 <strong>ЛАЙФХАК ОГЭ №12:</strong> В геометрической прогрессии каждый шаг умножает число: <strong>b_n = b_1 · qⁿ⁻¹</strong>. Если в банке депозит со сложным процентом 10% годовых, через 3 года капитал вырастет в <strong>1.10³ = 1.331 раза</strong>, а не на 30%!
+            </div>
+            <canvas class="scratch-canvas" id="modalScratchCanvas2"></canvas>
+        </div>
+        
+        <button class="stat-pill" style="width:100%; justify-content:center; padding:10px; font-size:0.95rem; cursor:pointer;" onclick="closeChest(2)">ЗАБРАТЬ +50 XP</button>
+    </div>
+</div>
+
+<!-- DIPLOMA MODAL -->
+<div class="modal-overlay" id="trophyModal">
+    <div class="modal-card" style="max-width:500px; text-align:center; border: 4px solid #000; box-shadow: 10px 10px 0px #000;">
+        <button class="close-btn" onclick="closeTrophy()">✕</button>
+        <div style="font-size:3.5rem; margin-bottom:10px;">🏆</div>
+        <h3 style="font-size: clamp(1.2rem, 4vw, 1.6rem); margin: 0 0 10px; text-transform:uppercase;">ДИПЛОМ МАГИСТРА ИГРОВОЙ МЕТЫ</h3>
+        <div style="display:inline-block; background:var(--accent); border:2px solid #000; font-family:'Roboto Mono',monospace; font-weight:900; font-size:0.85rem; padding:3px 10px; margin-bottom:15px;">
+            ВЫСШАЯ ШКОЛА ЭКОНОМИКИ • ИМБА
+        </div>
+        
+        <p style="font-weight:700; font-size:0.92rem; line-height:1.5; text-align:left; background:#F4F1E1; border:2px solid #000; padding:14px; margin-bottom:15px;">
+            Настоящий сертификат подтверждает, что игрок освоил <strong>8 математических моделей</strong> игрового баланса и успешно применяет их к заданиям ОГЭ:
+            <br>• Вероятности лутбоксов (№10)
+            <br>• Системы крафта и неравенства (№13)
+            <br>• Сплавы и концентрации (№21)
+            <br>• Равновесие Нэша и теория игр (№11)
+            <br>• Сложные проценты и прогрессии (№12)
+            <br>• Осадные параболы баллистики (№11)
+            <br>• Формулу Пика для захвата баз (№18)
+            <br>• Алгоритм Дейкстры в рейдах (№4)
+        </p>
+
+        <button class="stat-pill" style="width:100%; justify-content:center; padding:12px; font-size:1rem; cursor:pointer; background:var(--yellow);" onclick="claimTrophy()">ПОДТВЕРДИТЬ И ЗАБРАТЬ +500 XP ⭐</button>
     </div>
 </div>
 
@@ -519,6 +611,10 @@
             document.getElementById('node3'),
             document.getElementById('node4'),
             document.getElementById('node5'),
+            document.getElementById('bonusChest2'),
+            document.getElementById('node6'),
+            document.getElementById('node7'),
+            document.getElementById('node8'),
             document.getElementById('trophyNode')
         ].filter(Boolean);
 
@@ -563,10 +659,14 @@
             { id: 'node2', key: 'imba_mod_2' },
             { id: 'node3', key: 'imba_mod_4' },
             { id: 'node4', key: 'imba_mod_3' },
-            { id: 'node5', key: 'imba_mod_5' }
+            { id: 'node5', key: 'imba_mod_6' },
+            { id: 'node6', key: 'imba_mod_7' },
+            { id: 'node7', key: 'imba_mod_8' },
+            { id: 'node8', key: 'imba_mod_5' }
         ];
 
         let activeFound = false;
+        let completedCount = 0;
 
         mods.forEach(m => {
             const el = document.getElementById(m.id);
@@ -576,6 +676,7 @@
             if (isDone) {
                 el.classList.add('completed-level');
                 el.classList.remove('active-level');
+                completedCount++;
             } else if (!activeFound) {
                 el.classList.add('active-level');
                 activeFound = true;
@@ -583,6 +684,11 @@
                 el.style.opacity = '0.9';
             }
         });
+
+        const trophyEl = document.getElementById('trophyNode');
+        if (trophyEl && completedCount >= 8) {
+            trophyEl.classList.add('active-level');
+        }
 
         drawMapPath();
     }
@@ -592,32 +698,60 @@
     window.addEventListener('resize', drawMapPath);
     window.addEventListener('orientationchange', () => setTimeout(drawMapPath, 100));
 
-    // CHEST MODAL
-    function openChest() {
-        document.getElementById('chestModal').classList.add('active');
-        initModalScratch();
+    // CHEST MODALS (1 and 2)
+    function openChest(num) {
+        const modal = document.getElementById('chestModal' + num);
+        if (modal) {
+            modal.classList.add('active');
+            initModalScratch(num);
+        }
     }
-    function closeChest() {
-        document.getElementById('chestModal').classList.remove('active');
+    function closeChest(num) {
+        const modal = document.getElementById('chestModal' + num);
+        if (modal) modal.classList.remove('active');
+        let xp = parseInt(localStorage.getItem('imba_xp') || '150');
+        xp += 50;
+        localStorage.setItem('imba_xp', xp.toString());
+        const xpEl = document.getElementById('userXp');
+        if (xpEl) xpEl.innerText = xp;
+    }
+
+    // TROPHY MODAL
+    function openTrophy() {
+        const modal = document.getElementById('trophyModal');
+        if (modal) modal.classList.add('active');
+    }
+    function closeTrophy() {
+        const modal = document.getElementById('trophyModal');
+        if (modal) modal.classList.remove('active');
+    }
+    function claimTrophy() {
+        let xp = parseInt(localStorage.getItem('imba_xp') || '150');
+        xp += 500;
+        localStorage.setItem('imba_xp', xp.toString());
+        const xpEl = document.getElementById('userXp');
+        if (xpEl) xpEl.innerText = xp;
+        alert('🎉 ПОЗДРАВЛЯЕМ! Вы получили +500 XP и звание МАГИСТРА ИГРОВОЙ МЕТЫ!');
+        closeTrophy();
     }
 
     // SCRATCH IN MODAL
-    let scratchInitialized = false;
-    function initModalScratch() {
-        if (scratchInitialized) return;
-        scratchInitialized = true;
-        const canvas = document.getElementById('modalScratchCanvas');
-        const card = document.getElementById('modalScratchCard');
+    const scratchedMap = {};
+    function initModalScratch(num) {
+        if (scratchedMap[num]) return;
+        scratchedMap[num] = true;
+        const canvas = document.getElementById('modalScratchCanvas' + num);
+        const card = document.getElementById('modalScratchCard' + num);
         if (!canvas || !card) return;
         const ctx = canvas.getContext('2d');
 
         canvas.width = card.offsetWidth;
         canvas.height = card.offsetHeight;
 
-        ctx.fillStyle = '#B8B8B8';
+        ctx.fillStyle = num === 1 ? '#B8B8B8' : '#90CAF9';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = '#999';
-        ctx.lineWidth = 5;
+        ctx.strokeStyle = '#666';
+        ctx.lineWidth = 4;
         for (let x = -canvas.height; x < canvas.width + canvas.height; x += 25) {
             ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + canvas.height, canvas.height); ctx.stroke();
         }
