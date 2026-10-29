@@ -218,7 +218,6 @@
             <div class="progress-fill" style="width: 50%;"></div>
             <div class="progress-label">ШАГ 1 ИЗ 2 • МАРШРУТ К БОССУ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
     </div>
     <div class="header">
         <h2 style="letter-spacing: 2px;">RAID<span style="color:var(--danger)">ZONE</span></h2>
@@ -229,73 +228,84 @@
         <h3 style="font-size: 1.8rem; text-align: center;">МАРШРУТ ДО ЛОГОВА БОССА</h3>
         <p style="font-weight: 700; margin-top: 10px; text-align: center; line-height: 1.5;">
             Босс начинает кастовать смертельное заклинание через <strong>12 минут</strong>. <br>
-            Проложи кратчайший маршрут отряда от портала <strong>A (Старт)</strong> до портала <strong>F (Логово)</strong>!
+            Проложи кратчайший маршрут отряда от портала <strong>A (Старт)</strong> до портала <strong>F (Логово)</strong>! Кликай по узлам или выбери маршрут:
         </p>
 
-        <!-- GRAPH CANVAS / SVG -->
+        <!-- GRAPH CANVAS / SVG (INTERACTIVE BRILLIANT STYLE) -->
         <div class="graph-board">
-            <svg viewBox="0 0 550 240" style="width:100%; height:auto;">
-                <!-- Lines -->
-                <line x1="60" y1="120" x2="180" y2="50" stroke="#000" stroke-width="3"/>
+            <svg id="raidSvg" viewBox="0 0 550 240" style="width:100%; height:auto;">
+                <!-- Lines (Initial neutral state) -->
+                <line id="edge-AB" x1="60" y1="120" x2="180" y2="50" stroke="#000" stroke-width="3" transition="stroke 0.3s"/>
                 <text x="110" y="75" font-family="Roboto Mono" font-weight="900" font-size="12">5 мин</text>
 
-                <line x1="60" y1="120" x2="180" y2="190" stroke="#00C853" stroke-width="4"/>
-                <text x="110" y="170" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">2 мин</text>
+                <line id="edge-AC" x1="60" y1="120" x2="180" y2="190" stroke="#000" stroke-width="3" transition="stroke 0.3s"/>
+                <text x="110" y="170" font-family="Roboto Mono" font-weight="900" font-size="13">2 мин</text>
 
-                <line x1="180" y1="50" x2="350" y2="50" stroke="#000" stroke-width="3"/>
+                <line id="edge-BD" x1="180" y1="50" x2="350" y2="50" stroke="#000" stroke-width="3" transition="stroke 0.3s"/>
                 <text x="260" y="40" font-family="Roboto Mono" font-weight="900" font-size="12">6 мин</text>
 
-                <line x1="180" y1="190" x2="350" y2="190" stroke="#00C853" stroke-width="4"/>
-                <text x="260" y="210" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">5 мин</text>
+                <line id="edge-CE" x1="180" y1="190" x2="350" y2="190" stroke="#000" stroke-width="3" transition="stroke 0.3s"/>
+                <text x="260" y="210" font-family="Roboto Mono" font-weight="900" font-size="13">5 мин</text>
 
-                <line x1="180" y1="50" x2="350" y2="190" stroke="#000" stroke-width="2" stroke-dasharray="3"/>
+                <line id="edge-BE" x1="180" y1="50" x2="350" y2="190" stroke="#777" stroke-width="2" stroke-dasharray="4" transition="stroke 0.3s"/>
                 <text x="245" y="115" font-family="Roboto Mono" font-weight="900" font-size="11">4 мин</text>
 
-                <line x1="350" y1="50" x2="480" y2="120" stroke="#000" stroke-width="3"/>
+                <line id="edge-DF" x1="350" y1="50" x2="480" y2="120" stroke="#000" stroke-width="3" transition="stroke 0.3s"/>
                 <text x="425" y="75" font-family="Roboto Mono" font-weight="900" font-size="12">4 мин</text>
 
-                <line x1="350" y1="190" x2="480" y2="120" stroke="#00C853" stroke-width="4"/>
-                <text x="425" y="170" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">3 мин</text>
+                <line id="edge-EF" x1="350" y1="190" x2="480" y2="120" stroke="#000" stroke-width="3" transition="stroke 0.3s"/>
+                <text x="425" y="170" font-family="Roboto Mono" font-weight="900" font-size="13">3 мин</text>
 
-                <!-- Nodes -->
+                <!-- Interactive Nodes -->
                 <!-- A: (60, 120) -->
-                <circle cx="60" cy="120" r="20" fill="#FFC000" stroke="#000" stroke-width="3"/>
-                <text x="60" y="126" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">A</text>
+                <circle id="node-A" cx="60" cy="120" r="22" fill="#FFC000" stroke="#000" stroke-width="3" style="cursor:pointer;" onclick="clickGraphNode('A')"/>
+                <text x="60" y="126" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle" pointer-events="none">A</text>
 
                 <!-- B: (180, 50) -->
-                <circle cx="180" cy="50" r="20" fill="#fff" stroke="#000" stroke-width="3"/>
-                <text x="180" y="56" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">B</text>
+                <circle id="node-B" cx="180" cy="50" r="20" fill="#fff" stroke="#000" stroke-width="3" style="cursor:pointer;" onclick="clickGraphNode('B')"/>
+                <text x="180" y="56" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle" pointer-events="none">B</text>
 
                 <!-- C: (180, 190) -->
-                <circle cx="180" cy="190" r="20" fill="#00C853" stroke="#000" stroke-width="3"/>
-                <text x="180" y="196" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">C</text>
+                <circle id="node-C" cx="180" cy="190" r="20" fill="#fff" stroke="#000" stroke-width="3" style="cursor:pointer;" onclick="clickGraphNode('C')"/>
+                <text x="180" y="196" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle" pointer-events="none">C</text>
 
                 <!-- D: (350, 50) -->
-                <circle cx="350" cy="50" r="20" fill="#fff" stroke="#000" stroke-width="3"/>
-                <text x="350" y="56" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">D</text>
+                <circle id="node-D" cx="350" cy="50" r="20" fill="#fff" stroke="#000" stroke-width="3" style="cursor:pointer;" onclick="clickGraphNode('D')"/>
+                <text x="350" y="56" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle" pointer-events="none">D</text>
 
                 <!-- E: (350, 190) -->
-                <circle cx="350" cy="190" r="20" fill="#00C853" stroke="#000" stroke-width="3"/>
-                <text x="350" y="196" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">E</text>
+                <circle id="node-E" cx="350" cy="190" r="20" fill="#fff" stroke="#000" stroke-width="3" style="cursor:pointer;" onclick="clickGraphNode('E')"/>
+                <text x="350" y="196" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle" pointer-events="none">E</text>
 
                 <!-- F: (480, 120) -->
-                <circle cx="480" cy="120" r="22" fill="#FF2A55" stroke="#000" stroke-width="4"/>
-                <text x="480" y="127" font-family="Montserrat" font-weight="900" font-size="15" text-anchor="middle" fill="#fff">БОСС</text>
+                <circle id="node-F" cx="480" cy="120" r="24" fill="#FF2A55" stroke="#000" stroke-width="4" style="cursor:pointer;" onclick="clickGraphNode('F')"/>
+                <text x="480" y="127" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle" fill="#fff" pointer-events="none">БОСС</text>
             </svg>
         </div>
 
-        <div style="background:#f9f9f9; border:2px solid #000; padding:15px; text-align:center; font-family:'Roboto Mono',monospace; font-weight:900; font-size:1.1rem;">
-            ВЫБЕРИ МАРШРУТ:
+        <div style="background:#f9f9f9; border:2px solid #000; padding:15px; text-align:center; font-family:'Roboto Mono',monospace; font-weight:900; font-size:1rem;">
+            ВЫБЕРИ МАРШРУТ ОТРЯДА:
             <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
-                <button class="node-btn" onclick="selectRoute(15, 'A → B → D → F')" style="padding:10px; border:2px solid #000; font-weight:900; background:#fff;">A → B → D → F (5 + 6 + 4 = 15 мин)</button>
-                <button class="node-btn" onclick="selectRoute(10, 'A → C → E → F')" style="padding:10px; border:2px solid #000; font-weight:900; background:var(--yellow);">A → C → E → F (2 + 5 + 3 = 10 мин)</button>
-                <button class="node-btn" onclick="selectRoute(13, 'A → B → E → F')" style="padding:10px; border:2px solid #000; font-weight:900; background:#fff;">A → B → E → F (5 + 4 + 3 = 12 мин)</button>
+                <button class="node-btn" id="routeBtn0" onclick="selectRoute(0, 15, 'A → B → D → F', ['AB', 'BD', 'DF'], ['B', 'D'])" style="padding:10px 14px; border:2px solid #000; font-weight:900; background:#fff; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                    <span>A → B → D → F (5 + 6 + 4 = 15 мин)</span>
+                    <span class="route-badge">⚪</span>
+                </button>
+                <button class="node-btn" id="routeBtn1" onclick="selectRoute(1, 10, 'A → C → E → F', ['AC', 'CE', 'EF'], ['C', 'E'])" style="padding:10px 14px; border:2px solid #000; font-weight:900; background:#fff; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                    <span>A → C → E → F (2 + 5 + 3 = 10 мин)</span>
+                    <span class="route-badge">⚪</span>
+                </button>
+                <button class="node-btn" id="routeBtn2" onclick="selectRoute(2, 12, 'A → B → E → F', ['AB', 'BE', 'EF'], ['B', 'E'])" style="padding:10px 14px; border:2px solid #000; font-weight:900; background:#fff; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                    <span>A → B → E → F (5 + 4 + 3 = 12 мин)</span>
+                    <span class="route-badge">⚪</span>
+                </button>
             </div>
         </div>
 
-        <div id="routeStatus" style="text-align:center; font-weight:900; margin-top:15px; font-size:1.1rem; min-height:30px;">Выбери маршрут отряда выше!</div>
+        <div id="routeStatus" style="text-align:center; font-weight:900; margin-top:15px; font-size:1.05rem; min-height:30px;">
+            Кликни по одному из трех маршрутов или строй путь по узлам графа!
+        </div>
 
-        <button class="btn-gacha hidden" id="bossWinBtn" style="background:var(--accent); color:#000;" onclick="showVictory()">АТАКОВАТЬ БОССА!</button>
+        <button class="btn-gacha hidden" id="bossWinBtn" style="background:var(--accent); color:#000;" onclick="showVictory()">⚔️ АТАКОВАТЬ БОССА!</button>
     </div>
 </div>
 
@@ -307,25 +317,30 @@
             <div class="progress-fill" style="width: 100%;"></div>
             <div class="progress-label">ШАГ 2 ИЗ 2 • БОСС ПОВЕРЖЕН!</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
     </div>
     <div class="story-card" style="box-shadow: 8px 8px 0px var(--accent); text-align:center;">
         <div class="trophy-badge">🏆</div>
         <h2 style="font-size: 2.2rem; margin-bottom:10px;">БОСС ОГЭ ПОВЕРЖЕН!</h2>
-        <p style="font-size: 1.2rem; font-weight: 700; color:#333; line-height:1.6;">
-            Ты прошел все 5 уровней симулятора «ИМБА»!<br>
-            Ты освоил теорию вероятностей, системы неравенств, задачи на смеси и теорию графов.
+        <p style="font-size: 1.15rem; font-weight: 700; color:#333; line-height:1.6;">
+            Ты прошел все 8 уровней симулятора «ИМБА»!<br>
+            Ты освоил фундаментальные математические модели: от вероятностей лутбоксов до алгоритма Дейкстры.
         </p>
 
-        <div style="background:#fff; border:3px solid #000; box-shadow:4px 4px 0px #000; padding:20px; max-width:500px; margin:25px auto; font-family:'Roboto Mono',monospace; text-align:left;">
-            <div style="font-weight:900; color:var(--accent); margin-bottom:10px;">СЕРТИФИКАТ ГОТОВНОСТИ К ОГЭ:</div>
-            <div>✔ Задание №10: Вероятности лутбоксов</div>
-            <div>✔ Задание №13: Лимиты крафта кузницы</div>
-            <div>✔ Задание №21: Концентрация зелий и сплавы</div>
-            <div>✔ Задание №11: Анализ стратегий Нэша</div>
-            <div>✔ Задание №4: Поиск кратчайшего пути графа</div>
+        <div style="background:#fff; border:3px solid #000; box-shadow:4px 4px 0px #000; padding:20px; max-width:520px; margin:25px auto; font-family:'Roboto Mono',monospace; text-align:left; font-size:0.9rem; line-height:1.5;">
+            <div style="font-weight:900; color:var(--accent); margin-bottom:10px; font-size:1rem;">ТВОИ ОСВОЕННЫЕ КОМПЕТЕНЦИИ:</div>
+            <div>✔ ОГЭ №10: Вероятности лутбоксов и мат. ожидание</div>
+            <div>✔ ОГЭ №13: Лимиты крафта кузницы и системы неравенств</div>
+            <div>✔ ОГЭ №21: Концентрация зелий и смеси сплавов</div>
+            <div>✔ ОГЭ №11: Анализ стратегий Нэша и теория игр</div>
+            <div>✔ ОГЭ №12: Сложный процент и геометрическая прогрессия</div>
+            <div>✔ ОГЭ №11: Осадная баллистика и параболы $y = ax^2+bx+c$</div>
+            <div>✔ ОГЭ №18: Захват баз на сетке и Формула Пика</div>
+            <div>✔ ОГЭ №4: Поиск кратчайшего пути в графе (Дейкстра)</div>
             <hr style="border:1px solid #000; margin:12px 0;">
-            <div style="font-weight:900;">ИТОГОВЫЙ СЧЕТ: <span style="color:var(--accent);">+250 XP (МАСТЕР)</span></div>
+            <div style="font-weight:900; display:flex; justify-content:space-between;">
+                <span>НАГРАДА:</span>
+                <span style="color:var(--accent);">+200 XP ⭐ • +50 💎</span>
+            </div>
         </div>
 
         <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--yellow); color:#000; max-width:400px; margin:20px auto 0;">🗺 ВЕРНУТЬСЯ К КАРТЕ КУРСА</a>
@@ -333,22 +348,128 @@
 </div>
 
 <footer style="width:100%; max-width:860px; text-align:center; font-size:0.75rem; color:#777; margin-top:30px; padding:15px; font-weight:700; border-top:2px solid #ddd;">
-    🛡 Учебно-просветительский симулятор математических моделей (12+). Все расчеты производятся на условных игровых очках в целях изучения графов и алгоритмов оптимизации (ФЗ № 436-ФЗ).
+    🛡 Учебно-просветительский симулятор математических моделей «ИМБА» (12+). Все расчеты производятся на условных игровых очках в целях изучения графов и алгоритмов оптимизации (ФЗ № 436-ФЗ).
 </footer>
 
 <script>
-    function selectRoute(time, name) {
-        let status = document.getElementById('routeStatus');
-        let btn = document.getElementById('bossWinBtn');
-        
-        if (time <= 10) {
-            status.innerHTML = '⚡ <strong>ИДЕАЛЬНЫЙ МАРШРУТ!</strong> ' + name + ' займет всего 10 минут. Мы опережаем босса на 2 минуты!';
-            status.style.color = 'var(--accent)';
-            btn.classList.remove('hidden');
+    const allEdges = ['AB', 'AC', 'BD', 'BE', 'CE', 'DF', 'EF'];
+    const intermediateNodes = ['B', 'C', 'D', 'E'];
+
+    function resetGraph() {
+        allEdges.forEach(e => {
+            const el = document.getElementById('edge-' + e);
+            if (el) {
+                el.setAttribute('stroke', e === 'BE' ? '#777' : '#000');
+                el.setAttribute('stroke-width', e === 'BE' ? '2' : '3');
+            }
+        });
+        intermediateNodes.forEach(n => {
+            const el = document.getElementById('node-' + n);
+            if (el) el.setAttribute('fill', '#fff');
+        });
+        for (let i = 0; i < 3; i++) {
+            const btn = document.getElementById('routeBtn' + i);
+            if (btn) {
+                btn.style.background = '#fff';
+                btn.style.borderColor = '#000';
+                btn.querySelector('.route-badge').innerText = '⚪';
+            }
+        }
+    }
+
+    function selectRoute(idx, time, name, edges, nodes) {
+        resetGraph();
+        const status = document.getElementById('routeStatus');
+        const winBtn = document.getElementById('bossWinBtn');
+        const activeBtn = document.getElementById('routeBtn' + idx);
+
+        if (time <= 10) { // Optimal route (A -> C -> E -> F)
+            edges.forEach(e => {
+                const el = document.getElementById('edge-' + e);
+                if (el) {
+                    el.setAttribute('stroke', '#00C853');
+                    el.setAttribute('stroke-width', '5');
+                }
+            });
+            nodes.forEach(n => {
+                const el = document.getElementById('node-' + n);
+                if (el) el.setAttribute('fill', '#00C853');
+            });
+
+            activeBtn.style.background = '#E8F5E9';
+            activeBtn.style.borderColor = 'var(--accent)';
+            activeBtn.querySelector('.route-badge').innerText = '✔';
+
+            status.innerHTML = '⚡ <strong>ИДЕАЛЬНЫЙ МАРШРУТ (10 МИНУТ)!</strong> Мы опережаем каст заклинания босса на 2 минуты! Путь A → C → E → F оптимален по алгоритму Дейкстры.';
+            status.style.color = '#00701A';
+            winBtn.classList.remove('hidden');
         } else {
-            status.innerHTML = '⚠️ <strong>СЛИШКОМ МЕДЛЕННО!</strong> ' + name + ' займет ' + time + ' минут. Босс успеет завершить заклинание!';
+            edges.forEach(e => {
+                const el = document.getElementById('edge-' + e);
+                if (el) {
+                    el.setAttribute('stroke', 'var(--danger)');
+                    el.setAttribute('stroke-width', '4');
+                }
+            });
+            nodes.forEach(n => {
+                const el = document.getElementById('node-' + n);
+                if (el) el.setAttribute('fill', '#FFCDD2');
+            });
+
+            activeBtn.style.background = '#FFEBEE';
+            activeBtn.style.borderColor = 'var(--danger)';
+            activeBtn.querySelector('.route-badge').innerText = '✖';
+
+            status.innerHTML = `⚠️ <strong>СЛИШКОМ МЕДЛЕННО (${time} МИН)!</strong> Лимит: 12 минут. Босс успеет скастовать смертельное заклинание! Попробуй путь через другой портал.`;
             status.style.color = 'var(--danger)';
-            btn.classList.add('hidden');
+            winBtn.classList.add('hidden');
+        }
+    }
+
+    // Direct node clicking (Brilliant-style interactive path tracing)
+    let userPath = ['A'];
+    function clickGraphNode(node) {
+        if (node === 'A') {
+            userPath = ['A'];
+            resetGraph();
+            document.getElementById('routeStatus').innerText = 'Портал A выбран. Выбери следующий шаг: B (5 мин) или C (2 мин)?';
+            return;
+        }
+
+        const validTransitions = {
+            'A': ['B', 'C'],
+            'B': ['D', 'E'],
+            'C': ['E'],
+            'D': ['F'],
+            'E': ['F']
+        };
+
+        const last = userPath[userPath.length - 1];
+        if (validTransitions[last] && validTransitions[last].includes(node)) {
+            userPath.push(node);
+            const edgeKey = last + node;
+            const elEdge = document.getElementById('edge-' + edgeKey);
+            if (elEdge) {
+                elEdge.setAttribute('stroke', '#FFC000');
+                elEdge.setAttribute('stroke-width', '4');
+            }
+            const elNode = document.getElementById('node-' + node);
+            if (elNode && node !== 'F') elNode.setAttribute('fill', '#FFC000');
+
+            if (node === 'F') {
+                const pathStr = userPath.join(' → ');
+                if (pathStr === 'A → C → E → F') {
+                    selectRoute(1, 10, 'A → C → E → F', ['AC', 'CE', 'EF'], ['C', 'E']);
+                } else if (pathStr === 'A → B → D → F') {
+                    selectRoute(0, 15, 'A → B → D → F', ['AB', 'BD', 'DF'], ['B', 'D']);
+                } else if (pathStr === 'A → B → E → F') {
+                    selectRoute(2, 12, 'A → B → E → F', ['AB', 'BE', 'EF'], ['B', 'E']);
+                }
+            } else {
+                document.getElementById('routeStatus').innerText = `Текущий путь: ${userPath.join(' → ')}. Куда идем дальше?`;
+            }
+        } else {
+            document.getElementById('routeStatus').innerText = `Нет прямого перехода от ${last} к ${node}! Выбери соединенный портал.`;
         }
     }
 
@@ -357,8 +478,10 @@
         document.getElementById('step2').classList.remove('hidden');
         try {
             localStorage.setItem('imba_mod_5', 'true');
-            let cur = parseInt(localStorage.getItem('imba_xp') || '0');
-            localStorage.setItem('imba_xp', (cur + 100).toString());
+            let curXp = parseInt(localStorage.getItem('imba_xp') || '150');
+            localStorage.setItem('imba_xp', (curXp + 200).toString());
+            let curCry = parseInt(localStorage.getItem('imba_crystals') || '50');
+            localStorage.setItem('imba_crystals', (curCry + 50).toString());
         } catch(e) {}
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }

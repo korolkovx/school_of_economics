@@ -299,7 +299,7 @@
             <div class="progress-fill" style="width: 33%;"></div>
             <div class="progress-label">ШАГ 1 ИЗ 3 • ЗАХВАТ ТЕРРИТОРИИ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="letter-spacing: 1px;">BASE<span style="color:var(--teal)">ZONE</span></h2>
@@ -352,7 +352,7 @@
             <div class="progress-fill" style="width: 66%;"></div>
             <div class="progress-label">ШАГ 2 ИЗ 3 • МАТЕМАТИЧЕСКАЯ МЕТА</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
 
     <div class="story-card" style="box-shadow: 6px 6px 0px var(--teal);">
@@ -388,7 +388,7 @@
             <div class="progress-fill" style="width: 100%;"></div>
             <div class="progress-label">ШАГ 3 ИЗ 3 • ТРЕНАЖЕР ФИПИ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
 
     <div class="story-card" style="box-shadow: 6px 6px 0px var(--accent);">
@@ -404,19 +404,19 @@
         <div id="quizContainer">
             <div class="quiz-opt" onclick="checkAnswer(this, false)">
                 <span>1) 8</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer(this, true)">
                 <span>2) 9</span>
-                <span>✔</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer(this, false)">
                 <span>3) 10</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer(this, false)">
                 <span>4) 12</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
         </div>
 
@@ -587,14 +587,21 @@
         document.querySelectorAll('.quiz-opt').forEach(opt => opt.onclick = null);
         if (isCorrect) {
             el.classList.add('correct');
+            el.querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback').classList.remove('hidden');
             try {
                 localStorage.setItem('imba_mod_8', 'true');
                 let xp = parseInt(localStorage.getItem('imba_xp') || '150');
                 localStorage.setItem('imba_xp', (xp + 100).toString());
+                let cry = parseInt(localStorage.getItem('imba_crystals') || '50');
+                localStorage.setItem('imba_crystals', (cry + 20).toString());
             } catch(e) {}
         } else {
             el.classList.add('wrong');
+            el.querySelector('.opt-badge').innerText = '✖';
+            const correctOpt = document.querySelectorAll('.quiz-opt')[1];
+            correctOpt.classList.add('correct');
+            correctOpt.querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback').classList.remove('hidden');
             document.getElementById('quizFeedback').style.background = '#FFEBEE';
             document.getElementById('quizFeedback').innerHTML = '❌ <strong>ПОКА НЕВЕРНО!</strong> S = В + Г/2 − 1 = 7 + (6/2) − 1 = 7 + 3 − 1 = 9!';

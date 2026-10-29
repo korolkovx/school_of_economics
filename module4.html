@@ -256,7 +256,7 @@
             <div class="progress-fill" style="width: 50%;"></div>
             <div class="progress-label">ШАГ 1 ИЗ 2 • ВАРКА ЗЕЛЬЯ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="letter-spacing: 2px;">ALCHEMY<span style="color:var(--purple)">ZONE</span></h2>
@@ -312,7 +312,7 @@
             <div class="progress-fill" id="pFill4" style="width: 80%;"></div>
             <div class="progress-label" id="pLabel4">ШАГ 2 ИЗ 2 • ТЕОРИЯ СПЛАВОВ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="color: var(--accent);">СЕКРЕТ ЗАДАНИЯ ОГЭ №21</h2>
@@ -350,19 +350,19 @@
         <div id="quizContainer4">
             <div class="quiz-opt" onclick="checkAnswer4(this, false)">
                 <span>1) 20%</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer4(this, true)">
                 <span>2) 21%</span>
-                <span>✔</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer4(this, false)">
                 <span>3) 22%</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer4(this, false)">
                 <span>4) 18.5%</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
         </div>
 
@@ -433,19 +433,24 @@
         let opts = document.querySelectorAll('#quizContainer4 .quiz-opt');
         opts.forEach(o => o.style.pointerEvents = 'none');
         
-if (isCorrect) {
+        if (isCorrect) {
             el.classList.add('correct');
+            el.querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback4').classList.remove('hidden');
             let f = document.getElementById('pFill4'); if(f) f.style.width = '100%';
             let l = document.getElementById('pLabel4'); if(l) l.innerText = 'ШАГ 2 ИЗ 2 • ЭКЗАМЕН СДАН!';
             try {
                 localStorage.setItem('imba_mod_4', 'true');
-                let cur = parseInt(localStorage.getItem('imba_xp') || '0');
+                let cur = parseInt(localStorage.getItem('imba_xp') || '150');
                 localStorage.setItem('imba_xp', (cur + 50).toString());
+                let cry = parseInt(localStorage.getItem('imba_crystals') || '50');
+                localStorage.setItem('imba_crystals', (cry + 15).toString());
             } catch(e) {}
         } else {
             el.classList.add('wrong');
+            el.querySelector('.opt-badge').innerText = '✖';
             opts[1].classList.add('correct');
+            opts[1].querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback4').classList.remove('hidden');
             document.getElementById('quizFeedback4').innerHTML = '❌ <strong>Ошибка!</strong> Правильный ответ: 21%. Масса чистого вещества: 4·0.15 + 6·0.25 = 0.6 + 1.5 = 2.1 литра. 2.1 / 10 = 21%.';
             document.getElementById('quizFeedback4').style.background = '#FFEBEE';

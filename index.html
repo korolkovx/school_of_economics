@@ -278,6 +278,83 @@
             font-weight: 900;
         }
 
+        /* LOCKED STATES */
+        .duo-node.locked-level, .duo-chest.locked-chest {
+            background: #E0DDD0 !important;
+            border-color: #666 !important;
+            box-shadow: 0 5px 0px #777 !important;
+            cursor: not-allowed !important;
+            filter: grayscale(0.8);
+            opacity: 0.65;
+            position: relative;
+        }
+        .duo-node.locked-level::after, .duo-chest.locked-chest::after {
+            content: '🔒';
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #222;
+            color: #fff;
+            font-size: 0.75rem;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+            box-shadow: 1px 1px 0px #000;
+        }
+        .node-label.locked-label {
+            opacity: 0.6;
+            background: #E8E6D8 !important;
+            border-color: #777 !important;
+            color: #666 !important;
+            box-shadow: 2px 2px 0px #777 !important;
+        }
+        .node-label.locked-label .node-oge {
+            background: #777 !important;
+            color: #fff !important;
+        }
+
+        /* SHAKE ANIMATION */
+        @keyframes node-shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+        .shake-node {
+            animation: node-shake 0.35s ease !important;
+        }
+
+        /* LOCKED TOAST NOTIFICATION */
+        .locked-toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            border: 3px solid var(--danger);
+            box-shadow: 4px 4px 0px var(--danger);
+            padding: 12px 20px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 900;
+            font-size: 0.85rem;
+            z-index: 999;
+            opacity: 0;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+            pointer-events: none;
+            text-align: center;
+            max-width: 90vw;
+        }
+        .locked-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         /* CHEST / SCRATCH NODE */
         .duo-chest {
             width: 72px;
@@ -379,16 +456,15 @@
 </head>
 <body>
 
-<!-- TOP NAVBAR STATS (DUOLINGO STYLE) -->
+<!-- TOP NAVBAR STATS -->
 <header class="top-navbar">
     <div class="nav-left">
         <a href="index.html" class="nav-logo">ИМБА</a>
         <span class="age-badge">12+</span>
     </div>
     <div class="duo-stats">
-        <div class="stat-pill">🔥 <span id="streakCount">1</span></div>
-        <div class="stat-pill">💎 <span id="userXp">150</span> XP</div>
-        <div class="stat-pill">❤️ 5/5</div>
+        <div class="stat-pill">⭐ <span id="userXp">150</span> XP</div>
+        <div class="stat-pill">💎 <span id="userCrystals">50</span></div>
     </div>
 </header>
 
@@ -569,7 +645,7 @@
         <div style="font-size:3.5rem; margin-bottom:10px;">🏆</div>
         <h3 style="font-size: clamp(1.2rem, 4vw, 1.6rem); margin: 0 0 10px; text-transform:uppercase;">ДИПЛОМ МАГИСТРА ИГРОВОЙ МЕТЫ</h3>
         <div style="display:inline-block; background:var(--accent); border:2px solid #000; font-family:'Roboto Mono',monospace; font-weight:900; font-size:0.85rem; padding:3px 10px; margin-bottom:15px;">
-            ВЫСШАЯ ШКОЛА ЭКОНОМИКИ • ИМБА
+            СИМУЛЯТОР МАТЕМАТИКИ И ГЕЙМДИЗАЙНА • ИМБА
         </div>
         
         <p style="font-weight:700; font-size:0.92rem; line-height:1.5; text-align:left; background:#F4F1E1; border:2px solid #000; padding:14px; margin-bottom:15px;">
@@ -584,9 +660,12 @@
             <br>• Алгоритм Дейкстры в рейдах (№4)
         </p>
 
-        <button class="stat-pill" style="width:100%; justify-content:center; padding:12px; font-size:1rem; cursor:pointer; background:var(--yellow);" onclick="claimTrophy()">ПОДТВЕРДИТЬ И ЗАБРАТЬ +500 XP ⭐</button>
+        <button class="stat-pill" style="width:100%; justify-content:center; padding:12px; font-size:1rem; cursor:pointer; background:var(--yellow);" onclick="claimTrophy()">ПОДТВЕРДИТЬ И ЗАБРАТЬ +500 XP ⭐ • +100 💎</button>
     </div>
 </div>
+
+<!-- LOCKED TOAST NOTIFICATION -->
+<div id="lockedToast" class="locked-toast">🔒 УРОК ЗАБЛОКИРОВАН: Сначала пройди предыдущий уровень!</div>
 
 <!-- COMPLIANCE FOOTER -->
 <footer>
@@ -597,6 +676,26 @@
 </footer>
 
 <script>
+    // TOAST SYSTEM
+    let toastTimer = null;
+    function showToast(msg) {
+        const toast = document.getElementById('lockedToast');
+        if (!toast) return;
+        toast.innerText = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2600);
+    }
+
+    function handleLockedClick(e, el, reqName) {
+        e.preventDefault();
+        el.classList.add('shake-node');
+        setTimeout(() => el.classList.remove('shake-node'), 360);
+        showToast(`🔒 УРОК ЗАБЛОКИРОВАН: Сначала пройди ${reqName}!`);
+    }
+
     // DYNAMIC PIXEL-PERFECT SERPENTINE PATH
     function drawMapPath() {
         const map = document.querySelector('.duo-map');
@@ -648,46 +747,110 @@
         path.setAttribute('d', d);
     }
 
-    // UPDATE PROGRESS & XP FROM LOCALSTORAGE
+    // UPDATE PROGRESS, XP, CRYSTALS & PROGRESSIVE UNLOCKING
+    const levelsConfig = [
+        { id: 'node1', url: 'module1.html', key: 'imba_mod_1', reqKey: null, name: 'Уровень 1' },
+        { id: 'node2', url: 'module2.html', key: 'imba_mod_2', reqKey: 'imba_mod_1', name: 'Уровень 2', reqName: 'Уровень 1' },
+        { id: 'node3', url: 'module4.html', key: 'imba_mod_4', reqKey: 'imba_mod_2', name: 'Уровень 3', reqName: 'Уровень 2' },
+        { id: 'node4', url: 'module3.html', key: 'imba_mod_3', reqKey: 'imba_mod_4', name: 'Уровень 4', reqName: 'Уровень 3' },
+        { id: 'node5', url: 'module6.html', key: 'imba_mod_6', reqKey: 'imba_mod_3', name: 'Уровень 5', reqName: 'Уровень 4' },
+        { id: 'node6', url: 'module7.html', key: 'imba_mod_7', reqKey: 'imba_mod_6', name: 'Уровень 6', reqName: 'Уровень 5' },
+        { id: 'node7', url: 'module8.html', key: 'imba_mod_8', reqKey: 'imba_mod_7', name: 'Уровень 7', reqName: 'Уровень 6' },
+        { id: 'node8', url: 'module5.html', key: 'imba_mod_5', reqKey: 'imba_mod_8', name: 'Уровень 8', reqName: 'Уровень 7' }
+    ];
+
+    let chest1Unlocked = false;
+    let chest2Unlocked = false;
+    let trophyUnlocked = false;
+
     function updateProgress() {
         let xp = parseInt(localStorage.getItem('imba_xp') || '150');
+        let crystals = parseInt(localStorage.getItem('imba_crystals') || '50');
         const xpEl = document.getElementById('userXp');
+        const cryEl = document.getElementById('userCrystals');
         if (xpEl) xpEl.innerText = xp;
-
-        const mods = [
-            { id: 'node1', key: 'imba_mod_1' },
-            { id: 'node2', key: 'imba_mod_2' },
-            { id: 'node3', key: 'imba_mod_4' },
-            { id: 'node4', key: 'imba_mod_3' },
-            { id: 'node5', key: 'imba_mod_6' },
-            { id: 'node6', key: 'imba_mod_7' },
-            { id: 'node7', key: 'imba_mod_8' },
-            { id: 'node8', key: 'imba_mod_5' }
-        ];
+        if (cryEl) cryEl.innerText = crystals;
 
         let activeFound = false;
         let completedCount = 0;
 
-        mods.forEach(m => {
-            const el = document.getElementById(m.id);
+        levelsConfig.forEach(lvl => {
+            const el = document.getElementById(lvl.id);
             if (!el) return;
-            const isDone = localStorage.getItem(m.key) === 'true';
+            const labelEl = el.parentElement ? el.parentElement.querySelector('.node-label') : null;
+
+            const isUnlocked = !lvl.reqKey || localStorage.getItem(lvl.reqKey) === 'true';
+            const isDone = localStorage.getItem(lvl.key) === 'true';
 
             if (isDone) {
                 el.classList.add('completed-level');
-                el.classList.remove('active-level');
+                el.classList.remove('locked-level', 'active-level');
+                el.setAttribute('href', lvl.url);
+                el.onclick = null;
+                if (labelEl) labelEl.classList.remove('locked-label');
                 completedCount++;
-            } else if (!activeFound) {
-                el.classList.add('active-level');
-                activeFound = true;
+            } else if (isUnlocked) {
+                el.setAttribute('href', lvl.url);
+                el.onclick = null;
+                if (labelEl) labelEl.classList.remove('locked-label');
+                if (!activeFound) {
+                    el.classList.add('active-level');
+                    el.classList.remove('locked-level', 'completed-level');
+                    activeFound = true;
+                } else {
+                    el.classList.remove('locked-level', 'completed-level', 'active-level');
+                }
             } else {
-                el.style.opacity = '0.9';
+                // Locked State
+                el.classList.add('locked-level');
+                el.classList.remove('completed-level', 'active-level');
+                el.removeAttribute('href');
+                el.onclick = (e) => handleLockedClick(e, el, lvl.reqName);
+                if (labelEl) labelEl.classList.add('locked-label');
             }
         });
 
+        // CHESTS UNLOCK LOGIC
+        chest1Unlocked = localStorage.getItem('imba_mod_1') === 'true';
+        const ch1 = document.getElementById('bonusChest');
+        if (ch1) {
+            const ch1Label = ch1.parentElement ? ch1.parentElement.querySelector('.node-label') : null;
+            if (chest1Unlocked) {
+                ch1.classList.remove('locked-chest');
+                if (ch1Label) ch1Label.classList.remove('locked-label');
+            } else {
+                ch1.classList.add('locked-chest');
+                if (ch1Label) ch1Label.classList.add('locked-label');
+            }
+        }
+
+        chest2Unlocked = localStorage.getItem('imba_mod_6') === 'true';
+        const ch2 = document.getElementById('bonusChest2');
+        if (ch2) {
+            const ch2Label = ch2.parentElement ? ch2.parentElement.querySelector('.node-label') : null;
+            if (chest2Unlocked) {
+                ch2.classList.remove('locked-chest');
+                if (ch2Label) ch2Label.classList.remove('locked-label');
+            } else {
+                ch2.classList.add('locked-chest');
+                if (ch2Label) ch2Label.classList.add('locked-label');
+            }
+        }
+
+        // TROPHY UNLOCK LOGIC
+        trophyUnlocked = localStorage.getItem('imba_mod_5') === 'true';
         const trophyEl = document.getElementById('trophyNode');
-        if (trophyEl && completedCount >= 8) {
-            trophyEl.classList.add('active-level');
+        if (trophyEl) {
+            const trLabel = trophyEl.parentElement ? trophyEl.parentElement.querySelector('.node-label') : null;
+            if (trophyUnlocked) {
+                trophyEl.classList.add('active-level');
+                trophyEl.classList.remove('locked-level');
+                if (trLabel) trLabel.classList.remove('locked-label');
+            } else {
+                trophyEl.classList.add('locked-level');
+                trophyEl.classList.remove('active-level');
+                if (trLabel) trLabel.classList.add('locked-label');
+            }
         }
 
         drawMapPath();
@@ -698,26 +861,60 @@
     window.addEventListener('resize', drawMapPath);
     window.addEventListener('orientationchange', () => setTimeout(drawMapPath, 100));
 
-    // CHEST MODALS (1 and 2)
+    // CHEST MODALS
     function openChest(num) {
+        if (num === 1 && !chest1Unlocked) {
+            const el = document.getElementById('bonusChest');
+            if (el) {
+                el.classList.add('shake-node');
+                setTimeout(() => el.classList.remove('shake-node'), 360);
+            }
+            showToast('🔒 СУНДУК ЗАБЛОКИРОВАН: Сначала пройди Уровень 1!');
+            return;
+        }
+        if (num === 2 && !chest2Unlocked) {
+            const el = document.getElementById('bonusChest2');
+            if (el) {
+                el.classList.add('shake-node');
+                setTimeout(() => el.classList.remove('shake-node'), 360);
+            }
+            showToast('🔒 СУНДУК ЗАБЛОКИРОВАН: Сначала пройди Уровень 5!');
+            return;
+        }
+
         const modal = document.getElementById('chestModal' + num);
         if (modal) {
             modal.classList.add('active');
             initModalScratch(num);
         }
     }
+
     function closeChest(num) {
         const modal = document.getElementById('chestModal' + num);
         if (modal) modal.classList.remove('active');
         let xp = parseInt(localStorage.getItem('imba_xp') || '150');
+        let crystals = parseInt(localStorage.getItem('imba_crystals') || '50');
         xp += 50;
+        crystals += 15;
         localStorage.setItem('imba_xp', xp.toString());
+        localStorage.setItem('imba_crystals', crystals.toString());
         const xpEl = document.getElementById('userXp');
+        const cryEl = document.getElementById('userCrystals');
         if (xpEl) xpEl.innerText = xp;
+        if (cryEl) cryEl.innerText = crystals;
     }
 
     // TROPHY MODAL
     function openTrophy() {
+        if (!trophyUnlocked) {
+            const el = document.getElementById('trophyNode');
+            if (el) {
+                el.classList.add('shake-node');
+                setTimeout(() => el.classList.remove('shake-node'), 360);
+            }
+            showToast('🔒 ДИПЛОМ ЗАБЛОКИРОВАН: Пройди все 8 уровней курса!');
+            return;
+        }
         const modal = document.getElementById('trophyModal');
         if (modal) modal.classList.add('active');
     }
@@ -727,11 +924,16 @@
     }
     function claimTrophy() {
         let xp = parseInt(localStorage.getItem('imba_xp') || '150');
+        let crystals = parseInt(localStorage.getItem('imba_crystals') || '50');
         xp += 500;
+        crystals += 100;
         localStorage.setItem('imba_xp', xp.toString());
+        localStorage.setItem('imba_crystals', crystals.toString());
         const xpEl = document.getElementById('userXp');
+        const cryEl = document.getElementById('userCrystals');
         if (xpEl) xpEl.innerText = xp;
-        alert('🎉 ПОЗДРАВЛЯЕМ! Вы получили +500 XP и звание МАГИСТРА ИГРОВОЙ МЕТЫ!');
+        if (cryEl) cryEl.innerText = crystals;
+        alert('🎉 ПОЗДРАВЛЯЕМ! Вы получили +500 XP ⭐, +100 💎 и звание МАГИСТРА ИГРОВОЙ МЕТЫ!');
         closeTrophy();
     }
 

@@ -280,7 +280,7 @@
             <div class="progress-fill" style="width: 33%;"></div>
             <div class="progress-label">ШАГ 1 ИЗ 3 • ДИЛЕММА НЭША</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="letter-spacing: 2px;">MIND<span style="color:var(--danger)">ZONE</span></h2>
@@ -336,7 +336,7 @@
             <div class="progress-fill" style="width: 66%;"></div>
             <div class="progress-label">ШАГ 2 ИЗ 3 • АРЕНА АКСЕЛЬРОДА</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="letter-spacing: 2px;">BOT<span style="color:var(--yellow)">ARENA</span></h2>
@@ -468,7 +468,7 @@
             <div class="progress-fill" style="width: 100%;"></div>
             <div class="progress-label">ШАГ 3 ИЗ 3 • ГРАФ РЕШЕНИЙ И ОГЭ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="color: var(--accent);">ТЕОРИЯ ИГР И ГРАФЫ</h2>
@@ -510,12 +510,12 @@
                 <!-- D: (340, 40) -->
                 <!-- E: (450, 110) -->
 
-                <!-- Edges -->
-                <line x1="60" y1="110" x2="190" y2="40" stroke="#000" stroke-width="3"/>
+                <!-- Edges (Initial neutral state) -->
+                <line id="m3-edge-AB" x1="60" y1="110" x2="190" y2="40" stroke="#000" stroke-width="3"/>
                 <text x="110" y="65" font-family="Roboto Mono" font-weight="900" font-size="12" fill="#555">4 км</text>
 
-                <line x1="60" y1="110" x2="190" y2="180" stroke="#00C853" stroke-width="4"/>
-                <text x="110" y="165" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">2 км</text>
+                <line id="m3-edge-AC" x1="60" y1="110" x2="190" y2="180" stroke="#000" stroke-width="3"/>
+                <text id="m3-txt-AC" x="110" y="165" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#555">2 км</text>
 
                 <line x1="190" y1="40" x2="190" y2="180" stroke="#000" stroke-width="2" stroke-dasharray="3"/>
                 <text x="200" y="115" font-family="Roboto Mono" font-weight="900" font-size="11">1 км</text>
@@ -523,8 +523,8 @@
                 <line x1="190" y1="40" x2="340" y2="40" stroke="#000" stroke-width="3"/>
                 <text x="260" y="30" font-family="Roboto Mono" font-weight="900" font-size="12" fill="#555">5 км</text>
 
-                <line x1="190" y1="180" x2="450" y2="110" stroke="#00C853" stroke-width="4"/>
-                <text x="320" y="170" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">7 км</text>
+                <line id="m3-edge-CE" x1="190" y1="180" x2="450" y2="110" stroke="#000" stroke-width="3"/>
+                <text id="m3-txt-CE" x="320" y="170" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#555">7 км</text>
 
                 <line x1="340" y1="40" x2="450" y2="110" stroke="#000" stroke-width="3"/>
                 <text x="405" y="65" font-family="Roboto Mono" font-weight="900" font-size="12" fill="#555">3 км</text>
@@ -536,7 +536,7 @@
                 <circle cx="190" cy="40" r="18" fill="#fff" stroke="#000" stroke-width="3"/>
                 <text x="190" y="46" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">B</text>
 
-                <circle cx="190" cy="180" r="18" fill="#00C853" stroke="#000" stroke-width="3"/>
+                <circle id="m3-node-C" cx="190" cy="180" r="18" fill="#fff" stroke="#000" stroke-width="3"/>
                 <text x="190" y="186" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">C</text>
 
                 <circle cx="340" cy="40" r="18" fill="#fff" stroke="#000" stroke-width="3"/>
@@ -566,19 +566,19 @@
         <div id="quizContainer3">
             <div class="quiz-opt" onclick="checkAnswer3(this, false)">
                 <span>1) 12 км (A → B → D → E)</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer3(this, true)">
                 <span>2) 9 км (A → C → E)</span>
-                <span>✔</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer3(this, false)">
                 <span>3) 11 км (A → C → B → D → E)</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer3(this, false)">
                 <span>4) 10 км</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
         </div>
 
@@ -825,25 +825,44 @@
         let opts = document.querySelectorAll('#quizContainer3 .quiz-opt');
         opts.forEach(o => o.style.pointerEvents = 'none');
         
-if (isCorrect) {
+        // Highlight shortest path in graph
+        const edgeAC = document.getElementById('m3-edge-AC');
+        const edgeCE = document.getElementById('m3-edge-CE');
+        const txtAC = document.getElementById('m3-txt-AC');
+        const txtCE = document.getElementById('m3-txt-CE');
+        const nodeC = document.getElementById('m3-node-C');
+        if (edgeAC && edgeCE && nodeC) {
+            edgeAC.setAttribute('stroke', '#00C853');
+            edgeAC.setAttribute('stroke-width', '4');
+            edgeCE.setAttribute('stroke', '#00C853');
+            edgeCE.setAttribute('stroke-width', '4');
+            if (txtAC) txtAC.setAttribute('fill', '#00C853');
+            if (txtCE) txtCE.setAttribute('fill', '#00C853');
+            nodeC.setAttribute('fill', '#00C853');
+        }
+
+        if (isCorrect) {
             el.classList.add('correct');
+            el.querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback3').classList.remove('hidden');
             let f = document.getElementById('pFill3'); if(f) f.style.width = '100%';
             let l = document.getElementById('pLabel3'); if(l) l.innerText = 'ШАГ 3 ИЗ 3 • ЭКЗАМЕН СДАН!';
             try {
                 localStorage.setItem('imba_mod_3', 'true');
-                let cur = parseInt(localStorage.getItem('imba_xp') || '0');
+                let cur = parseInt(localStorage.getItem('imba_xp') || '150');
                 localStorage.setItem('imba_xp', (cur + 50).toString());
+                let cry = parseInt(localStorage.getItem('imba_crystals') || '50');
+                localStorage.setItem('imba_crystals', (cry + 15).toString());
             } catch(e) {}
 
         } else {
             el.classList.add('wrong');
+            el.querySelector('.opt-badge').innerText = '✖';
             opts[1].classList.add('correct');
+            opts[1].querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback3').classList.remove('hidden');
             try {
                 localStorage.setItem('imba_mod_3', 'true');
-                let cur = parseInt(localStorage.getItem('imba_xp') || '0');
-                localStorage.setItem('imba_xp', (cur + 50).toString());
             } catch(e) {}
 
             document.getElementById('quizFeedback3').innerHTML = '❌ <strong>Ошибка!</strong> Правильный путь: A → C (2) + C → E (7) = 9 км. Это самый короткий маршрут.';

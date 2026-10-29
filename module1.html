@@ -338,7 +338,7 @@
             <div class="progress-fill" id="pFill1" style="width: 25%;"></div>
             <div class="progress-label" id="pLabel1">ШАГ 1 ИЗ 4 • СИМУЛЯЦИЯ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="letter-spacing: 2px;">DROP<span style="color:var(--accent)">ZONE</span></h2>
@@ -400,7 +400,7 @@
             <div class="progress-fill" style="width: 50%;"></div>
             <div class="progress-label">ШАГ 2 ИЗ 4 • МАТОЖИДАНИЕ</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2 style="color: var(--danger);">СИСТЕМА ВЗЛОМАНА</h2>
@@ -484,7 +484,7 @@
             <div class="progress-fill" id="pFill3" style="width: 75%;"></div>
             <div class="progress-label" id="pLabel3">ШАГ 3 ИЗ 4 • БАЛАНСИРОВКА</div>
         </div>
-        <div class="hearts-pill">❤️ 5</div>
+
     </div>
     <div class="header">
         <h2>DEV<span style="color:var(--success)">MODE</span></h2>
@@ -578,19 +578,19 @@
         <div id="quizContainer1">
             <div class="quiz-opt" onclick="checkAnswer1(this, false)" style="background:#fff; border:2px solid #000; padding:12px 16px; margin:8px 0; font-family:'Roboto Mono',monospace; font-size:1.1rem; font-weight:900; cursor:pointer; display:flex; justify-content:space-between; box-shadow:3px 3px 0px #000;">
                 <span>1) 0,08</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer1(this, true)" style="background:#fff; border:2px solid #000; padding:12px 16px; margin:8px 0; font-family:'Roboto Mono',monospace; font-size:1.1rem; font-weight:900; cursor:pointer; display:flex; justify-content:space-between; box-shadow:3px 3px 0px #000;">
                 <span>2) 0,92</span>
-                <span>✔</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer1(this, false)" style="background:#fff; border:2px solid #000; padding:12px 16px; margin:8px 0; font-family:'Roboto Mono',monospace; font-size:1.1rem; font-weight:900; cursor:pointer; display:flex; justify-content:space-between; box-shadow:3px 3px 0px #000;">
                 <span>3) 0,23</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
             <div class="quiz-opt" onclick="checkAnswer1(this, false)" style="background:#fff; border:2px solid #000; padding:12px 16px; margin:8px 0; font-family:'Roboto Mono',monospace; font-size:1.1rem; font-weight:900; cursor:pointer; display:flex; justify-content:space-between; box-shadow:3px 3px 0px #000;">
                 <span>4) 0,40</span>
-                <span>✖</span>
+                <span class="opt-badge">⚪</span>
             </div>
         </div>
 
@@ -738,24 +738,25 @@
         opts.forEach(o => o.style.pointerEvents = 'none');
         if (isCorrect) {
             el.style.background = 'var(--success)';
+            el.querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback1').classList.remove('hidden');
-        try {
-            localStorage.setItem('imba_mod_1', 'true');
-            let cur = parseInt(localStorage.getItem('imba_xp') || '0');
-            localStorage.setItem('imba_xp', (cur + 50).toString());
-        } catch(e) {}
-
+            try {
+                localStorage.setItem('imba_mod_1', 'true');
+                let cur = parseInt(localStorage.getItem('imba_xp') || '150');
+                localStorage.setItem('imba_xp', (cur + 50).toString());
+                let cry = parseInt(localStorage.getItem('imba_crystals') || '50');
+                localStorage.setItem('imba_crystals', (cry + 15).toString());
+            } catch(e) {}
         } else {
             el.style.background = 'var(--danger)';
             el.style.color = '#fff';
+            el.querySelector('.opt-badge').innerText = '✖';
             opts[1].style.background = 'var(--success)';
+            opts[1].querySelector('.opt-badge').innerText = '✔';
             document.getElementById('quizFeedback1').classList.remove('hidden');
-        try {
-            localStorage.setItem('imba_mod_1', 'true');
-            let cur = parseInt(localStorage.getItem('imba_xp') || '0');
-            localStorage.setItem('imba_xp', (cur + 50).toString());
-        } catch(e) {}
-
+            try {
+                localStorage.setItem('imba_mod_1', 'true');
+            } catch(e) {}
             document.getElementById('quizFeedback1').innerHTML = '❌ <strong>Ошибка!</strong> Внимание на условие: "НЕ будет" вопроса! Билетов без вопроса: 25 - 2 = 23. P = 23 / 25 = 0,92.';
             document.getElementById('quizFeedback1').style.background = '#FFEBEE';
         }
