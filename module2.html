@@ -146,8 +146,14 @@
                 </div>
             </div>
 
-            <div class="hint-box" id="dynamicHint">
-                💡 <strong>Совет геймдизайнера:</strong> Если ресурсы остаются лежать на складе, ты теряешь прибыль. Попробуй забить склад под 100%.
+            <div style="margin-top: 15px;">
+                <div style="font-size: 0.8rem; font-weight: 900; font-family:'Roboto Mono',monospace; margin-bottom: 6px;">СЕКРЕТНЫЙ СОВЕТ КУЗНЕЦА (СОТРИ СЛОЙ):</div>
+                <div class="scratch-card" id="hintScratchContainer" style="position:relative; width:100%; min-height:85px; background:var(--yellow); border:2px solid #000; box-shadow:3px 3px 0px #000; overflow:hidden; user-select:none; display:flex; align-items:center;">
+                    <div class="scratch-secret" id="hintSecretText" style="padding:12px 16px; font-weight:700; font-size:0.92rem; line-height:1.4;">
+                        💡 <strong>ИНСАЙТ КУЗНИЦЫ:</strong> Чтобы выжать абсолютный максимум золота (620 💰), склад должен быть загружен ровно на 100% железа и 100% кожи без единого простоя!
+                    </div>
+                    <canvas class="scratch-canvas" id="hintScratchCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%; cursor:crosshair; touch-action:none;"></canvas>
+                </div>
             </div>
         </div>
 
@@ -408,6 +414,63 @@
             document.getElementById('quizFeedback').style.background = '#FFEBEE';
         }
     }
+
+    function initHintScratch() {
+        const canvas = document.getElementById('hintScratchCanvas');
+        const container = document.getElementById('hintScratchContainer');
+        if (!canvas || !container) return;
+        const ctx = canvas.getContext('2d');
+        
+        function resize() {
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = '#B8B8B8';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 5;
+            for (let x = -canvas.height; x < canvas.width + canvas.height; x += 20) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + canvas.height, canvas.height); ctx.stroke();
+            }
+            ctx.fillStyle = '#000';
+            ctx.font = '900 12px sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🪙 СОТРИ СЛОЙ МОНЕТОЙ', canvas.width / 2, canvas.height / 2);
+        }
+        
+        let scratching = false;
+        function scratch(e) {
+            if (!scratching) return;
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            const cy = e.touches ? e.touches[0].clientY : e.clientY;
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(cx - rect.left, cy - rect.top, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            let trans = 0;
+            for (let i = 3; i < imgData.data.length; i += 4 * 32) { if (imgData.data[i] === 0) trans++; }
+            if (trans > (imgData.data.length / (4 * 32)) * 0.35) {
+                canvas.style.transition = 'opacity 0.3s';
+                canvas.style.opacity = '0';
+                setTimeout(() => { canvas.style.display = 'none'; }, 300);
+            }
+        }
+        
+        canvas.addEventListener('mousedown', () => scratching = true);
+        window.addEventListener('mouseup', () => scratching = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchstart', (e) => { scratching = true; scratch(e); }, { passive: true });
+        window.addEventListener('touchend', () => scratching = false);
+        canvas.addEventListener('touchmove', scratch, { passive: true });
+        
+        setTimeout(resize, 60);
+        window.addEventListener('resize', resize);
+    }
+    window.addEventListener('DOMContentLoaded', initHintScratch);
+
 </script>
 
 </body>
