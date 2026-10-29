@@ -25,8 +25,9 @@
             background-image: radial-gradient(#aaa 1px, transparent 1px);
             background-size: 20px 20px;
             color: var(--text);
-            margin: 0; padding: 20px; overflow-x: hidden;
-            display: flex; justify-content: center;
+            margin: 0; padding: 20px 10px; overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
         }
         .app-container {
             width: 100%; max-width: 900px; min-height: calc(100vh - 40px);
@@ -267,7 +268,10 @@
             Ты только что применил алгоритм поиска оптимального пути графа, закрыв задание ОГЭ №4!
         </div>
 
-        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; margin-top: 30px; background:var(--text); color:#fff;">ВЕРНУТЬСЯ В ГЛАВНОЕ МЕНЮ</a>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:30px; max-width:480px; margin-left:auto; margin-right:auto;">
+            <a href="module5.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--accent); color:#000; font-size:1.15rem;">СЛЕДУЮЩИЙ УРОВЕНЬ: ФИНАЛЬНЫЙ БОСС (№4) ➔</a>
+            <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:#fff; color:#000; font-size:0.95rem; border:2px solid #000; box-shadow:3px 3px 0px #000;">🗺 ВЕРНУТЬСЯ НА КАРТУ КУРСА</a>
+        </div>
     </div>
 </div>
 
@@ -336,16 +340,28 @@
         if (isCorrect) {
             el.classList.add('correct');
             document.getElementById('quizFeedback3').classList.remove('hidden');
+            try {
+                localStorage.setItem('imba_mod_3', 'true');
+                let cur = parseInt(localStorage.getItem('imba_xp') || '0');
+                localStorage.setItem('imba_xp', (cur + 50).toString());
+            } catch(e) {}
+
         } else {
             el.classList.add('wrong');
             opts[1].classList.add('correct');
             document.getElementById('quizFeedback3').classList.remove('hidden');
+            try {
+                localStorage.setItem('imba_mod_3', 'true');
+                let cur = parseInt(localStorage.getItem('imba_xp') || '0');
+                localStorage.setItem('imba_xp', (cur + 50).toString());
+            } catch(e) {}
+
             document.getElementById('quizFeedback3').innerHTML = '❌ <strong>Ошибка!</strong> Правильный путь: A → C (2) + C → E (7) = 9 км. Это самый короткий маршрут.';
             document.getElementById('quizFeedback3').style.background = '#FFEBEE';
         }
     }
 </script>
 
-<div style="text-align:center; font-size:0.75rem; color:#777; margin-top:30px; font-weight:700;">🛡 Учебно-просветительский симулятор математических моделей (12+). Все расчеты производятся на условных игровых очках в целях изучения теории игр и графов (ФЗ № 436-ФЗ).</div>
+<footer style="width:100%; max-width:860px; text-align:center; font-size:0.75rem; color:#777; margin-top:30px; padding:15px; font-weight:700; border-top:2px solid #ddd;">🛡 Учебно-просветительский симулятор математических моделей (12+). Все расчеты производятся на условных игровых очках в целях изучения теории игр и графов (ФЗ № 436-ФЗ).</footer>
 </body>
 </html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOSS RAID | ИМБА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F4F1E1;
+            --panel: #FFFFFF;
+            --accent: #00C853; 
+            --danger: #FF2A55; 
+            --yellow: #FFC000; 
+            --text: #000000;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 4px 4px 0px #000000;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
+            margin: 0; padding: 20px 10px; overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 100%; max-width: 860px; min-height: calc(100vh - 40px);
+            position: relative; display: flex; flex-direction: column;
+        }
+        h1, h2, h3, h4 { text-transform: uppercase; margin: 0; font-weight: 900; }
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 20px; border-bottom: var(--border); margin-bottom: 20px;
+        }
+        .balance-badge {
+            background: var(--danger); border: var(--border); padding: 8px 16px;
+            font-family: 'Roboto Mono', monospace; font-weight: 900; color: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        .glass-panel {
+            background: var(--panel); border: var(--border); box-shadow: var(--shadow);
+            padding: 28px; position: relative; margin-top: 20px;
+        }
+
+        .graph-board {
+            width: 100%; max-width: 600px; margin: 25px auto;
+            background: #fff; border: 3px solid #000; box-shadow: 4px 4px 0px #000;
+            padding: 10px;
+        }
+        .node-btn {
+            cursor: pointer; transition: transform 0.1s;
+        }
+        .node-btn:hover { transform: scale(1.1); }
+
+        .btn-gacha {
+            background: var(--text); color: #fff; border: var(--border);
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.15rem;
+            padding: 18px; width: 100%; cursor: pointer; margin-top: 20px;
+            box-shadow: var(--shadow); transition: all 0.1s; text-transform: uppercase;
+        }
+        .btn-gacha:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; }
+        
+        .hidden { display: none !important; }
+        .story-card { background: #fff; border: var(--border); box-shadow: var(--shadow); padding: 25px; margin-bottom: 25px; }
+
+        .trophy-badge {
+            width: 120px; height: 120px; border: 5px solid #000; background: var(--yellow);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 3.5rem; margin: 20px auto; box-shadow: 6px 6px 0px #000;
+            animation: bounce 1.5s infinite alternate;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container" id="step1">
+    <div class="header">
+        <h2 style="letter-spacing: 2px;">RAID<span style="color:var(--danger)">ZONE</span></h2>
+        <div class="balance-badge">УРОВЕНЬ 5 • ФИНАЛЬНЫЙ БОСС</div>
+    </div>
+
+    <div class="glass-panel" style="box-shadow: 8px 8px 0px var(--danger);">
+        <h3 style="font-size: 1.8rem; text-align: center;">МАРШРУТ ДО ЛОГОВА БОССА</h3>
+        <p style="font-weight: 700; margin-top: 10px; text-align: center; line-height: 1.5;">
+            Босс начинает кастовать смертельное заклинание через <strong>12 минут</strong>. <br>
+            Проложи кратчайший маршрут отряда от портала <strong>A (Старт)</strong> до портала <strong>F (Логово)</strong>!
+        </p>
+
+        <!-- GRAPH CANVAS / SVG -->
+        <div class="graph-board">
+            <svg viewBox="0 0 550 240" style="width:100%; height:auto;">
+                <!-- Lines -->
+                <line x1="60" y1="120" x2="180" y2="50" stroke="#000" stroke-width="3"/>
+                <text x="110" y="75" font-family="Roboto Mono" font-weight="900" font-size="12">5 мин</text>
+
+                <line x1="60" y1="120" x2="180" y2="190" stroke="#00C853" stroke-width="4"/>
+                <text x="110" y="170" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">2 мин</text>
+
+                <line x1="180" y1="50" x2="350" y2="50" stroke="#000" stroke-width="3"/>
+                <text x="260" y="40" font-family="Roboto Mono" font-weight="900" font-size="12">6 мин</text>
+
+                <line x1="180" y1="190" x2="350" y2="190" stroke="#00C853" stroke-width="4"/>
+                <text x="260" y="210" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">5 мин</text>
+
+                <line x1="180" y1="50" x2="350" y2="190" stroke="#000" stroke-width="2" stroke-dasharray="3"/>
+                <text x="245" y="115" font-family="Roboto Mono" font-weight="900" font-size="11">4 мин</text>
+
+                <line x1="350" y1="50" x2="480" y2="120" stroke="#000" stroke-width="3"/>
+                <text x="425" y="75" font-family="Roboto Mono" font-weight="900" font-size="12">4 мин</text>
+
+                <line x1="350" y1="190" x2="480" y2="120" stroke="#00C853" stroke-width="4"/>
+                <text x="425" y="170" font-family="Roboto Mono" font-weight="900" font-size="13" fill="#00C853">3 мин</text>
+
+                <!-- Nodes -->
+                <!-- A: (60, 120) -->
+                <circle cx="60" cy="120" r="20" fill="#FFC000" stroke="#000" stroke-width="3"/>
+                <text x="60" y="126" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">A</text>
+
+                <!-- B: (180, 50) -->
+                <circle cx="180" cy="50" r="20" fill="#fff" stroke="#000" stroke-width="3"/>
+                <text x="180" y="56" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">B</text>
+
+                <!-- C: (180, 190) -->
+                <circle cx="180" cy="190" r="20" fill="#00C853" stroke="#000" stroke-width="3"/>
+                <text x="180" y="196" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">C</text>
+
+                <!-- D: (350, 50) -->
+                <circle cx="350" cy="50" r="20" fill="#fff" stroke="#000" stroke-width="3"/>
+                <text x="350" y="56" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">D</text>
+
+                <!-- E: (350, 190) -->
+                <circle cx="350" cy="190" r="20" fill="#00C853" stroke="#000" stroke-width="3"/>
+                <text x="350" y="196" font-family="Montserrat" font-weight="900" font-size="14" text-anchor="middle">E</text>
+
+                <!-- F: (480, 120) -->
+                <circle cx="480" cy="120" r="22" fill="#FF2A55" stroke="#000" stroke-width="4"/>
+                <text x="480" y="127" font-family="Montserrat" font-weight="900" font-size="15" text-anchor="middle" fill="#fff">БОСС</text>
+            </svg>
+        </div>
+
+        <div style="background:#f9f9f9; border:2px solid #000; padding:15px; text-align:center; font-family:'Roboto Mono',monospace; font-weight:900; font-size:1.1rem;">
+            ВЫБЕРИ МАРШРУТ:
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+                <button class="node-btn" onclick="selectRoute(15, 'A → B → D → F')" style="padding:10px; border:2px solid #000; font-weight:900; background:#fff;">A → B → D → F (5 + 6 + 4 = 15 мин)</button>
+                <button class="node-btn" onclick="selectRoute(10, 'A → C → E → F')" style="padding:10px; border:2px solid #000; font-weight:900; background:var(--yellow);">A → C → E → F (2 + 5 + 3 = 10 мин)</button>
+                <button class="node-btn" onclick="selectRoute(13, 'A → B → E → F')" style="padding:10px; border:2px solid #000; font-weight:900; background:#fff;">A → B → E → F (5 + 4 + 3 = 12 мин)</button>
+            </div>
+        </div>
+
+        <div id="routeStatus" style="text-align:center; font-weight:900; margin-top:15px; font-size:1.1rem; min-height:30px;">Выбери маршрут отряда выше!</div>
+
+        <button class="btn-gacha hidden" id="bossWinBtn" style="background:var(--accent); color:#000;" onclick="showVictory()">АТАКОВАТЬ БОССА!</button>
+    </div>
+</div>
+
+<!-- STEP 2: VICTORY & DIPLOMA -->
+<div class="app-container hidden" id="step2">
+    <div class="story-card" style="box-shadow: 8px 8px 0px var(--accent); text-align:center;">
+        <div class="trophy-badge">🏆</div>
+        <h2 style="font-size: 2.2rem; margin-bottom:10px;">БОСС ОГЭ ПОВЕРЖЕН!</h2>
+        <p style="font-size: 1.2rem; font-weight: 700; color:#333; line-height:1.6;">
+            Ты прошел все 5 уровней симулятора «ИМБА»!<br>
+            Ты освоил теорию вероятностей, системы неравенств, задачи на смеси и теорию графов.
+        </p>
+
+        <div style="background:#fff; border:3px solid #000; box-shadow:4px 4px 0px #000; padding:20px; max-width:500px; margin:25px auto; font-family:'Roboto Mono',monospace; text-align:left;">
+            <div style="font-weight:900; color:var(--accent); margin-bottom:10px;">СЕРТИФИКАТ ГОТОВНОСТИ К ОГЭ:</div>
+            <div>✔ Задание №10: Вероятности лутбоксов</div>
+            <div>✔ Задание №13: Лимиты крафта кузницы</div>
+            <div>✔ Задание №21: Концентрация зелий и сплавы</div>
+            <div>✔ Задание №11: Анализ стратегий Нэша</div>
+            <div>✔ Задание №4: Поиск кратчайшего пути графа</div>
+            <hr style="border:1px solid #000; margin:12px 0;">
+            <div style="font-weight:900;">ИТОГОВЫЙ СЧЕТ: <span style="color:var(--accent);">+250 XP (МАСТЕР)</span></div>
+        </div>
+
+        <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--yellow); color:#000; max-width:400px; margin:20px auto 0;">🗺 ВЕРНУТЬСЯ К КАРТЕ КУРСА</a>
+    </div>
+</div>
+
+<footer style="width:100%; max-width:860px; text-align:center; font-size:0.75rem; color:#777; margin-top:30px; padding:15px; font-weight:700; border-top:2px solid #ddd;">
+    🛡 Учебно-просветительский симулятор математических моделей (12+). Все расчеты производятся на условных игровых очках в целях изучения графов и алгоритмов оптимизации (ФЗ № 436-ФЗ).
+</footer>
+
+<script>
+    function selectRoute(time, name) {
+        let status = document.getElementById('routeStatus');
+        let btn = document.getElementById('bossWinBtn');
+        
+        if (time <= 10) {
+            status.innerHTML = '⚡ <strong>ИДЕАЛЬНЫЙ МАРШРУТ!</strong> ' + name + ' займет всего 10 минут. Мы опережаем босса на 2 минуты!';
+            status.style.color = 'var(--accent)';
+            btn.classList.remove('hidden');
+        } else {
+            status.innerHTML = '⚠️ <strong>СЛИШКОМ МЕДЛЕННО!</strong> ' + name + ' займет ' + time + ' минут. Босс успеет завершить заклинание!';
+            status.style.color = 'var(--danger)';
+            btn.classList.add('hidden');
+        }
+    }
+
+    function showVictory() {
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        try {
+            localStorage.setItem('imba_mod_5', 'true');
+            let cur = parseInt(localStorage.getItem('imba_xp') || '0');
+            localStorage.setItem('imba_xp', (cur + 100).toString());
+        } catch(e) {}
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>

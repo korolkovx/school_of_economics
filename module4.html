@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALCHEMY ZONE | ИМБА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F4F1E1;
+            --panel: #FFFFFF;
+            --accent: #00C853; 
+            --danger: #FF2A55; 
+            --yellow: #FFC000; 
+            --purple: #7C4DFF;
+            --text: #000000;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 4px 4px 0px #000000;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
+            margin: 0; padding: 20px 10px; overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 100%; max-width: 860px; min-height: calc(100vh - 40px);
+            position: relative; display: flex; flex-direction: column;
+        }
+        h1, h2, h3, h4 { text-transform: uppercase; margin: 0; font-weight: 900; }
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 20px; border-bottom: var(--border); margin-bottom: 20px;
+        }
+        .balance-badge {
+            background: var(--purple); border: var(--border); padding: 8px 16px;
+            font-family: 'Roboto Mono', monospace; font-weight: 900; color: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        .glass-panel {
+            background: var(--panel); border: var(--border); box-shadow: var(--shadow);
+            padding: 28px; position: relative; margin-top: 20px;
+        }
+
+        /* FLASK VISUALIZER */
+        .alchemy-display {
+            display: flex; justify-content: space-around; align-items: flex-end;
+            margin: 30px 0; gap: 15px; flex-wrap: wrap;
+        }
+        .flask-box {
+            text-align: center; font-weight: 900;
+        }
+        .flask {
+            width: 90px; height: 160px; border: 4px solid #000; background: #fff;
+            position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+            box-shadow: 4px 4px 0px #000; margin: 10px auto; overflow: hidden;
+        }
+        .liquid {
+            width: 100%; transition: height 0.2s, background 0.3s;
+        }
+        .flask-main {
+            width: 130px; height: 200px; border: 5px solid #000; box-shadow: 6px 6px 0px #000;
+        }
+        .conc-badge {
+            font-family: 'Roboto Mono', monospace; font-size: 1.4rem; font-weight: 900; margin-top: 8px;
+        }
+
+        .slider-container { margin: 20px 0; background: #f9f9f9; padding: 18px; border: 2px solid #000; }
+        .slider-container label { display: flex; justify-content: space-between; font-weight: 900; font-size: 1.1rem; margin-bottom: 10px; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: #000; height: 12px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; background: var(--purple); border: 3px solid #000; cursor: pointer; }
+
+        .btn-gacha {
+            background: var(--text); color: #fff; border: var(--border);
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.15rem;
+            padding: 18px; width: 100%; cursor: pointer; margin-top: 20px;
+            box-shadow: var(--shadow); transition: all 0.1s; text-transform: uppercase;
+        }
+        .btn-gacha:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; }
+        .btn-gacha:disabled { background: #bbb; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .hidden { display: none !important; }
+        .story-card { background: #fff; border: var(--border); box-shadow: var(--shadow); padding: 25px; margin-bottom: 25px; }
+
+        .quiz-opt {
+            background: #fff; border: 2px solid #000; padding: 12px 16px; margin: 8px 0;
+            font-family: 'Roboto Mono', monospace; font-size: 1.1rem; font-weight: 900;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 3px 3px 0px #000; transition: all 0.1s;
+        }
+        .quiz-opt:hover { background: #fdf5d3; }
+        .quiz-opt.correct { background: var(--accent) !important; color: #000; }
+        .quiz-opt.wrong { background: var(--danger) !important; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="app-container" id="step1">
+    <div class="header">
+        <h2 style="letter-spacing: 2px;">ALCHEMY<span style="color:var(--purple)">ZONE</span></h2>
+        <div class="balance-badge">МОДУЛЬ 3 • СПЛАВЫ И СМЕСИ</div>
+    </div>
+
+    <div class="glass-panel" style="box-shadow: 8px 8px 0px var(--purple);">
+        <h3 style="font-size: 1.8rem;">ВАРКА БОЕВОГО ЭЛИКСИРА</h3>
+        <p style="font-weight: 700; margin-top: 10px; line-height: 1.5;">
+            Перед рейдом гильдии нужно ровно <strong>10 литров</strong> боевого зелья с концентрацией экстракта дракона строго <strong>25%</strong>. 
+            Смешай зелье A (слабое, 10%) и зелье B (концентрат, 40%) в нужной пропорции!
+        </p>
+
+        <div class="alchemy-display">
+            <!-- Flask A -->
+            <div class="flask-box">
+                <div>ЗЕЛЬЕ A (10%)</div>
+                <div class="flask"><div class="liquid" id="liqA" style="height: 50%; background: #4FC3F7;"></div></div>
+                <div id="volA" style="font-family:'Roboto Mono';">5 л</div>
+            </div>
+
+            <!-- Flask Main -->
+            <div class="flask-box">
+                <div style="color:var(--purple);">КОТЕЛ СМЕШИВАНИЯ</div>
+                <div class="flask flask-main"><div class="liquid" id="liqMain" style="height: 100%; background: #AB47BC;"></div></div>
+                <div class="conc-badge" id="concText">25.0%</div>
+                <div id="targetStatus" style="font-size:0.85rem; font-weight:900; color:var(--accent);">ЦЕЛЬ ДОСТИГНУТА!</div>
+            </div>
+
+            <!-- Flask B -->
+            <div class="flask-box">
+                <div>ЗЕЛЬЕ B (40%)</div>
+                <div class="flask"><div class="liquid" id="liqB" style="height: 50%; background: #BA68C8;"></div></div>
+                <div id="volB" style="font-family:'Roboto Mono';">5 л</div>
+            </div>
+        </div>
+
+        <div class="slider-container">
+            <label><span>ОБЪЕМ ИЗ КОЛБЫ A</span> <strong id="sliderVal" style="color:var(--purple);">5.0 л</strong></label>
+            <div style="font-size: 0.85rem; font-weight: 700; color: #555; margin-bottom: 10px;">Остаток (10 - X) автоматически доливается из колбы B</div>
+            <input type="range" id="mixSlider" min="0" max="100" value="50" oninput="updateMix()">
+        </div>
+
+        <button class="btn-gacha" id="brewBtn" onclick="finishBrew()">ГОТОВО: ВЗЛОМАТЬ МАТЕМАТИКУ ЗЕЛЬЯ</button>
+    </div>
+</div>
+
+<!-- STEP 2: THEORY & OGE EXPLANATION -->
+<div class="app-container hidden" id="step2">
+    <div class="header">
+        <h2 style="color: var(--accent);">СЕКРЕТ ЗАДАНИЯ ОГЭ №21</h2>
+        <div class="balance-badge">ВТОРАЯ ЧАСТЬ ОГЭ</div>
+    </div>
+
+    <div class="story-card" style="box-shadow: 8px 8px 0px var(--purple);">
+        <h3 style="font-size: 1.8rem;">ТЫ ТОЛЬКО ЧТО РЕШИЛ ЗАДАЧУ НА СПЛАВЫ</h3>
+        <p style="font-size: 1.15rem; font-weight: 700; line-height: 1.6; margin-top: 12px;">
+            Задание №21 из второй части ОГЭ на смеси и сплавы пугает 80% школьников. <br>
+            Но на самом деле это <strong>закон сохранения массы вещества</strong>, который ты только что настроил в котле!
+        </p>
+
+        <div style="background:#f9f9f9; border:2px solid #000; padding:18px; margin-top:15px; font-family:'Roboto Mono',monospace; line-height:1.7;">
+            <strong>УРАВНЕНИЕ БАЛАНСА ЧИСТОЙ МАНЫ:</strong><br>
+            (Мана из колбы A) + (Мана из колбы B) = (Мана в итоговом зелье)<br>
+            <span style="color:var(--purple); font-size:1.2rem;">0.10 · x + 0.40 · (10 − x) = 0.25 · 10</span><br>
+            0.10x + 4 − 0.40x = 2.5<br>
+            −0.30x = −1.5<br>
+            <strong>x = 5 литров!</strong>
+        </div>
+    </div>
+
+    <!-- OGE PRACTICE CARD -->
+    <div class="story-card" style="box-shadow: 8px 8px 0px var(--danger);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size: 1.6rem;">ПРОВЕРЬ СЕБЯ: ЗАДАНИЕ ОГЭ №21</h3>
+            <span style="background:var(--danger); color:#fff; font-family:'Roboto Mono',monospace; padding:4px 8px; font-weight:900; border:2px solid #000;">ФИПИ 2 ЧАСТЬ</span>
+        </div>
+        
+        <p style="font-weight: 700; margin-top: 15px; font-size: 1.1rem;">
+            <em>"Смешали 4 литра 15-процентного водного раствора некоторого вещества с 6 литрами 25-процентного раствора этого же вещества. Сколько процентов составляет концентрация получившегося раствора?"</em>
+        </p>
+
+        <div id="quizContainer4">
+            <div class="quiz-opt" onclick="checkAnswer4(this, false)">
+                <span>1) 20%</span>
+                <span>✖</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer4(this, true)">
+                <span>2) 21%</span>
+                <span>✔</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer4(this, false)">
+                <span>3) 22%</span>
+                <span>✖</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer4(this, false)">
+                <span>4) 18.5%</span>
+                <span>✖</span>
+            </div>
+        </div>
+
+        <div id="quizFeedback4" class="hidden" style="margin-top: 20px; padding: 15px; border: 2px solid #000; background: #E8F5E9; font-weight: 700; line-height: 1.5;">
+            🎉 <strong>ВЕРНО! +2 БАЛЛА ВО 2-Й ЧАСТИ ОГЭ!</strong><br>
+            Чистое вещество: 4 · 0.15 + 6 · 0.25 = 0.6 + 1.5 = 2.1 литра.<br>
+            Общий объем: 4 + 6 = 10 литров.<br>
+            Итоговая концентрация: 2.1 / 10 = 0.21, то есть ровно <strong>21%</strong>!
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:30px; max-width:480px; margin-left:auto; margin-right:auto;">
+            <a href="module3.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--accent); color:#000; font-size:1.15rem;">СЛЕДУЮЩИЙ УРОВЕНЬ: ТЕОРИЯ ИГР (№11) ➔</a>
+            <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:#fff; color:#000; font-size:0.95rem; border:2px solid #000; box-shadow:3px 3px 0px #000;">🗺 ВЕРНУТЬСЯ НА КАРТУ КУРСА</a>
+        </div>
+    </div>
+</div>
+
+<footer style="width:100%; max-width:860px; text-align:center; font-size:0.75rem; color:#777; margin-top:30px; padding:15px; font-weight:700; border-top:2px solid #ddd;">
+    🛡 Учебно-просветительский симулятор математических моделей (12+). Все расчеты производятся на условных игровых очках в целях изучения процентной концентрации и смесей (ФЗ № 436-ФЗ).
+</footer>
+
+<script>
+    function updateMix() {
+        let vA = parseFloat(document.getElementById('mixSlider').value) / 10;
+        let vB = 10 - vA;
+        
+        document.getElementById('sliderVal').innerText = vA.toFixed(1) + ' л';
+        document.getElementById('volA').innerText = vA.toFixed(1) + ' л';
+        document.getElementById('volB').innerText = vB.toFixed(1) + ' л';
+        
+        document.getElementById('liqA').style.height = (vA / 10 * 100) + '%';
+        document.getElementById('liqB').style.height = (vB / 10 * 100) + '%';
+        
+        // Pure substance: vA * 0.10 + vB * 0.40
+        let pure = (vA * 0.10) + (vB * 0.40);
+        let conc = (pure / 10) * 100;
+        
+        let concEl = document.getElementById('concText');
+        let statusEl = document.getElementById('targetStatus');
+        let btn = document.getElementById('brewBtn');
+        
+        concEl.innerText = conc.toFixed(1) + '%';
+        
+        if (Math.abs(conc - 25.0) < 0.2) {
+            concEl.style.color = 'var(--accent)';
+            statusEl.innerText = '🎯 ИДЕАЛЬНОЕ ЗЕЛЬЕ (25%)! ГОТОВО К РЕЙДУ';
+            statusEl.style.color = 'var(--accent)';
+            btn.style.background = 'var(--accent)';
+            btn.style.color = '#000';
+            btn.disabled = false;
+        } else {
+            concEl.style.color = 'var(--purple)';
+            statusEl.innerText = conc < 25 ? 'СЛИШКОМ СЛАБОЕ (ДОБАВЬ КОЛБУ B)' : 'СЛИШКОМ ГОРЯЧЕЕ (ДОБАВЬ КОЛБУ A)';
+            statusEl.style.color = 'var(--danger)';
+            btn.style.background = 'var(--text)';
+            btn.style.color = '#fff';
+            btn.disabled = false;
+        }
+    }
+
+    function finishBrew() {
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function checkAnswer4(el, isCorrect) {
+        let opts = document.querySelectorAll('#quizContainer4 .quiz-opt');
+        opts.forEach(o => o.style.pointerEvents = 'none');
+        
+        if (isCorrect) {
+            el.classList.add('correct');
+            document.getElementById('quizFeedback4').classList.remove('hidden');
+            try {
+                localStorage.setItem('imba_mod_4', 'true');
+                let cur = parseInt(localStorage.getItem('imba_xp') || '0');
+                localStorage.setItem('imba_xp', (cur + 50).toString());
+            } catch(e) {}
+        } else {
+            el.classList.add('wrong');
+            opts[1].classList.add('correct');
+            document.getElementById('quizFeedback4').classList.remove('hidden');
+            document.getElementById('quizFeedback4').innerHTML = '❌ <strong>Ошибка!</strong> Правильный ответ: 21%. Масса чистого вещества: 4·0.15 + 6·0.25 = 0.6 + 1.5 = 2.1 литра. 2.1 / 10 = 21%.';
+            document.getElementById('quizFeedback4').style.background = '#FFEBEE';
+        }
+    }
+</script>
+
+</body>
+</html>
