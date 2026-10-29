@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ИМБА | Карта курса ОГЭ</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
     <style>
@@ -17,18 +17,21 @@
             --text-muted: #555555;
             --border: 3px solid #000000;
             --shadow: 6px 6px 0px #000000;
-            --shadow-sm: 4px 4px 0px #000000;
+            --shadow-sm: 3px 3px 0px #000000;
         }
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Montserrat', sans-serif;
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        html, body {
+            overflow-x: hidden; max-width: 100vw;
+            width: 100%;
             margin: 0;
             padding: 0;
             background-color: var(--bg);
             background-image: radial-gradient(#aaa 1px, transparent 1px);
             background-size: 20px 20px;
             color: var(--text);
-            line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.5;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -40,7 +43,7 @@
             width: 100%;
             background-color: #FFFFFF;
             border-bottom: var(--border);
-            padding: 10px 20px;
+            padding: 10px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -48,14 +51,16 @@
             top: 0;
             z-index: 100;
             box-shadow: 0 4px 0 rgba(0,0,0,0.06);
+            box-sizing: border-box;
         }
         .nav-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
         }
         .nav-logo {
-            font-size: 1.6rem;
+            font-size: 1.45rem;
             font-weight: 900;
             color: #000;
             text-decoration: none;
@@ -66,39 +71,43 @@
             background: #000;
             color: #fff;
             font-family: 'Roboto Mono', monospace;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 900;
-            padding: 3px 6px;
+            padding: 2px 5px;
             border: 2px solid #000;
+            line-height: 1;
         }
 
         .duo-stats {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
+            flex-shrink: 0;
         }
         .stat-pill {
             background: #fff;
             border: 2px solid #000;
             box-shadow: 2px 2px 0px #000;
-            padding: 4px 10px;
+            padding: 4px 8px;
             font-family: 'Roboto Mono', monospace;
             font-weight: 900;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
+            white-space: nowrap;
         }
 
         /* CONTAINER */
         .container {
             width: 100%;
-            max-width: 600px;
-            padding: 25px 15px 40px;
+            max-width: 540px;
+            padding: 20px 12px 50px;
             display: flex;
             flex-direction: column;
             align-items: center;
             flex: 1;
+            box-sizing: border-box;
         }
 
         /* SECTION HEADER BANNER */
@@ -107,26 +116,29 @@
             background: var(--accent);
             border: var(--border);
             box-shadow: var(--shadow);
-            padding: 16px 20px;
-            margin-bottom: 35px;
+            padding: 16px 18px;
+            margin-bottom: 40px;
             color: #000;
+            box-sizing: border-box;
         }
         .unit-tag {
             font-family: 'Roboto Mono', monospace;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 900;
             background: #000;
             color: #fff;
             padding: 3px 8px;
             display: inline-block;
             margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
         .unit-banner h2 {
             margin: 0;
-            font-size: 1.35rem;
+            font-size: clamp(1.05rem, 4.2vw, 1.35rem);
             font-weight: 900;
             text-transform: uppercase;
-            line-height: 1.2;
+            line-height: 1.25;
+            word-break: break-word;
         }
 
         /* DUOLINGO MAP PATH */
@@ -136,7 +148,8 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            padding: 10px 0 40px;
+            padding: 10px 0 30px;
+            box-sizing: border-box;
         }
 
         /* PATH CONNECTOR SVG BEHIND NODES */
@@ -154,15 +167,21 @@
         .map-node-row {
             width: 100%;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 50px;
+            margin-bottom: 45px;
             position: relative;
             z-index: 2;
+            transition: transform 0.2s ease;
         }
-        .pos-left { align-items: flex-start; padding-left: 20%; }
-        .pos-center { align-items: center; }
-        .pos-right { align-items: flex-end; padding-right: 20%; }
+        .pos-center .node-wrapper { transform: translateX(0); }
+        .pos-left .node-wrapper { transform: translateX(-45px); }
+        .pos-right .node-wrapper { transform: translateX(45px); }
+
+        @media (min-width: 520px) {
+            .pos-left .node-wrapper { transform: translateX(-70px); }
+            .pos-right .node-wrapper { transform: translateX(70px); }
+        }
 
         .node-wrapper {
             display: flex;
@@ -173,53 +192,58 @@
 
         /* CIRCULAR DUOLINGO NODE BUTTON */
         .duo-node {
-            width: 90px;
-            height: 90px;
+            width: 82px;
+            height: 82px;
             border-radius: 50%;
             border: 4px solid #000;
             background: #FFFFFF;
-            box-shadow: 0 8px 0px #000;
+            box-shadow: 0 7px 0px #000;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             text-decoration: none;
             position: relative;
-            transition: all 0.1s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .duo-node:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 0px #000;
+            box-shadow: 0 9px 0px #000;
         }
         .duo-node:active {
-            transform: translateY(6px);
+            transform: translateY(5px);
             box-shadow: 0 2px 0px #000;
         }
         .duo-node .icon {
-            font-size: 2.6rem;
+            font-size: 2.3rem;
             line-height: 1;
         }
 
         /* LEVEL LABEL PILL UNDER NODE */
         .node-label {
-            margin-top: 12px;
+            margin-top: 10px;
             background: #FFFFFF;
             border: 2px solid #000;
             box-shadow: 3px 3px 0px #000;
-            padding: 4px 10px;
+            padding: 4px 8px;
             font-family: 'Roboto Mono', monospace;
             font-weight: 900;
-            font-size: 0.78rem;
+            font-size: clamp(0.7rem, 2.5vw, 0.78rem);
             text-align: center;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
         .node-oge {
             color: var(--accent);
             background: #000;
             padding: 1px 4px;
-            margin-left: 4px;
             border-radius: 2px;
+            font-size: 0.72rem;
         }
 
         /* NODE STATES */
@@ -228,9 +252,9 @@
             animation: pulse-ring 1.8s infinite;
         }
         @keyframes pulse-ring {
-            0% { box-shadow: 0 8px 0px #000, 0 0 0 0 rgba(255, 192, 0, 0.7); }
-            70% { box-shadow: 0 8px 0px #000, 0 0 0 16px rgba(255, 192, 0, 0); }
-            100% { box-shadow: 0 8px 0px #000, 0 0 0 0 rgba(255, 192, 0, 0); }
+            0% { box-shadow: 0 7px 0px #000, 0 0 0 0 rgba(255, 192, 0, 0.7); }
+            70% { box-shadow: 0 7px 0px #000, 0 0 0 14px rgba(255, 192, 0, 0); }
+            100% { box-shadow: 0 7px 0px #000, 0 0 0 0 rgba(255, 192, 0, 0); }
         }
 
         .duo-node.completed-level {
@@ -243,49 +267,54 @@
             right: -2px;
             background: #000;
             color: #fff;
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             border: 2px solid #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 900;
         }
 
         /* CHEST / SCRATCH NODE */
         .duo-chest {
-            width: 76px;
-            height: 76px;
+            width: 72px;
+            height: 72px;
             background: #fff;
-            border-radius: 16px;
+            border-radius: 14px;
             border: 4px solid #000;
             box-shadow: 0 6px 0 #000;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
+        .duo-chest:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #000; }
         .duo-chest:active { transform: translateY(4px); box-shadow: 0 2px 0 #000; }
 
         /* SCRATCH CARD MODAL */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); z-index: 200; display: flex;
-            align-items: center; justify-content: center; padding: 20px;
-            opacity: 0; pointer-events: none; transition: opacity 0.2s;
+            align-items: center; justify-content: center; padding: 15px;
+            display: none;
+            box-sizing: border-box;
         }
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-overlay.active { display: flex; }
         .modal-card {
             background: #FFFFFF; border: var(--border); box-shadow: var(--shadow);
-            padding: 24px; width: 100%; max-width: 480px; position: relative;
+            padding: 20px; width: 100%; max-width: 460px; position: relative;
+            box-sizing: border-box;
         }
         .close-btn {
             position: absolute; top: 12px; right: 12px; background: #000; color: #fff;
-            border: none; font-size: 1.2rem; font-weight: 900; padding: 4px 10px; cursor: pointer;
+            border: none; font-size: 1.1rem; font-weight: 900; padding: 4px 9px; cursor: pointer;
         }
 
         .scratch-card {
@@ -302,11 +331,49 @@
             width: 100%;
             background-color: #FFFFFF;
             border-top: var(--border);
-            padding: 20px 15px;
-            font-size: 0.78rem;
+            padding: 18px 15px;
+            font-size: 0.75rem;
             color: #555;
             text-align: center;
             line-height: 1.5;
+            box-sizing: border-box;
+        }
+
+        /* MOBILE ADJUSTMENTS */
+        @media (max-width: 600px) {
+            .top-navbar {
+                padding: 8px 10px;
+            }
+            .nav-logo {
+                font-size: 1.25rem;
+            }
+            .age-badge {
+                font-size: 0.65rem;
+                padding: 1px 4px;
+            }
+            .duo-stats {
+                gap: 5px;
+            }
+            .stat-pill {
+                padding: 3px 6px;
+                font-size: 0.75rem;
+                gap: 3px;
+            }
+            .duo-node {
+                width: 74px;
+                height: 74px;
+            }
+            .duo-node .icon {
+                font-size: 2rem;
+            }
+            .duo-chest {
+                width: 66px;
+                height: 66px;
+                font-size: 1.6rem;
+            }
+            .map-node-row {
+                margin-bottom: 38px;
+            }
         }
     </style>
 </head>
@@ -334,10 +401,9 @@
 
     <!-- DUOLINGO MAP PATH -->
     <div class="duo-map">
-        <!-- SVG CONNECTOR PATH -->
-        <svg class="map-svg-path" viewBox="0 0 400 800" preserveAspectRatio="none">
-            <path d="M 200 45 Q 320 110, 300 170 T 120 290 T 200 410 T 290 530 T 200 650 T 200 750" 
-                  fill="none" stroke="#D1CCA8" stroke-width="8" stroke-dasharray="10 8" stroke-linecap="round"/>
+        <!-- DYNAMIC SVG CONNECTOR PATH -->
+        <svg id="mapSvg" class="map-svg-path">
+            <path id="duoPath" fill="none" stroke="#D1CCA8" stroke-width="8" stroke-dasharray="10 8" stroke-linecap="round"/>
         </svg>
 
         <!-- LEVEL 1: LOOTBOXES -->
@@ -353,7 +419,7 @@
         <!-- BONUS CHEST: SCRATCH CARD -->
         <div class="map-node-row pos-right">
             <div class="node-wrapper">
-                <div class="duo-chest" onclick="openChest()" title="Секретный сундук с чит-кодом">
+                <div class="duo-chest" id="bonusChest" onclick="openChest()" title="Секретный сундук с чит-кодом">
                     <span>🎁</span>
                 </div>
                 <div class="node-label" style="background:var(--yellow);">БОНУСНЫЙ СУНДУК</div>
@@ -402,8 +468,11 @@
 
         <!-- FINAL TROPHY -->
         <div class="map-node-row pos-center" style="margin-bottom: 0;">
-            <div class="duo-node" style="width: 100px; height: 100px; background: var(--yellow); border-radius: 20px;">
-                <span class="icon" style="font-size: 3rem;">🏆</span>
+            <div class="node-wrapper">
+                <div class="duo-node" id="trophyNode" style="width: 86px; height: 86px; background: var(--yellow); border-radius: 20px;">
+                    <span class="icon" style="font-size: 2.6rem;">🏆</span>
+                </div>
+                <div class="node-label" style="background:var(--accent);">ИТОГОВЫЙ ДИПЛОМ</div>
             </div>
         </div>
     </div>
@@ -413,45 +482,93 @@
 <div class="modal-overlay" id="chestModal">
     <div class="modal-card">
         <button class="close-btn" onclick="closeChest()">✕</button>
-        <h3 style="margin-top:0; font-size:1.4rem;">СЕКРЕТНЫЙ БОНУСНЫЙ СУНДУК</h3>
-        <p style="font-weight:700; font-size:0.95rem;">Сотри защитный слой монетой или пальцем, чтобы забрать секретный инсайт:</p>
+        <h3 style="margin-top:0; font-size:1.25rem;">СЕКРЕТНЫЙ БОНУСНЫЙ СУНДУК</h3>
+        <p style="font-weight:700; font-size:0.9rem; line-height: 1.4;">Сотри защитный слой монетой или пальцем, чтобы забрать секретный инсайт:</p>
         
         <div class="scratch-card" id="modalScratchCard">
-            <div style="padding:15px; font-weight:700; line-height:1.4; text-align:center;">
+            <div style="padding:15px; font-weight:700; font-size:0.88rem; line-height:1.4; text-align:center;">
                 ⚡ <strong>ЛАЙФХАК ОГЭ №10:</strong> Если в условии спрашивают вероятность того, что событие <em>НЕ произойдет</em>, никогда не складывай все варианты вручную! Просто вычти вероятность успеха из единицы: <strong>P = 1 − P_успеха</strong>. Это экономит 3 минуты на экзамене!
             </div>
             <canvas class="scratch-canvas" id="modalScratchCanvas"></canvas>
         </div>
         
-        <button class="stat-pill" style="width:100%; justify-content:center; padding:10px; font-size:1rem; cursor:pointer;" onclick="closeChest()">ЗАБРАТЬ +50 XP</button>
+        <button class="stat-pill" style="width:100%; justify-content:center; padding:10px; font-size:0.95rem; cursor:pointer;" onclick="closeChest()">ЗАБРАТЬ +50 XP</button>
     </div>
 </div>
 
 <!-- COMPLIANCE FOOTER -->
 <footer>
-    <div style="max-width: 600px; margin: 0 auto;">
-        <p><strong>Учебно-просветительский симулятор математических моделей «ИМБА» (12+)</strong></p>
-        <p>Все вычисления производятся в виртуальных очках в целях изучения теории вероятностей, оптимизации и графов. Проект не является азартной игрой или лотереей (ФЗ № 244-ФЗ, ФЗ № 138-ФЗ). Программа направлена на повышение математической грамотности школьников и профилактику импульсивного поведения в играх.</p>
+    <div style="max-width: 540px; margin: 0 auto;">
+        <p style="margin: 0 0 8px;"><strong>Учебно-просветительский симулятор математических моделей «ИМБА» (12+)</strong></p>
+        <p style="margin: 0;">Все вычисления производятся в виртуальных очках в целях изучения теории вероятностей, оптимизации и графов. Проект не является азартной игрой или лотереей (ФЗ № 244-ФЗ, ФЗ № 138-ФЗ). Программа направлена на повышение математической грамотности школьников и профилактику импульсивного поведения в играх.</p>
     </div>
 </footer>
 
 <script>
+    // DYNAMIC PIXEL-PERFECT SERPENTINE PATH
+    function drawMapPath() {
+        const map = document.querySelector('.duo-map');
+        const svg = document.getElementById('mapSvg');
+        const path = document.getElementById('duoPath');
+        if (!map || !svg || !path) return;
+
+        const targets = [
+            document.getElementById('node1'),
+            document.getElementById('bonusChest'),
+            document.getElementById('node2'),
+            document.getElementById('node3'),
+            document.getElementById('node4'),
+            document.getElementById('node5'),
+            document.getElementById('trophyNode')
+        ].filter(Boolean);
+
+        if (targets.length < 2) return;
+
+        const mapRect = map.getBoundingClientRect();
+        const w = Math.round(mapRect.width);
+        const h = Math.round(mapRect.height);
+        
+        svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        svg.setAttribute('width', `${w}`);
+        svg.setAttribute('height', `${h}`);
+
+        const pts = targets.map(el => {
+            const r = el.getBoundingClientRect();
+            return {
+                x: r.left - mapRect.left + r.width / 2,
+                y: r.top - mapRect.top + r.height / 2
+            };
+        });
+
+        let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+        for (let i = 0; i < pts.length - 1; i++) {
+            const p0 = pts[i];
+            const p1 = pts[i + 1];
+            const dy = p1.y - p0.y;
+            const cy1 = p0.y + dy * 0.55;
+            const cy2 = p1.y - dy * 0.45;
+            d += ` C ${p0.x.toFixed(1)} ${cy1.toFixed(1)}, ${p1.x.toFixed(1)} ${cy2.toFixed(1)}, ${p1.x.toFixed(1)} ${p1.y.toFixed(1)}`;
+        }
+        path.setAttribute('d', d);
+    }
+
     // UPDATE PROGRESS & XP FROM LOCALSTORAGE
     function updateProgress() {
         let xp = parseInt(localStorage.getItem('imba_xp') || '150');
-        document.getElementById('userXp').innerText = xp;
+        const xpEl = document.getElementById('userXp');
+        if (xpEl) xpEl.innerText = xp;
 
         const mods = [
-            { id: 'node1', star: 'star1', key: 'imba_mod_1' },
-            { id: 'node2', star: 'star2', key: 'imba_mod_2' },
-            { id: 'node3', star: 'star3', key: 'imba_mod_4' },
-            { id: 'node4', star: 'star4', key: 'imba_mod_3' },
-            { id: 'node5', star: 'star5', key: 'imba_mod_5' }
+            { id: 'node1', key: 'imba_mod_1' },
+            { id: 'node2', key: 'imba_mod_2' },
+            { id: 'node3', key: 'imba_mod_4' },
+            { id: 'node4', key: 'imba_mod_3' },
+            { id: 'node5', key: 'imba_mod_5' }
         ];
 
         let activeFound = false;
 
-        mods.forEach((m, idx) => {
+        mods.forEach(m => {
             const el = document.getElementById(m.id);
             if (!el) return;
             const isDone = localStorage.getItem(m.key) === 'true';
@@ -466,7 +583,14 @@
                 el.style.opacity = '0.9';
             }
         });
+
+        drawMapPath();
     }
+
+    // REDRAW ON RESIZE AND LOAD
+    window.addEventListener('load', drawMapPath);
+    window.addEventListener('resize', drawMapPath);
+    window.addEventListener('orientationchange', () => setTimeout(drawMapPath, 100));
 
     // CHEST MODAL
     function openChest() {
@@ -484,6 +608,7 @@
         scratchInitialized = true;
         const canvas = document.getElementById('modalScratchCanvas');
         const card = document.getElementById('modalScratchCard');
+        if (!canvas || !card) return;
         const ctx = canvas.getContext('2d');
 
         canvas.width = card.offsetWidth;
