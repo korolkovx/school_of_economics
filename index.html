@@ -157,10 +157,12 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 100% !important;
+            max-width: 100% !important;
             height: 100%;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
         }
 
         /* NODE ROW */
@@ -535,8 +537,8 @@
         <!-- UNIT 2 BANNER (IN-BETWEEN SECTIONS) -->
         <div class="map-node-row pos-center" style="margin: 35px 0 45px; z-index: 5;">
             <div class="unit-banner" style="background:#2979FF; color:#fff; box-shadow:6px 6px 0px #000; width:100%; max-width:440px;">
-                <span class="unit-tag" style="background:#fff; color:#000;">РАЗДЕЛ 2 • МАКРОЭКОНОМИКА И ФУНКЦИИ</span>
-                <h2 style="color:#fff;">РЫНКИ, БАЛЛИСТИКА И ГРАФЫ</h2>
+                <span class="unit-tag" style="background:#fff; color:#000;">РАЗДЕЛ 2 • МАКРОЭКОНОМИКА И ГЕОМЕТРИЯ БАЗ</span>
+                <h2 style="color:#fff;">БИРЖА, БАЛЛИСТИКА И STEALTH</h2>
             </div>
         </div>
 
@@ -580,13 +582,71 @@
             </div>
         </div>
 
-        <!-- LEVEL 8: FINAL BOSS RAID (OGE 4) -->
+        <!-- LEVEL 8: STEALTH ZONE & TRIGONOMETRY (OGE 15) -->
         <div class="map-node-row pos-center">
             <div class="node-wrapper">
-                <a href="module5.html" class="duo-node" id="node8" title="Начать Уровень 8">
+                <a href="module9.html" class="duo-node" id="node8" title="Начать Уровень 8">
+                    <span class="icon">🎯</span>
+                </a>
+                <div class="node-label">8. STEALTH & УГЛЫ <span class="node-oge">№15</span></div>
+            </div>
+        </div>
+
+        <!-- UNIT 3 BANNER -->
+        <div class="map-node-row pos-center" style="margin: 35px 0 45px; z-index: 5;">
+            <div class="unit-banner" style="background:#7C4DFF; color:#fff; box-shadow:6px 6px 0px #000; width:100%; max-width:440px;">
+                <span class="unit-tag" style="background:#fff; color:#000;">РАЗДЕЛ 3 • ФИЗИКА МЕТЫ, СПИДРАН И РЕЙДЫ</span>
+                <h2 style="color:#fff;">СПИДРАН, DPS И ФИНАЛЬНЫЙ РЕЙД</h2>
+            </div>
+        </div>
+
+        <!-- LEVEL 9: SPEEDRUN & CURRENT (OGE 21) -->
+        <div class="map-node-row pos-right">
+            <div class="node-wrapper">
+                <a href="module10.html" class="duo-node" id="node9" title="Начать Уровень 9">
+                    <span class="icon">🚤</span>
+                </a>
+                <div class="node-label">9. ПОГОНЯ НА РЕКЕ <span class="node-oge">№21</span></div>
+            </div>
+        </div>
+
+        <!-- BONUS CHEST 3: SCRATCH CARD -->
+        <div class="map-node-row pos-left">
+            <div class="node-wrapper">
+                <div class="duo-chest" id="bonusChest3" onclick="openChest(3)" title="Секретный сундук с чит-кодом №3" style="background:#EDE7F6;">
+                    <span>⚡</span>
+                </div>
+                <div class="node-label" style="background:var(--yellow);">БОНУСНЫЙ СУНДУК 3</div>
+            </div>
+        </div>
+
+        <!-- LEVEL 10: RAID DPS & SHARED WORK (OGE 21) -->
+        <div class="map-node-row pos-center">
+            <div class="node-wrapper">
+                <a href="module11.html" class="duo-node" id="node10" title="Начать Уровень 10">
+                    <span class="icon">⚔️</span>
+                </a>
+                <div class="node-label">10. РЕЙДОВЫЙ DPS <span class="node-oge">№21</span></div>
+            </div>
+        </div>
+
+        <!-- LEVEL 11: META STATS & MEDIAN (OGE 19) -->
+        <div class="map-node-row pos-right">
+            <div class="node-wrapper">
+                <a href="module12.html" class="duo-node" id="node11" title="Начать Уровень 11">
+                    <span class="icon">📊</span>
+                </a>
+                <div class="node-label">11. БАЛАНС МЕТЫ <span class="node-oge">№19</span></div>
+            </div>
+        </div>
+
+        <!-- LEVEL 12: ULTIMATE FINAL BOSS RAID (OGE 4) -->
+        <div class="map-node-row pos-center">
+            <div class="node-wrapper">
+                <a href="module5.html" class="duo-node" id="node12" title="Начать Уровень 12">
                     <span class="icon">🐉</span>
                 </a>
-                <div class="node-label">8. РЕЙД ПО ГРАФАМ <span class="node-oge">№4</span></div>
+                <div class="node-label">12. РЕЙД ПО ГРАФАМ <span class="node-oge">№4</span></div>
             </div>
         </div>
 
@@ -638,9 +698,27 @@
     </div>
 </div>
 
+<!-- SCRATCH CHEST MODAL 3 -->
+<div class="modal-overlay" id="chestModal3">
+    <div class="modal-card">
+        <button class="close-btn" onclick="closeChest(3)">✕</button>
+        <h3 style="margin-top:0; font-size:1.25rem;">СЕКРЕТНЫЙ БОНУСНЫЙ СУНДУК 3</h3>
+        <p style="font-weight:700; font-size:0.9rem; line-height: 1.4;">Сотри защитный слой, чтобы забрать формулы 2-й части ОГЭ:</p>
+        
+        <div class="scratch-card" id="modalScratchCard3">
+            <div style="padding:15px; font-weight:700; font-size:0.88rem; line-height:1.4; text-align:center;">
+                ⚡ <strong>ЛАЙФХАК ОГЭ №21:</strong> В задачах на совместную работу (трубы, рабочие, DPS) всегда используй формулу <strong>T = (T₁ · T₂) / (T₁ + T₂)</strong>, а для движения по воде помни: <strong>v_по = v + u, v_против = v − u</strong>. Всегда указывай в решении «Пусть x > 0», чтобы эксперт ОГЭ поставил максимальные 2 балла!
+            </div>
+            <canvas class="scratch-canvas" id="modalScratchCanvas3"></canvas>
+        </div>
+        
+        <button class="stat-pill" style="width:100%; justify-content:center; padding:10px; font-size:0.95rem; cursor:pointer;" onclick="closeChest(3)">ЗАБРАТЬ +50 XP</button>
+    </div>
+</div>
+
 <!-- DIPLOMA MODAL -->
 <div class="modal-overlay" id="trophyModal">
-    <div class="modal-card" style="max-width:500px; text-align:center; border: 4px solid #000; box-shadow: 10px 10px 0px #000;">
+    <div class="modal-card" style="max-width:520px; text-align:center; border: 4px solid #000; box-shadow: 10px 10px 0px #000;">
         <button class="close-btn" onclick="closeTrophy()">✕</button>
         <div style="font-size:3.5rem; margin-bottom:10px;">🏆</div>
         <h3 style="font-size: clamp(1.2rem, 4vw, 1.6rem); margin: 0 0 10px; text-transform:uppercase;">ДИПЛОМ МАГИСТРА ИГРОВОЙ МЕТЫ</h3>
@@ -648,16 +726,20 @@
             СИМУЛЯТОР МАТЕМАТИКИ И ГЕЙМДИЗАЙНА • ИМБА
         </div>
         
-        <p style="font-weight:700; font-size:0.92rem; line-height:1.5; text-align:left; background:#F4F1E1; border:2px solid #000; padding:14px; margin-bottom:15px;">
-            Настоящий сертификат подтверждает, что игрок освоил <strong>8 математических моделей</strong> игрового баланса и успешно применяет их к заданиям ОГЭ:
+        <p style="font-weight:700; font-size:0.88rem; line-height:1.45; text-align:left; background:#F4F1E1; border:2px solid #000; padding:14px; margin-bottom:15px;">
+            Настоящий сертификат подтверждает, что игрок освоил <strong>12 математических моделей</strong> игрового баланса и успешно применяет их к заданиям ОГЭ:
             <br>• Вероятности лутбоксов (№10)
             <br>• Системы крафта и неравенства (№13)
             <br>• Сплавы и концентрации (№21)
             <br>• Равновесие Нэша и теория игр (№11)
             <br>• Сложные проценты и прогрессии (№12)
             <br>• Осадные параболы баллистики (№11)
-            <br>• Формулу Пика для захвата баз (№18)
-            <br>• Алгоритм Дейкстры в рейдах (№4)
+            <br>• Формула Пика для захвата баз (№18)
+            <br>• Stealth FOV и тригонометрия снайпера (№15)
+            <br>• Спидран и векторы течения реки (№21)
+            <br>• Суммарный DPS рейда и совместная работа (№21)
+            <br>• Баланс меты, медиана и гистограммы (№19)
+            <br>• Алгоритм Дейкстры в финальных рейдах (№4)
         </p>
 
         <button class="stat-pill" style="width:100%; justify-content:center; padding:12px; font-size:1rem; cursor:pointer; background:var(--yellow);" onclick="claimTrophy()">ПОДТВЕРДИТЬ И ЗАБРАТЬ +500 XP ⭐ • +100 💎</button>
@@ -714,6 +796,11 @@
             document.getElementById('node6'),
             document.getElementById('node7'),
             document.getElementById('node8'),
+            document.getElementById('node9'),
+            document.getElementById('bonusChest3'),
+            document.getElementById('node10'),
+            document.getElementById('node11'),
+            document.getElementById('node12'),
             document.getElementById('trophyNode')
         ].filter(Boolean);
 
@@ -721,11 +808,11 @@
 
         const mapRect = map.getBoundingClientRect();
         const w = Math.round(mapRect.width);
-        const h = Math.round(mapRect.height);
+        const h = Math.round(map.scrollHeight || mapRect.height);
         
         svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-        svg.setAttribute('width', `${w}`);
-        svg.setAttribute('height', `${h}`);
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
 
         const pts = targets.map(el => {
             const r = el.getBoundingClientRect();
@@ -756,11 +843,16 @@
         { id: 'node5', url: 'module6.html', key: 'imba_mod_6', reqKey: 'imba_mod_3', name: 'Уровень 5', reqName: 'Уровень 4' },
         { id: 'node6', url: 'module7.html', key: 'imba_mod_7', reqKey: 'imba_mod_6', name: 'Уровень 6', reqName: 'Уровень 5' },
         { id: 'node7', url: 'module8.html', key: 'imba_mod_8', reqKey: 'imba_mod_7', name: 'Уровень 7', reqName: 'Уровень 6' },
-        { id: 'node8', url: 'module5.html', key: 'imba_mod_5', reqKey: 'imba_mod_8', name: 'Уровень 8', reqName: 'Уровень 7' }
+        { id: 'node8', url: 'module9.html', key: 'imba_mod_9', reqKey: 'imba_mod_8', name: 'Уровень 8', reqName: 'Уровень 7' },
+        { id: 'node9', url: 'module10.html', key: 'imba_mod_10', reqKey: 'imba_mod_9', name: 'Уровень 9', reqName: 'Уровень 8' },
+        { id: 'node10', url: 'module11.html', key: 'imba_mod_11', reqKey: 'imba_mod_10', name: 'Уровень 10', reqName: 'Уровень 9' },
+        { id: 'node11', url: 'module12.html', key: 'imba_mod_12', reqKey: 'imba_mod_11', name: 'Уровень 11', reqName: 'Уровень 10' },
+        { id: 'node12', url: 'module5.html', key: 'imba_mod_5', reqKey: 'imba_mod_12', name: 'Уровень 12', reqName: 'Уровень 11' }
     ];
 
     let chest1Unlocked = false;
     let chest2Unlocked = false;
+    let chest3Unlocked = false;
     let trophyUnlocked = false;
 
     function updateProgress() {
@@ -837,6 +929,19 @@
             }
         }
 
+        chest3Unlocked = localStorage.getItem('imba_mod_10') === 'true';
+        const ch3 = document.getElementById('bonusChest3');
+        if (ch3) {
+            const ch3Label = ch3.parentElement ? ch3.parentElement.querySelector('.node-label') : null;
+            if (chest3Unlocked) {
+                ch3.classList.remove('locked-chest');
+                if (ch3Label) ch3Label.classList.remove('locked-label');
+            } else {
+                ch3.classList.add('locked-chest');
+                if (ch3Label) ch3Label.classList.add('locked-label');
+            }
+        }
+
         // TROPHY UNLOCK LOGIC
         trophyUnlocked = localStorage.getItem('imba_mod_5') === 'true';
         const trophyEl = document.getElementById('trophyNode');
@@ -881,6 +986,15 @@
             showToast('🔒 СУНДУК ЗАБЛОКИРОВАН: Сначала пройди Уровень 5!');
             return;
         }
+        if (num === 3 && !chest3Unlocked) {
+            const el = document.getElementById('bonusChest3');
+            if (el) {
+                el.classList.add('shake-node');
+                setTimeout(() => el.classList.remove('shake-node'), 360);
+            }
+            showToast('🔒 СУНДУК ЗАБЛОКИРОВАН: Сначала пройди Уровень 9!');
+            return;
+        }
 
         const modal = document.getElementById('chestModal' + num);
         if (modal) {
@@ -912,7 +1026,7 @@
                 el.classList.add('shake-node');
                 setTimeout(() => el.classList.remove('shake-node'), 360);
             }
-            showToast('🔒 ДИПЛОМ ЗАБЛОКИРОВАН: Пройди все 8 уровней курса!');
+            showToast('🔒 ДИПЛОМ ЗАБЛОКИРОВАН: Пройди все 12 уровней курса!');
             return;
         }
         const modal = document.getElementById('trophyModal');
@@ -950,7 +1064,7 @@
         canvas.width = card.offsetWidth;
         canvas.height = card.offsetHeight;
 
-        ctx.fillStyle = num === 1 ? '#B8B8B8' : '#90CAF9';
+        ctx.fillStyle = num === 1 ? '#B8B8B8' : (num === 2 ? '#90CAF9' : '#D1C4E9');
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = '#666';
         ctx.lineWidth = 4;

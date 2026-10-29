@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SPEEDRUN ZONE | ИМБА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F4F1E1;
+            --panel: #FFFFFF;
+            --accent: #00C853; 
+            --danger: #FF2A55; 
+            --yellow: #FFC000; 
+            --purple: #7C4DFF;
+            --blue: #2979FF;
+            --cyan: #00B0FF;
+            --text: #000000;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 3px 3px 0px #000000;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* LESSON TOP BAR */
+        .lesson-navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 14px;
+            border-bottom: var(--border);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .exit-btn {
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            box-shadow: 3px 3px 0px #000000;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #000000;
+            text-decoration: none;
+            transition: all 0.1s;
+            flex-shrink: 0;
+        }
+        .exit-btn:hover { background: #f0f0f0; }
+        .exit-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+        .progress-track {
+            flex: 1;
+            min-width: 0;
+            background: #E0DEC9;
+            border: 3px solid #000000;
+            height: 26px;
+            position: relative;
+            box-shadow: 2px 2px 0px #000000;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--blue);
+            height: 100%;
+            width: 33%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: clamp(0.65rem, 2.3vw, 0.78rem);
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 4px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 820px;
+            min-height: calc(100vh - 40px);
+            position: relative;
+            padding: 15px 12px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+        h1, h2, h3, h4 { text-transform: uppercase; margin: 0; font-weight: 900; word-break: break-word; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .balance-badge {
+            background: var(--blue);
+            color: #fff;
+            padding: 5px 10px;
+            font-weight: 900;
+            border: var(--border);
+            box-shadow: var(--shadow-sm);
+            font-size: 0.85rem;
+        }
+
+        .glass-panel {
+            background: var(--panel);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .hud-cell {
+            background: #F4F1E1;
+            border: 2px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+        .hud-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 4px;
+        }
+        .hud-val {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        .control-group {
+            margin: 15px 0;
+            background: #FAF8F0;
+            border: 2px solid #000;
+            padding: 12px;
+        }
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: #000;
+            height: 8px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: var(--blue);
+            border: 3px solid #000;
+            cursor: pointer;
+        }
+
+        .btn-gacha {
+            background: var(--text);
+            color: #fff;
+            border: var(--border);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            padding: 15px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: var(--shadow);
+            transition: all 0.1s;
+            text-transform: uppercase;
+        }
+        .btn-gacha:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        .hidden { display: none !important; }
+        .story-card {
+            background: #fff;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 18px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quiz-opt {
+            background: #fff;
+            border: 2px solid #000;
+            padding: 10px 14px;
+            margin: 8px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 2px 2px 0px #000;
+            transition: all 0.1s;
+        }
+        .quiz-opt:hover { background: #fdf5d3; }
+        .quiz-opt.correct { background: var(--accent) !important; color: #000; }
+        .quiz-opt.wrong { background: var(--danger) !important; color: #fff; }
+
+        .scratch-container {
+            position: relative;
+            background: #FFF9C4;
+            border: 2px dashed #000;
+            margin: 15px 0;
+            overflow: hidden;
+            min-height: 90px;
+        }
+        .scratch-content {
+            padding: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        @media (min-width: 768px) {
+            .app-container { padding: 30px 20px; }
+            .glass-panel { padding: 35px; }
+            .story-card { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STEP 1: INTERACTIVE RIVER MOTION SIMULATOR -->
+<div class="app-container" id="step1">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 33%;"></div>
+            <div class="progress-label">ШАГ 1 ИЗ 3 • ФИЗИКА ТЕЧЕНИЯ</div>
+        </div>
+    </div>
+    <div class="header">
+        <h2 style="letter-spacing: 1px;">SPEEDRUN<span style="color:var(--blue)">ZONE</span></h2>
+        <div class="balance-badge">УРОВЕНЬ 9 • ДВИЖЕНИЕ ПО ВОДЕ</div>
+    </div>
+
+    <div class="glass-panel" style="box-shadow: 6px 6px 0px var(--blue);">
+        <h3 style="font-size: clamp(1.2rem, 3.5vw, 1.7rem);">РЕКА И СПИДРАН: ВЕКТОРЫ СКОРОСТИ</h3>
+        <p style="font-weight: 700; margin-top: 8px; line-height: 1.5; font-size: 0.95rem;">
+            В спидранах и задачах ОГЭ №21 река — это динамический бафф или дебафф к твоей скорости. 
+            По течению скорости <strong>складываются</strong>, против течения — <strong>вычитаются</strong>.
+        </p>
+
+        <!-- CONTROLS -->
+        <div class="control-group">
+            <div class="control-row">
+                <span>🚤 Собственная скорость катера (v):</span>
+                <span id="lblV" style="font-family:'Roboto Mono',monospace; color:var(--blue); font-weight:900;">12 км/ч</span>
+            </div>
+            <input type="range" id="slV" min="8" max="28" value="12" step="1" oninput="updateRiverSim()">
+        </div>
+
+        <div class="control-group">
+            <div class="control-row">
+                <span>🌊 Скорость течения реки (u):</span>
+                <span id="lblU" style="font-family:'Roboto Mono',monospace; color:#00838F; font-weight:900;">3 км/ч</span>
+            </div>
+            <input type="range" id="slU" min="0" max="6" value="3" step="0.5" oninput="updateRiverSim()">
+        </div>
+
+        <div class="control-group">
+            <div class="control-row">
+                <span>📍 Дистанция до чекпоинта (S):</span>
+                <span id="lblS" style="font-family:'Roboto Mono',monospace; color:var(--purple); font-weight:900;">36 км</span>
+            </div>
+            <input type="range" id="slS" min="12" max="60" value="36" step="6" oninput="updateRiverSim()">
+        </div>
+
+        <!-- CANVAS VISUALIZATION -->
+        <div style="background:#E1F5FE; border:3px solid #000; box-shadow:4px 4px 0px #000; margin:15px 0; overflow:hidden;">
+            <canvas id="riverCanvas" style="width:100%; height:160px; display:block;"></canvas>
+        </div>
+
+        <!-- HUD METRICS -->
+        <div class="hud-grid">
+            <div class="hud-cell" style="border-top:4px solid var(--accent);">
+                <div class="hud-label">ПО ТЕЧЕНИЮ (v + u)</div>
+                <div class="hud-val" id="valVDown" style="color:var(--accent);">15 км/ч</div>
+                <div style="font-size:0.75rem; font-weight:700; margin-top:4px;">t = <span id="valTDown">2.4</span> ч</div>
+            </div>
+            <div class="hud-cell" style="border-top:4px solid var(--danger);">
+                <div class="hud-label">ПРОТИВ ТЕЧЕНИЯ (v − u)</div>
+                <div class="hud-val" id="valVUp" style="color:var(--danger);">9 км/ч</div>
+                <div style="font-size:0.75rem; font-weight:700; margin-top:4px;">t = <span id="valTUp">4.0</span> ч</div>
+            </div>
+            <div class="hud-cell" style="border-top:4px solid var(--purple);">
+                <div class="hud-label">ИТОГО ТУДА-ОБРАТНО</div>
+                <div class="hud-val" id="valTRound" style="color:var(--purple);">6.4 ч</div>
+                <div style="font-size:0.75rem; font-weight:700; margin-top:4px;">в озере: <span id="valTLake">6.0</span> ч</div>
+            </div>
+        </div>
+
+        <!-- BRILLIANT PARADOX CALLOUT -->
+        <div style="background:#FFF3E0; border:2px solid #000; padding:12px; margin-top:10px; font-weight:700; font-size:0.85rem; line-height:1.4;">
+            💡 <strong>ПАРАДОКС ТЕЧЕНИЯ (БРИЛЛИАНТОВЫЙ ИНСАЙТ):</strong><br>
+            В стоячей воде (озере) путь 36 км туда и обратно занял бы ровно <strong><span id="valTLakeCallout">6.0</span> ч</strong>. А на реке — <strong><span id="valTRoundCallout">6.4</span> ч</strong>! 
+            Течение крадет больше времени на обратном пути, чем дает на попутном, потому что против течения ты двигаешься медленнее и проводишь в зоне сопротивления дольше времени!
+        </div>
+
+        <button class="btn-gacha" style="background:var(--blue); color:#fff;" onclick="goToStep(2)">РАЗОБРАТЬ ШАБЛОН ОГЭ №21 ➔</button>
+    </div>
+</div>
+
+<!-- STEP 2: THEORY & SCRATCH CARD -->
+<div class="app-container hidden" id="step2">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 66%;"></div>
+            <div class="progress-label">ШАГ 2 ИЗ 3 • АЛГОРИТМ ЧАСТИ 2</div>
+        </div>
+    </div>
+
+    <div class="story-card" style="box-shadow: 6px 6px 0px var(--blue);">
+        <h3 style="font-size: clamp(1.2rem, 3.5vw, 1.8rem);">ТАБЛИЦА S-v-t: 2 БАЛЛА ВО 2 ЧАСТИ</h3>
+        <p style="font-weight: 700; margin-top: 10px; line-height: 1.6; font-size: 0.95rem;">
+            Задание <strong>№21 ОГЭ</strong> требует строгого оформления. Эксперты ФИПИ снимут балл, если не ввести переменную или потерять физический смысл (скорость не может быть отрицательной).
+        </p>
+
+        <!-- TABLE REFERENCE -->
+        <div style="overflow-x:auto; margin:15px 0;">
+            <table style="width:100%; border-collapse:collapse; border:2px solid #000; font-family:'Roboto Mono',monospace; font-size:0.85rem; font-weight:700; text-align:center;">
+                <thead>
+                    <tr style="background:#E1F5FE; border-bottom:2px solid #000;">
+                        <th style="padding:8px; border-right:2px solid #000;">Маршрут</th>
+                        <th style="padding:8px; border-right:2px solid #000;">S (км)</th>
+                        <th style="padding:8px; border-right:2px solid #000;">v (км/ч)</th>
+                        <th style="padding:8px;">t (ч) = S / v</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom:1px solid #000;">
+                        <td style="padding:8px; border-right:2px solid #000;">По течению</td>
+                        <td style="padding:8px; border-right:2px solid #000;">S</td>
+                        <td style="padding:8px; border-right:2px solid #000; color:var(--accent);">v + u</td>
+                        <td style="padding:8px;">S / (v + u)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border-right:2px solid #000;">Против течения</td>
+                        <td style="padding:8px; border-right:2px solid #000;">S</td>
+                        <td style="padding:8px; border-right:2px solid #000; color:var(--danger);">v − u</td>
+                        <td style="padding:8px;">S / (v − u)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background:#F0FDF4; border:2px solid #000; padding:15px; margin:15px 0;">
+            <div style="font-weight:900; color:#1B5E20; font-family:'Roboto Mono',monospace; font-size:1.1rem; margin-bottom:6px;">⚡ УРАВНЕНИЕ РАЗНИЦЫ ВО ВРЕМЕНИ:</div>
+            <p style="font-size:0.9rem; font-weight:700; margin:0; line-height:1.5;">
+                Путь против течения занимает больше времени, поэтому вычитаем из большего меньшее:<br>
+                <strong style="font-size:1.1rem; color:#000;">t<sub>против</sub> − t<sub>по</sub> = Δt</strong><br>
+                <strong>S / (v − u) − S / (v + u) = Δt</strong>
+            </p>
+        </div>
+
+        <!-- SCRATCH CARD SECRET -->
+        <div style="font-size:0.85rem; font-weight:900; margin-top:15px;">🔒 СЕКРЕТНЫЙ ЛАЙФХАК ПРОРАБА ОГЭ (СОТРИ МОНЕТОЙ):</div>
+        <div class="scratch-container" id="scratchBox">
+            <div class="scratch-content">
+                🎯 <strong>ЧИТ-КОД ПОДБОРА ДЛЯ ЧЕРНОВИКА:</strong><br>
+                Если расстояние S = 48 км, а скорость течения u = 2, то числитель 48 обязан делиться нацело на (v − 2) и на (v + 2).
+                Делители 48: 6, 8, 12, 16. Если v = 10, то v − 2 = 8, v + 2 = 12. 
+                48 / 8 = 6 ч, 48 / 12 = 4 ч. Разница 6 − 4 = 2 ч! Ответ v = 10 находится за 10 секунд без квадратного уравнения!
+            </div>
+            <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+        </div>
+
+        <button class="btn-gacha" style="background:#000; color:var(--accent);" onclick="goToStep(3)">ПЕРЕЙТИ К ЗАДАНИЮ ОГЭ №21 ➔</button>
+    </div>
+</div>
+
+<!-- STEP 3: OGE QUIZ -->
+<div class="app-container hidden" id="step3">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 100%;"></div>
+            <div class="progress-label">ШАГ 3 ИЗ 3 • ТРЕНАЖЕР ФИПИ</div>
+        </div>
+    </div>
+
+    <div class="story-card" style="box-shadow: 6px 6px 0px var(--accent);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <h3 style="font-size: clamp(1.1rem, 3.5vw, 1.5rem);">ЗАДАНИЕ ОГЭ №21 (ФИПИ)</h3>
+            <span style="background:var(--accent); color:#000; font-family:'Roboto Mono',monospace; padding:3px 8px; font-weight:900; font-size:0.75rem; border:2px solid #000;">ОГЭ 2026 • 2 БАЛЛА</span>
+        </div>
+
+        <div style="background:#fff; border:2px solid #000; padding:15px; margin:15px 0; font-weight:700; line-height:1.6; font-size:0.95rem;">
+            <em>«Моторная лодка прошла против течения реки 48 км и вернулась в пункт отправления, затратив на обратный путь на 2 часа меньше, чем на путь против течения. Найдите скорость лодки в неподвижной воде, если скорость течения равна 2 км/ч.»</em>
+        </div>
+
+        <div id="quizContainer">
+            <div class="quiz-opt" onclick="checkAnswer(this, false)">
+                <span>1) 8 км/ч</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer(this, true)">
+                <span>2) 10 км/ч</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer(this, false)">
+                <span>3) 12 км/ч</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer(this, false)">
+                <span>4) 14 км/ч</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+        </div>
+
+        <div id="quizFeedback" class="hidden" style="margin-top:15px; padding:15px; border:2px solid #000; background:#E8F5E9; font-weight:700; line-height:1.5; font-size:0.9rem;">
+            🎉 <strong>БЛЕСТЯЩЕ! +100 XP! +20 💎</strong><br>
+            Уравнение: 48 / (v − 2) − 48 / (v + 2) = 2.<br>
+            48(v + 2) − 48(v − 2) = 2(v² − 4)<br>
+            48 · 4 = 2(v² − 4) ➔ 96 = v² − 4 ➔ v² = 100 ➔ <strong>v = 10 км/ч</strong> (так как v > 0).
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+            <a href="module11.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--danger); color:#fff;">СЛЕДУЮЩИЙ УРОВЕНЬ: РЕЙД DPS & РАБОТА (№21) ➔</a>
+            <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:#fff; color:#000; border:2px solid #000; box-shadow:3px 3px 0px #000;">🗺 ВЕРНУТЬСЯ НА КАРТУ КУРСА</a>
+        </div>
+    </div>
+</div>
+
+<footer style="width:100%; max-width:820px; text-align:center; font-size:0.75rem; color:#777; margin-top:20px; padding:15px; font-weight:700; border-top:2px solid #ddd;">
+    🛡 Учебно-просветительский симулятор математических моделей «ИМБА» (12+). Изучение задач на движение по воде (ФЗ № 436-ФЗ).
+</footer>
+
+<script>
+    function goToStep(num) {
+        document.querySelectorAll('.app-container').forEach(c => c.classList.add('hidden'));
+        const target = document.getElementById('step' + num);
+        if (target) target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (num === 2) initScratch();
+    }
+
+    function updateRiverSim() {
+        let v = parseFloat(document.getElementById('slV').value);
+        let u = parseFloat(document.getElementById('slU').value);
+        let s = parseFloat(document.getElementById('slS').value);
+
+        // Ensure boat can overcome current
+        if (v <= u) {
+            v = u + 1;
+            document.getElementById('slV').value = v;
+        }
+
+        document.getElementById('lblV').innerText = v + ' км/ч';
+        document.getElementById('lblU').innerText = u + ' км/ч';
+        document.getElementById('lblS').innerText = s + ' км';
+
+        const vDown = v + u;
+        const vUp = v - u;
+        const tDown = s / vDown;
+        const tUp = s / vUp;
+        const tRound = tDown + tUp;
+        const tLake = (2 * s) / v;
+
+        document.getElementById('valVDown').innerText = vDown.toFixed(1) + ' км/ч';
+        document.getElementById('valTDown').innerText = tDown.toFixed(2);
+
+        document.getElementById('valVUp').innerText = vUp.toFixed(1) + ' км/ч';
+        document.getElementById('valTUp').innerText = tUp.toFixed(2);
+
+        document.getElementById('valTRound').innerText = tRound.toFixed(2) + ' ч';
+        document.getElementById('valTLake').innerText = tLake.toFixed(2);
+
+        document.getElementById('valTRoundCallout').innerText = tRound.toFixed(2) + ' ч';
+        document.getElementById('valTLakeCallout').innerText = tLake.toFixed(2) + ' ч';
+
+        drawRiver(v, u, s);
+    }
+
+    let waveOffset = 0;
+    function drawRiver(v, u, s) {
+        const canvas = document.getElementById('riverCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+
+        canvas.width = canvas.offsetWidth * dpr;
+        canvas.height = canvas.offsetHeight * dpr;
+        ctx.scale(dpr, dpr);
+
+        const w = canvas.offsetWidth;
+        const h = canvas.offsetHeight;
+
+        // Background water
+        ctx.fillStyle = '#81D4FA';
+        ctx.fillRect(0, 0, w, h);
+
+        // River shores
+        ctx.fillStyle = '#A5D6A7';
+        ctx.fillRect(0, 0, w, 22);
+        ctx.fillRect(0, h - 22, w, 22);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, 22); ctx.lineTo(w, 22);
+        ctx.moveTo(0, h - 22); ctx.lineTo(w, h - 22);
+        ctx.stroke();
+
+        // Flow stream arrows (animated by current)
+        ctx.fillStyle = '#0277BD';
+        ctx.font = '900 12px "Roboto Mono", monospace';
+        const arrowCount = 5;
+        for (let i = 0; i < arrowCount; i++) {
+            const x = ((i * (w / arrowCount)) + waveOffset) % w;
+            ctx.fillText('➔ ➔ ТЕЧЕНИЕ (' + u + ' км/ч)', x, 50);
+        }
+
+        // Boat 1: Downstream (moving right)
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.fillRect(w * 0.25, 70, 50, 22);
+        ctx.strokeRect(w * 0.25, 70, 50, 22);
+        ctx.fillStyle = '#000';
+        ctx.font = '900 10px Montserrat';
+        ctx.fillText('🚤 ПО', w * 0.25 + 8, 85);
+
+        // Vector arrow for downstream
+        ctx.strokeStyle = '#00C853';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(w * 0.25 + 55, 81);
+        ctx.lineTo(w * 0.25 + 55 + Math.min(60, (v + u) * 2), 81);
+        ctx.stroke();
+
+        // Boat 2: Upstream (moving left)
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.fillRect(w * 0.65, 105, 50, 22);
+        ctx.strokeRect(w * 0.65, 105, 50, 22);
+        ctx.fillStyle = '#000';
+        ctx.fillText('🚤 ПРОТИВ', w * 0.65 + 3, 120);
+
+        // Vector arrow for upstream
+        ctx.strokeStyle = '#FF2A55';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(w * 0.65 - 5, 116);
+        ctx.lineTo(w * 0.65 - 5 - Math.min(60, (v - u) * 2), 116);
+        ctx.stroke();
+    }
+
+    function checkAnswer(el, isCorrect) {
+        document.querySelectorAll('.quiz-opt').forEach(opt => opt.onclick = null);
+        if (isCorrect) {
+            el.classList.add('correct');
+            el.querySelector('.opt-badge').innerText = '✔';
+            document.getElementById('quizFeedback').classList.remove('hidden');
+            try {
+                localStorage.setItem('imba_mod_10', 'true');
+                let xp = parseInt(localStorage.getItem('imba_xp') || '150');
+                localStorage.setItem('imba_xp', (xp + 100).toString());
+                let cry = parseInt(localStorage.getItem('imba_crystals') || '50');
+                localStorage.setItem('imba_crystals', (cry + 20).toString());
+            } catch(e) {}
+        } else {
+            el.classList.add('wrong');
+            el.querySelector('.opt-badge').innerText = '✖';
+            const correctOpt = document.querySelectorAll('.quiz-opt')[1];
+            correctOpt.classList.add('correct');
+            correctOpt.querySelector('.opt-badge').innerText = '✔';
+            document.getElementById('quizFeedback').classList.remove('hidden');
+            document.getElementById('quizFeedback').style.background = '#FFEBEE';
+            document.getElementById('quizFeedback').innerHTML = '❌ <strong>ПОКА НЕВЕРНО!</strong> 48/(v−2) − 48/(v+2) = 2 ➔ при v = 10: 48/8 − 48/12 = 6 − 4 = 2!';
+        }
+    }
+
+    // Scratch canvas implementation
+    let scratchInitialized = false;
+    function initScratch() {
+        if (scratchInitialized) return;
+        scratchInitialized = true;
+        const canvas = document.getElementById('scratchCanvas');
+        if (!canvas) return;
+        const box = document.getElementById('scratchBox');
+        canvas.width = box.offsetWidth;
+        canvas.height = box.offsetHeight;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#9E9E9E';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '900 13px "Roboto Mono", monospace';
+        ctx.fillStyle = '#212121';
+        ctx.textAlign = 'center';
+        ctx.fillText('🪙 СОТРИТЕ СЛОЙ ПАЛЬЦЕМ ИЛИ МЫШКОЙ', canvas.width / 2, canvas.height / 2 + 5);
+
+        let isDrawing = false;
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 18, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+        canvas.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('touchmove', scratch);
+    }
+
+    window.addEventListener('load', () => {
+        updateRiverSim();
+        setInterval(() => {
+            waveOffset = (waveOffset + 1) % 80;
+            const v = parseFloat(document.getElementById('slV').value);
+            const u = parseFloat(document.getElementById('slU').value);
+            const s = parseFloat(document.getElementById('slS').value);
+            drawRiver(v, u, s);
+        }, 60);
+    });
+    window.addEventListener('resize', updateRiverSim);
+</script>
+
+</body>
+</html>

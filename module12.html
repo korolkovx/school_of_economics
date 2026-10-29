@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>STATS & META ZONE | ИМБА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto+Mono:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F4F1E1;
+            --panel: #FFFFFF;
+            --accent: #00C853; 
+            --danger: #FF2A55; 
+            --yellow: #FFC000; 
+            --purple: #7C4DFF;
+            --blue: #2979FF;
+            --orange: #FF6D00;
+            --teal: #00BFA5;
+            --text: #000000;
+            --border: 3px solid #000000;
+            --shadow: 6px 6px 0px #000000;
+            --shadow-sm: 3px 3px 0px #000000;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* LESSON TOP BAR */
+        .lesson-navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 14px;
+            border-bottom: var(--border);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .exit-btn {
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            box-shadow: 3px 3px 0px #000000;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #000000;
+            text-decoration: none;
+            transition: all 0.1s;
+            flex-shrink: 0;
+        }
+        .exit-btn:hover { background: #f0f0f0; }
+        .exit-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+        .progress-track {
+            flex: 1;
+            min-width: 0;
+            background: #E0DEC9;
+            border: 3px solid #000000;
+            height: 26px;
+            position: relative;
+            box-shadow: 2px 2px 0px #000000;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--purple);
+            height: 100%;
+            width: 33%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: clamp(0.65rem, 2.3vw, 0.78rem);
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 4px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 820px;
+            min-height: calc(100vh - 40px);
+            position: relative;
+            padding: 15px 12px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+        h1, h2, h3, h4 { text-transform: uppercase; margin: 0; font-weight: 900; word-break: break-word; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .balance-badge {
+            background: var(--purple);
+            color: #fff;
+            padding: 5px 10px;
+            font-weight: 900;
+            border: var(--border);
+            box-shadow: var(--shadow-sm);
+            font-size: 0.85rem;
+        }
+
+        .glass-panel {
+            background: var(--panel);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .hud-cell {
+            background: #F4F1E1;
+            border: 2px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+        .hud-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 4px;
+        }
+        .hud-val {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        .control-group {
+            margin: 15px 0;
+            background: #FAF8F0;
+            border: 2px solid #000;
+            padding: 12px;
+        }
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: #000;
+            height: 8px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: var(--purple);
+            border: 3px solid #000;
+            cursor: pointer;
+        }
+
+        .btn-gacha {
+            background: var(--text);
+            color: #fff;
+            border: var(--border);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            padding: 15px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: var(--shadow);
+            transition: all 0.1s;
+            text-transform: uppercase;
+        }
+        .btn-gacha:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        .hidden { display: none !important; }
+        .story-card {
+            background: #fff;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 18px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quiz-opt {
+            background: #fff;
+            border: 2px solid #000;
+            padding: 10px 14px;
+            margin: 8px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 2px 2px 0px #000;
+            transition: all 0.1s;
+        }
+        .quiz-opt:hover { background: #fdf5d3; }
+        .quiz-opt.correct { background: var(--accent) !important; color: #000; }
+        .quiz-opt.wrong { background: var(--danger) !important; color: #fff; }
+
+        .scratch-container {
+            position: relative;
+            background: #FFF9C4;
+            border: 2px dashed #000;
+            margin: 15px 0;
+            overflow: hidden;
+            min-height: 90px;
+        }
+        .scratch-content {
+            padding: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        @media (min-width: 768px) {
+            .app-container { padding: 30px 20px; }
+            .glass-panel { padding: 35px; }
+            .story-card { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STEP 1: INTERACTIVE HISTOGRAM & STATS SIMULATOR -->
+<div class="app-container" id="step1">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 33%;"></div>
+            <div class="progress-label">ШАГ 1 ИЗ 3 • БАЛАНС МЕТЫ И СТАТИСТИКА</div>
+        </div>
+    </div>
+    <div class="header">
+        <h2 style="letter-spacing: 1px;">META<span style="color:var(--purple)">STATS</span></h2>
+        <div class="balance-badge">УРОВЕНЬ 11 • СТАТИСТИКА И ДИАГРАММЫ</div>
+    </div>
+
+    <div class="glass-panel" style="box-shadow: 6px 6px 0px var(--purple);">
+        <h3 style="font-size: clamp(1.2rem, 3.5vw, 1.7rem);">БАЛАНС МЕТЫ: СРЕДНЕЕ VS МЕДИАНА</h3>
+        <p style="font-weight: 700; margin-top: 8px; line-height: 1.5; font-size: 0.95rem;">
+            Геймдизайнеры балансируют пушки и героев не по «среднему арифметическому», а по <strong>медиане</strong>. 
+            Попробуй добавить в лобби одного читера с гипер-уроном и посмотри, как поведут себя метрики!
+        </p>
+
+        <!-- OUTLIER SLIDER -->
+        <div class="control-group">
+            <div class="control-row">
+                <span>👾 Урон читера/босса (Player 7):</span>
+                <span id="lblOutlier" style="font-family:'Roboto Mono',monospace; color:var(--danger); font-weight:900;">220</span>
+            </div>
+            <input type="range" id="slOutlier" min="150" max="3000" value="220" step="50" oninput="updateStatsSim()">
+        </div>
+
+        <!-- CANVAS HISTOGRAM -->
+        <div style="background:#fff; border:3px solid #000; box-shadow:4px 4px 0px #000; margin:15px 0; overflow:hidden;">
+            <canvas id="statsCanvas" style="width:100%; height:200px; display:block;"></canvas>
+        </div>
+
+        <!-- HUD METRICS -->
+        <div class="hud-grid">
+            <div class="hud-cell" style="border-top:4px solid var(--blue);">
+                <div class="hud-label">СРЕДНЕЕ АРИФМЕТИЧЕСКОЕ (MEAN)</div>
+                <div class="hud-val" id="valMean" style="color:var(--blue);">174.3</div>
+                <div style="font-size:0.75rem; font-weight:700; margin-top:4px;">Сумма / 7</div>
+            </div>
+            <div class="hud-cell" style="border-top:4px solid var(--orange);">
+                <div class="hud-label">МЕДИАНА РЯДА (MEDIAN)</div>
+                <div class="hud-val" id="valMedian" style="color:var(--orange);">170.0</div>
+                <div style="font-size:0.75rem; font-weight:700; margin-top:4px;">Центральный элемент</div>
+            </div>
+        </div>
+
+        <div style="background:#EDE7F6; border:2px solid #000; padding:12px; margin-top:10px; font-weight:700; font-size:0.85rem; line-height:1.4;">
+            💡 <strong>ГЛАВНЫЙ ИНСАЙТ ДАТАСАЙЕНТИСТА:</strong><br>
+            Когда урон читера улетает в космос (до 3000), среднее арифметическое улетает за ним (<span id="valMeanCallout">571</span>), 
+            хотя 6 из 7 игроков наносят обычные 140–190 урона! 
+            А <strong>медиана (<span id="valMedianCallout">170</span>)</strong> остается непоколебимой. Именно поэтому медиана отражает реальную жизнь!
+        </div>
+
+        <button class="btn-gacha" style="background:var(--purple); color:#fff;" onclick="goToStep(2)">РАЗОБРАТЬ ТЕОРИЮ ОГЭ №19 ➔</button>
+    </div>
+</div>
+
+<!-- STEP 2: THEORY & SCRATCH CARD -->
+<div class="app-container hidden" id="step2">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 66%;"></div>
+            <div class="progress-label">ШАГ 2 ИЗ 3 • МЕТОДЫ СТАТИСТИКИ</div>
+        </div>
+    </div>
+
+    <div class="story-card" style="box-shadow: 6px 6px 0px var(--purple);">
+        <h3 style="font-size: clamp(1.2rem, 3.5vw, 1.8rem);">КАК НАХОДИТЬ МЕДИАНУ В ОГЭ №19</h3>
+        <p style="font-weight: 700; margin-top: 10px; line-height: 1.6; font-size: 0.95rem;">
+            В заданиях <strong>№19 ОГЭ</strong> (анализ диаграмм, таблиц и числовых наборов) школьники часто путают <em>среднее арифметическое</em> и <em>медиану</em>.
+        </p>
+
+        <div style="background:#E3F2FD; border:2px solid #000; padding:15px; margin:15px 0;">
+            <div style="font-weight:900; color:#0D47A1; font-family:'Roboto Mono',monospace; font-size:1.1rem; margin-bottom:6px;">📊 СРЕДНЕЕ АРИФМЕТИЧЕСКОЕ:</div>
+            <p style="font-size:0.9rem; font-weight:700; margin:0; line-height:1.4;">
+                Складываем <strong>все числа</strong> и делим на их количество: <code style="font-weight:900;">(x₁ + x₂ + ... + xₙ) / n</code>.
+            </p>
+        </div>
+
+        <div style="background:#FFF3E0; border:2px solid #000; padding:15px; margin:15px 0;">
+            <div style="font-weight:900; color:#E65100; font-family:'Roboto Mono',monospace; font-size:1.1rem; margin-bottom:6px;">🎯 МЕДИАНА ЧИСЛОВОГО РЯДА:</div>
+            <p style="font-size:0.9rem; font-weight:700; margin:0; line-height:1.4;">
+                1. <strong>Обязательно упорядочить числа по возрастанию</strong> (ранжировать).<br>
+                2. Если чисел <em>нечетное количество</em> (например, 7) — берем ровно <strong>центральное число</strong> (4-е по счету).<br>
+                3. Если чисел <em>четное количество</em> (например, 6) — берем <strong>полусумму двух центральных</strong>: <code style="font-weight:900;">(x₃ + x₄) / 2</code>.
+            </p>
+        </div>
+
+        <!-- SCRATCH CARD SECRET -->
+        <div style="font-size:0.85rem; font-weight:900; margin-top:15px;">🔒 СЕКРЕТНЫЙ СПОСОБ ПОИСКА МЕДИАНЫ (СОТРИ МОНЕТОЙ):</div>
+        <div class="scratch-container" id="scratchBox">
+            <div class="scratch-content">
+                💎 <strong>МЕТОД СИММЕТРИЧНОГО ВЫЧЕРКИВАНИЯ:</strong><br>
+                Записал числа по возрастанию. Зачеркиваешь одновременно самое левое и самое правое число, затем второе слева и второе справа, пока в центре не останется ровно 1 число (или 2 средних). Никаких формул считать не нужно!
+            </div>
+            <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+        </div>
+
+        <button class="btn-gacha" style="background:#000; color:var(--accent);" onclick="goToStep(3)">ПЕРЕЙТИ К ЗАДАНИЮ ОГЭ №19 ➔</button>
+    </div>
+</div>
+
+<!-- STEP 3: OGE QUIZ -->
+<div class="app-container hidden" id="step3">
+    <div class="lesson-navbar">
+        <a href="index.html" class="exit-btn" title="Вернуться к карте">✕</a>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 100%;"></div>
+            <div class="progress-label">ШАГ 3 ИЗ 3 • ТРЕНАЖЕР ФИПИ</div>
+        </div>
+    </div>
+
+    <div class="story-card" style="box-shadow: 6px 6px 0px var(--accent);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <h3 style="font-size: clamp(1.1rem, 3.5vw, 1.5rem);">ЗАДАНИЕ ОГЭ №19 (ФИПИ)</h3>
+            <span style="background:var(--accent); color:#000; font-family:'Roboto Mono',monospace; padding:3px 8px; font-weight:900; font-size:0.75rem; border:2px solid #000;">ОГЭ 2026</span>
+        </div>
+
+        <div style="background:#fff; border:2px solid #000; padding:15px; margin:15px 0; font-weight:700; line-height:1.6; font-size:0.95rem;">
+            <em>«В гильдии 7 игроков нанесли следующий урон в рейде: 140, 150, 160, 170, 180, 190, 950. Найдите медиану этого набора чисел.»</em>
+        </div>
+
+        <div id="quizContainer">
+            <div class="quiz-opt" onclick="checkAnswer(this, false)">
+                <span>1) 160</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer(this, true)">
+                <span>2) 170</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer(this, false)">
+                <span>3) 180</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+            <div class="quiz-opt" onclick="checkAnswer(this, false)">
+                <span>4) 277 (среднее арифм.)</span>
+                <span class="opt-badge">⚪</span>
+            </div>
+        </div>
+
+        <div id="quizFeedback" class="hidden" style="margin-top:15px; padding:15px; border:2px solid #000; background:#E8F5E9; font-weight:700; line-height:1.5; font-size:0.9rem;">
+            🎉 <strong>БЛЕСТЯЩЕ! +100 XP! +20 💎</strong><br>
+            Числа уже отсортированы по возрастанию: 140, 150, 160, <strong>170</strong>, 180, 190, 950.<br>
+            В ряду ровно 7 чисел (нечетное количество). 4-й элемент ровно по центру — это <strong>170</strong>.<br>
+            Число 950 — это аномальный выброс, который искажает среднее (277), но не влияет на медиану!
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+            <a href="module5.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:var(--danger); color:#fff;">ФИНАЛЬНЫЙ РЕЙД-БОСС: ГРАФЫ (№4) ➔</a>
+            <a href="index.html" class="btn-gacha" style="display:block; text-align:center; text-decoration:none; background:#fff; color:#000; border:2px solid #000; box-shadow:3px 3px 0px #000;">🗺 ВЕРНУТЬСЯ НА КАРТУ КУРСА</a>
+        </div>
+    </div>
+</div>
+
+<footer style="width:100%; max-width:820px; text-align:center; font-size:0.75rem; color:#777; margin-top:20px; padding:15px; font-weight:700; border-top:2px solid #ddd;">
+    🛡 Учебно-просветительский симулятор математических моделей «ИМБА» (12+). Изучение описательной статистики и медианы (ФЗ № 436-ФЗ).
+</footer>
+
+<script>
+    const baseScores = [140, 150, 160, 170, 180, 190];
+
+    function goToStep(num) {
+        document.querySelectorAll('.app-container').forEach(c => c.classList.add('hidden'));
+        const target = document.getElementById('step' + num);
+        if (target) target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (num === 2) initScratch();
+    }
+
+    function updateStatsSim() {
+        const outlier = parseFloat(document.getElementById('slOutlier').value);
+        document.getElementById('lblOutlier').innerText = outlier;
+
+        const scores = [...baseScores, outlier].sort((a, b) => a - b);
+        const sum = scores.reduce((acc, v) => acc + v, 0);
+        const mean = sum / scores.length;
+        const median = scores[3]; // 4th element in 7 items
+
+        document.getElementById('valMean').innerText = mean.toFixed(1);
+        document.getElementById('valMedian').innerText = median.toFixed(1);
+
+        document.getElementById('valMeanCallout').innerText = Math.round(mean);
+        document.getElementById('valMedianCallout').innerText = Math.round(median);
+
+        drawHistogram(scores, mean, median);
+    }
+
+    function drawHistogram(scores, mean, median) {
+        const canvas = document.getElementById('statsCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+
+        canvas.width = canvas.offsetWidth * dpr;
+        canvas.height = canvas.offsetHeight * dpr;
+        ctx.scale(dpr, dpr);
+
+        const w = canvas.offsetWidth;
+        const h = canvas.offsetHeight;
+
+        // Clear
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, w, h);
+
+        const padLeft = 40;
+        const padRight = 20;
+        const padBottom = 30;
+        const padTop = 20;
+
+        const chartW = w - padLeft - padRight;
+        const chartH = h - padTop - padBottom;
+
+        const maxVal = Math.max(300, ...scores);
+        const barWidth = chartW / scores.length - 8;
+
+        // Draw Bars
+        for (let i = 0; i < scores.length; i++) {
+            const val = scores[i];
+            const barH = (val / maxVal) * chartH;
+            const x = padLeft + i * (barWidth + 8);
+            const y = h - padBottom - barH;
+
+            ctx.fillStyle = (val > 200) ? '#FF2A55' : '#7C4DFF';
+            ctx.fillRect(x, y, barWidth, barH);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, barWidth, barH);
+
+            // Label under bar
+            ctx.fillStyle = '#000';
+            ctx.font = '900 10px "Roboto Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(val, x + barWidth / 2, h - padBottom + 16);
+        }
+
+        // Draw Mean Line (Blue)
+        const meanY = h - padBottom - (mean / maxVal) * chartH;
+        ctx.strokeStyle = '#2979FF';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(padLeft, meanY);
+        ctx.lineTo(w - padRight, meanY);
+        ctx.stroke();
+
+        ctx.fillStyle = '#2979FF';
+        ctx.font = '900 11px Montserrat';
+        ctx.textAlign = 'left';
+        ctx.fillText(`СРЕДНЕЕ (${Math.round(mean)})`, padLeft + 6, Math.max(padTop + 12, meanY - 4));
+
+        // Draw Median Line (Orange)
+        const medianY = h - padBottom - (median / maxVal) * chartH;
+        ctx.strokeStyle = '#FF6D00';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(padLeft, medianY);
+        ctx.lineTo(w - padRight, medianY);
+        ctx.stroke();
+
+        ctx.fillStyle = '#FF6D00';
+        ctx.fillText(`МЕДИАНА (${median})`, padLeft + 6, medianY + 14);
+    }
+
+    function checkAnswer(el, isCorrect) {
+        document.querySelectorAll('.quiz-opt').forEach(opt => opt.onclick = null);
+        if (isCorrect) {
+            el.classList.add('correct');
+            el.querySelector('.opt-badge').innerText = '✔';
+            document.getElementById('quizFeedback').classList.remove('hidden');
+            try {
+                localStorage.setItem('imba_mod_12', 'true');
+                let xp = parseInt(localStorage.getItem('imba_xp') || '150');
+                localStorage.setItem('imba_xp', (xp + 100).toString());
+                let cry = parseInt(localStorage.getItem('imba_crystals') || '50');
+                localStorage.setItem('imba_crystals', (cry + 20).toString());
+            } catch(e) {}
+        } else {
+            el.classList.add('wrong');
+            el.querySelector('.opt-badge').innerText = '✖';
+            const correctOpt = document.querySelectorAll('.quiz-opt')[1];
+            correctOpt.classList.add('correct');
+            correctOpt.querySelector('.opt-badge').innerText = '✔';
+            document.getElementById('quizFeedback').classList.remove('hidden');
+            document.getElementById('quizFeedback').style.background = '#FFEBEE';
+            document.getElementById('quizFeedback').innerHTML = '❌ <strong>ПОКА НЕВЕРНО!</strong> Ряд уже отсортирован: 140, 150, 160, [170], 180, 190, 950. Центральное 4-е число = 170!';
+        }
+    }
+
+    // Scratch canvas implementation
+    let scratchInitialized = false;
+    function initScratch() {
+        if (scratchInitialized) return;
+        scratchInitialized = true;
+        const canvas = document.getElementById('scratchCanvas');
+        if (!canvas) return;
+        const box = document.getElementById('scratchBox');
+        canvas.width = box.offsetWidth;
+        canvas.height = box.offsetHeight;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#9E9E9E';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '900 13px "Roboto Mono", monospace';
+        ctx.fillStyle = '#212121';
+        ctx.textAlign = 'center';
+        ctx.fillText('🪙 СОТРИТЕ СЛОЙ ПАЛЬЦЕМ ИЛИ МЫШКОЙ', canvas.width / 2, canvas.height / 2 + 5);
+
+        let isDrawing = false;
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 18, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+        canvas.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('touchmove', scratch);
+    }
+
+    window.addEventListener('load', updateStatsSim);
+    window.addEventListener('resize', updateStatsSim);
+</script>
+
+</body>
+</html>
